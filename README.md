@@ -1,2 +1,4 @@
 # vimrc
-My personal vimrc.
+
+Personal vimrc configuration.
+
