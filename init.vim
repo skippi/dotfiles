@@ -12,28 +12,39 @@ if v:progname =~? "evim"
   finish
 endif
 
+if has("win32")
+  runtime mswin.vim
+endif
+
+set autoread
+au FocusGained * :checktime
+
 set expandtab
-set guifont=Consolas:h11
 set hidden
 set mouse=
 set shiftwidth=2
 set t_Co=256
 set t_ut=
 set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
+set termguicolors
+set nonumber norelativenumber
 
 call AutoInstallVimPlug()
 
 call plug#begin(stdpath('data') . '/plugged')
   " Language
+  Plug 'LnL7/vim-nix'
   Plug 'dunstontc/vim-vscode-theme'
+  Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'neovimhaskell/haskell-vim'
   Plug 'rust-lang/rust.vim'
 
   " Util
+  Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
-  Plug 'LnL7/vim-nix'
+  Plug 'kassio/neoterm'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-eunuch'
   Plug 'tpope/vim-fugitive'
@@ -78,8 +89,10 @@ nnoremap <silent> <leader>gl :Glog<CR>
 nnoremap <silent> <leader>gs :Gstatus<CR>
 nnoremap <silent> <leader>gt :Gcommit -v -q %<CR>
 nnoremap <silent> <leader>gw :Gwrite<CR><CR>
+nnoremap <silent> <leader>me :MarkdownPreview<CR>
+nnoremap <silent> <leader>md :MarkdownPreviewStop<CR>
 nnoremap <silent> <leader>r :Rg! <C-R><C-W><CR>
-nnoremap <silent> <leader>t :split<bar>term<CR>i
+nnoremap <silent> <leader>t :Topen<CR>
 nnoremap <leader>ve :exe 'e! $MYVIMRC'<CR>
 nnoremap <leader>vs :source $MYVIMRC<CR>
 tnoremap <Esc> <C-\><C-n>
