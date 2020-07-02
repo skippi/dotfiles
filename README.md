@@ -1,4 +1,4 @@
-# vimrc
+# dotfiles
 
-Personal vimrc configuration.
+Personal dotfiles shared across systems.
 
