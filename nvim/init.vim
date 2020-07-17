@@ -3,51 +3,50 @@ let mapleader = "\<Space>"
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'LnL7/vim-nix'
 Plug 'elixir-editors/vim-elixir'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'itchyny/lightline.vim'
-Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
+Plug 'junegunn/fzf', {'do': { -> fzf#install() }}
+Plug 'junegunn/fzf.vim'
+Plug 'justinmk/vim-sneak'
 Plug 'machakann/vim-sandwich'
 Plug 'michaeljsmith/vim-indent-object'
-Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'neovimhaskell/haskell-vim'
 Plug 'puremourning/vimspector'
 Plug 'rust-lang/rust.vim'
-Plug 'skbolton/embark'
 Plug 'tomasiser/vim-code-dark'
+Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
-" Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-unimpaired'
-Plug 'vn-ki/coc-clap'
 Plug 'wellle/targets.vim'
-Plug 'wsdjeg/vim-fetch'
+if has('win32')
+  Plug 'iamcco/markdown-preview.nvim', {'do': 'cd app & yarn install'}
+endif
+if !has('nvim')
+  Plug 'tpope/vim-sensible'
+endif
 call plug#end()
 
 syntax on
 filetype plugin indent on
 
+let $FZF_DEFAULT_COMMAND = 'rg --files --follow'
+let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5, 'border': 'sharp' } }
 let g:lightline = {}
 let g:lightline.active = {}
 let g:lightline.active.left = [['mode'], ['gitbranch', 'filename', 'modified']]
 let g:lightline.colorscheme = 'codedark'
 let g:lightline.component_function = { 'gitbranch': 'LightLineGitBranch' }
-let g:clap_insert_mode_only = v:true
-let g:clap_layout = { 'relative': 'editor' }
-let g:clap_popup_input_delay = 50
-let g:clap_provider_grep_delay = 50
-let g:gruvbox_contrast_dark = 'medium'
-let g:gruvbox_contrast_light = 'medium'
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_winsize = 25
 let g:sneak#label = 1
 let g:sneak#use_ic_scs = 1
 
-colorscheme codedark
+silent! colorscheme codedark
 
 augroup File
   autocmd!
@@ -62,11 +61,12 @@ augroup Terminal
   autocmd!
   " Automatically quit terminal after exit
   autocmd TermClose term://*
-        \ if (expand('<afile>') !~ "ranger") && (expand('<afile>') !~ "coc") |
+        \ if (expand('<afile>') !~ "fzf") && (expand('<afile>') !~ "coc") |
         \   call nvim_input('<CR>')  |
         \ endif
   " Remap <ESC> to allow terminal escaping
   autocmd TermOpen * tnoremap <buffer> <ESC> <C-\><C-n>
+  autocmd FileType fzf tunmap <buffer> <ESC>
 augroup END
 
 runtime macros/sandwich/keymap/surround.vim
@@ -74,15 +74,12 @@ runtime macros/sandwich/keymap/surround.vim
 set autoread
 set background=dark
 set backspace=indent,eol,start
-if has("win32")
-  set clipboard=unnamed
-endif
-set expandtab
 set expandtab tabstop=2 shiftwidth=2
 set foldlevelstart=99
 set foldmethod=indent
 set foldnestmax=20
 set grepprg=rg\ --vimgrep\ --smart-case\ --follow
+" set guicursor=
 set hidden
 set ignorecase smartcase
 set incsearch
@@ -102,6 +99,10 @@ set updatetime=100
 set wildmenu
 set wildmode=list:longest,full
 
+if has("win32")
+  set clipboard=unnamed
+endif
+
 " noshowcmd is BUGGED, do NOT enable it. Screen tears on linux.
 " set noshowcmd
 
@@ -109,38 +110,38 @@ set wildmode=list:longest,full
 " Apparently on windows term, the backspace key is mapped to <C-h>
 nmap <C-h> <BS>
 
-" File
 nmap <BS> <C-^>
+nmap <silent> <C-]> <Plug>(coc-definition)
 nmap <silent> con <Plug>(coc-rename)
-nmap <silent> glr <Plug>(coc-references)
-nmap <silent> god <Plug>(coc-definition)
-nmap <silent> goi <Plug>(coc-implementation)
+nmap <silent> gD <Plug>(coc-implementation)
+nmap <silent> gd <Plug>(coc-declaration)
+nmap <silent> gr <Plug>(coc-references)
 nnoremap ' `
 nnoremap / ms/
 nnoremap 0 ^
 nnoremap <C-p> <C-i>
 nnoremap <Tab> :ls<CR>:b<Space>
+nnoremap <expr> <A-CR> GuiWindowFullScreen(!g:GuiWindowFullScreen)
+nnoremap <silent> ,cd :cd %:p:h<CR>:echom ":cd " . expand("%:p:h")<CR>
+nnoremap <silent> ,f :Files<CR>
 nnoremap <silent> ,ga :Gcommit --amend -v -q<CR>
 nnoremap <silent> ,gb :Gblame<CR>
 nnoremap <silent> ,gc :Gcommit -v -q<CR>
 nnoremap <silent> ,gd :Gdiff<CR>
 nnoremap <silent> ,gl :Glog<CR>
-nnoremap <silent> ,gs :Gstatus<CR>
+nnoremap <silent> ,gs :Git status<CR>
 nnoremap <silent> ,gw :Gwrite<CR><CR>
 nnoremap <silent> ,ve :edit $MYVIMRC<CR>
 nnoremap <silent> ,vs :source $MYVIMRC<CR>:echom "init.vim reloaded"<CR>
 nnoremap <silent> <F5> :e %<CR>
 nnoremap <silent> <Space>bd :<C-u>Kwbd<CR>
-nnoremap <silent> <Space>cd :cd %:p:h<CR>:echom ":cd " . expand("%:p:h")<CR>
 nnoremap <silent> <Space>h :noh<CR>
+nnoremap <silent> <Space>ld :CocList diagnostics<CR>
+nnoremap <silent> <Space>ls :CocList symbols<CR>
 nnoremap <silent> <Space>q :q<CR>
+nnoremap <silent> <Space>t :call <SID>ToggleTerm("term://primary")<CR>
 nnoremap <silent> <Space>w :w<CR>
 nnoremap <silent> gV `[v`]
-nnoremap <silent> gld :CocList diagnostics<CR>
-nnoremap <silent> gli :Clap files ++finder=rg --files --follow<CR>
-nnoremap <silent> gls :CocList symbols<CR>
-nnoremap <silent> goe :Ex<CR>
-nnoremap <silent> got :call <SID>ToggleTerm("term://primary")<CR>
 nnoremap ? ms?
 nnoremap U <C-r>
 nnoremap Y y$
@@ -158,8 +159,11 @@ nnoremap <C-w> <Nop>
 nnoremap <Space>ve <Nop>
 nnoremap <Space>vs <Nop>
 nnoremap ` <Nop>
+nnoremap got <Nop>
 
 " Auto Expansion
+imap {<S-CR> {<CR>
+imap [<S-CR> [<CR>
 inoremap {<CR> {<CR>}<C-o>O
 inoremap [<CR> [<CR>]<C-oi>O
 
@@ -187,52 +191,64 @@ onoremap il :<C-u>normal vil<CR>
 xnoremap al $o0
 onoremap al :<C-u>normal val<CR>
 
+for char in [ '_', '.', ':', ',', ';', '<bar>', '/', '<bslash>', '*', '+', '-', '#' ]
+	execute 'xnoremap i' . char . ' :<C-u>normal! T' . char . 'vt' . char . '<CR>'
+	execute 'onoremap i' . char . ' :normal vi' . char . '<CR>'
+	execute 'xnoremap a' . char . ' :<C-u>normal! F' . char . 'vf' . char . '<CR>'
+	execute 'onoremap a' . char . ' :normal va' . char . '<CR>'
+endfor
+
 " Abbreviation
 cnoreabbrev <expr> grep (getcmdtype() ==# ':' && getcmdline() ==# 'grep') ? 'Grep' : 'grep'
 cnoreabbrev <expr> make (getcmdtype() ==# ':' && getcmdline() ==# 'make') ? 'Make' : 'make'
-cnoreabbrev <expr> bd "Kwbd"
+cnoreabbrev <expr> bd (getcmdtype() ==# ':' && getcmdline() ==# 'bd') ? 'Kwbd' : 'bd'
+cnoreabbrev <expr> git (getcmdtype() ==# ':' && getcmdline() ==# 'git') ? 'Git' : 'git'
 
 command! -nargs=+ -complete=file_in_path -bar Grep silent! grep! <args> | redraw! | cwindow 3
 command! -nargs=+ -complete=file_in_path -bar LGrep silent! lgrep! <args> | redraw! | lwindow 3
 command! -nargs=* Make silent make <args> | cwindow 3
+command! Kwbd call s:Kwbd(1)
 
 " Credits to romainl
 function! CommandLineCompletionCR()
-    let cmdline = getcmdline()
-    if cmdline =~ '\v\C^(ls|files|buffers)'
-        " like :ls but prompts for a buffer command
-        return "\<CR>:b\<Space>"
-    elseif cmdline =~ '\v\C/(#|nu|num|numb|numbe|number)$'
-        " like :g//# but prompts for a command
-        return "\<CR>:"
-    elseif cmdline =~ '\v\C^(dli|il)'
-        " like :dlist or :ilist but prompts for a count for :djump or :ijump
-        return "\<CR>:" . cmdline[0] . "j  " . split(cmdline, " ")[1] . "\<S-Left>\<Left>"
-    " elseif cmdline =~ '\v\C^(cli|lli)'
-    "     " like :clist or :llist but prompts for an error/location number
-    "     return "\<CR>:sil " . repeat(cmdline[0], 2) . "\<Space>"
-    " SEARCH CLIPBOARD BREAKS IT
-    elseif cmdline =~ '\C^old'
-        " like :oldfiles but prompts for an old file to edit
-        set nomore
-        return "\<CR>:sil se more|e #<"
-    elseif cmdline =~ '\C^changes'
-        " like :changes but prompts for a change to jump to
-        set nomore
-        return "\<CR>:sil se more|norm! g;\<S-Left>"
-    elseif cmdline =~ '\C^ju'
-        " like :jumps but prompts for a position to jump to
-        set nomore
-        return "\<CR>:sil se more|norm! \<C-o>\<S-Left>"
-    elseif cmdline =~ '\C^marks'
-        " like :marks but prompts for a mark to jump to
-        return "\<CR>:norm! `"
-    elseif cmdline =~ '\C^undol'
-        " like :undolist but prompts for a change to undo
-        return "\<CR>:u "
-    else
-        return "\<CR>"
-    endif
+  let type = getcmdtype()
+  if type !=# ':'
+    return "\<CR>"
+  endif
+  let cmdline = getcmdline()
+  if cmdline =~ '\v\C^(ls|files|buffers)'
+    " like :ls but prompts for a buffer command
+    return "\<CR>:b\<Space>"
+  elseif cmdline =~ '\v\C/(#|nu|num|numb|numbe|number)$'
+    " like :g//# but prompts for a command
+    return "\<CR>:"
+  elseif cmdline =~ '\v\C^(dli|il)'
+    " like :dlist or :ilist but prompts for a count for :djump or :ijump
+    return "\<CR>:" . cmdline[0] . "j  " . split(cmdline, " ")[1] . "\<S-Left>\<Left>"
+  elseif cmdline =~ '\v\C^(cli|lli)'
+      " like :clist or :llist but prompts for an error/location number
+      return "\<CR>:sil " . repeat(cmdline[0], 2) . "\<Space>"
+  elseif cmdline =~ '\C^old'
+    " like :oldfiles but prompts for an old file to edit
+    set nomore
+    return "\<CR>:sil se more|e #<"
+  elseif cmdline =~ '\C^changes'
+    " like :changes but prompts for a change to jump to
+    set nomore
+    return "\<CR>:sil se more|norm! g;\<S-Left>"
+  elseif cmdline =~ '\C^ju'
+    " like :jumps but prompts for a position to jump to
+    set nomore
+    return "\<CR>:sil se more|norm! \<C-o>\<S-Left>"
+  elseif cmdline =~ '\C^marks'
+    " like :marks but prompts for a mark to jump to
+    return "\<CR>:norm! `"
+  elseif cmdline =~ '\C^undol'
+    " like :undolist but prompts for a change to undo
+    return "\<CR>:u "
+  else
+    return "\<CR>"
+  endif
 endfunction
 cnoremap <expr> <CR> CommandLineCompletionCR()
 
@@ -370,8 +386,6 @@ function s:Kwbd(kwbdStage)
   endif
 endfunction
 
-command! Kwbd call s:Kwbd(1)
-
 function! s:ToggleTerm(termname)
   let exists = bufexists(a:termname)
   if exists > 0
@@ -390,3 +404,14 @@ function! LightLineGitBranch()
   endif
   return ''
 endfunction
+
+" augroup Session
+"   autocmd!
+"   autocmd VimLeave * call <SID>UpdateSession(getcwd() . '/.session.vim')
+"   autocmd BufEnter * call <SID>UpdateSession(getcwd() . '/.session.vim')
+" augroup END
+" function! s:UpdateSession(filepath)
+"   if filereadable(a:filepath)
+"     execute 'mksession! ' . a:filepath
+"   endif
+" endfunction
