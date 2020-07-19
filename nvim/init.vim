@@ -6,12 +6,14 @@ Plug 'elixir-editors/vim-elixir'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf', {'do': { -> fzf#install() }}
 Plug 'junegunn/fzf.vim'
+Plug 'justinmk/vim-dirvish'
 Plug 'justinmk/vim-sneak'
 Plug 'machakann/vim-sandwich'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'neovimhaskell/haskell-vim'
 Plug 'puremourning/vimspector'
+Plug 'romainl/vim-qf'
 Plug 'rust-lang/rust.vim'
 Plug 'tomasiser/vim-code-dark'
 Plug 'tommcdo/vim-lion'
@@ -19,6 +21,7 @@ Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-obsession' | Plug 'dhruvasagar/vim-prosession'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
 Plug 'wellle/targets.vim'
@@ -30,14 +33,17 @@ if !has('nvim')
 endif
 call plug#end()
 
+runtime macros/sandwich/keymap/surround.vim
+
 syntax on
 filetype plugin indent on
 
-let $FZF_DEFAULT_COMMAND = 'rg --files --follow'
+let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden --glob !.git'
+let g:prosession_dir = stdpath('data') . '/session'
 let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5, 'border': 'sharp' } }
 let g:lightline = {}
 let g:lightline.active = {}
-let g:lightline.active.left = [['mode'], ['gitbranch', 'filename', 'modified']]
+let g:lightline.active.left = [['mode'], ['gitbranch', 'relativepath', 'modified']]
 let g:lightline.colorscheme = 'codedark'
 let g:lightline.component_function = { 'gitbranch': 'LightLineGitBranch' }
 let g:netrw_banner = 0
@@ -52,9 +58,10 @@ augroup File
   autocmd!
   autocmd BufEnter,FocusGained * :checktime
   autocmd BufReadPost * :call RestoreLastCursorPosition()
-  autocmd BufWritePre * lua require("buffer").trim_whitespace()
+  autocmd BufWritePre * silent! lua require("buffer").trim_whitespace()
   autocmd FileType netrw setl bufhidden=wipe
   autocmd FileType text setlocal textwidth=78
+  autocmd TextYankPost * silent! lua require("vim.highlight").on_yank()
 augroup END
 
 augroup Terminal
@@ -69,20 +76,21 @@ augroup Terminal
   autocmd FileType fzf tunmap <buffer> <ESC>
 augroup END
 
-runtime macros/sandwich/keymap/surround.vim
-
 set autoread
 set background=dark
 set backspace=indent,eol,start
 set expandtab tabstop=2 shiftwidth=2
+set fileformat=unix
+set fileformats=unix,dos
 set foldlevelstart=99
 set foldmethod=indent
 set foldnestmax=20
 set grepprg=rg\ --vimgrep\ --smart-case\ --follow
-" set guicursor=
 set hidden
 set ignorecase smartcase
+set inccommand=split
 set incsearch
+set lazyredraw
 set mouse=
 set nobackup
 set noruler
@@ -99,7 +107,7 @@ set updatetime=100
 set wildmenu
 set wildmode=list:longest,full
 
-if has("win32")
+if has('win32')
   set clipboard=unnamed
 endif
 
@@ -111,10 +119,11 @@ endif
 nmap <C-h> <BS>
 
 nmap <BS> <C-^>
-nmap <silent> <C-]> <Plug>(coc-definition)
+nmap <silent> ,q <Plug>(qf_qf_toggle)
 nmap <silent> con <Plug>(coc-rename)
 nmap <silent> gD <Plug>(coc-implementation)
-nmap <silent> gd <Plug>(coc-declaration)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> goe :Dirvish<CR>
 nmap <silent> gr <Plug>(coc-references)
 nnoremap ' `
 nnoremap / ms/
@@ -129,7 +138,7 @@ nnoremap <silent> ,gb :Gblame<CR>
 nnoremap <silent> ,gc :Gcommit -v -q<CR>
 nnoremap <silent> ,gd :Gdiff<CR>
 nnoremap <silent> ,gl :Glog<CR>
-nnoremap <silent> ,gs :Git status<CR>
+nnoremap <silent> ,gs :Gstatus<CR>
 nnoremap <silent> ,gw :Gwrite<CR><CR>
 nnoremap <silent> ,ve :edit $MYVIMRC<CR>
 nnoremap <silent> ,vs :source $MYVIMRC<CR>:echom "init.vim reloaded"<CR>
@@ -139,9 +148,9 @@ nnoremap <silent> <Space>h :noh<CR>
 nnoremap <silent> <Space>ld :CocList diagnostics<CR>
 nnoremap <silent> <Space>ls :CocList symbols<CR>
 nnoremap <silent> <Space>q :q<CR>
-nnoremap <silent> <Space>t :call <SID>ToggleTerm("term://primary")<CR>
 nnoremap <silent> <Space>w :w<CR>
 nnoremap <silent> gV `[v`]
+nnoremap <silent> got :call <SID>ToggleTerm()<CR>
 nnoremap ? ms?
 nnoremap U <C-r>
 nnoremap Y y$
@@ -156,16 +165,19 @@ xnoremap coh :s///g<Left><Left>
 " Habit Breaks
 nnoremap <C-r> <Nop>
 nnoremap <C-w> <Nop>
+nnoremap <Space>t <Nop>
 nnoremap <Space>ve <Nop>
 nnoremap <Space>vs <Nop>
 nnoremap ` <Nop>
-nnoremap got <Nop>
 
 " Auto Expansion
 imap {<S-CR> {<CR>
 imap [<S-CR> [<CR>
 inoremap {<CR> {<CR>}<C-o>O
 inoremap [<CR> [<CR>]<C-oi>O
+
+" Brace Auto Indent
+inoremap <NL> <CR><ESC>%%i<CR><ESC>kI
 
 " Text Object
 onoremap <silent> ao :<C-u>call AChunkTextObject()<CR>
@@ -210,11 +222,15 @@ command! -nargs=* Make silent make <args> | cwindow 3
 command! Kwbd call s:Kwbd(1)
 
 " Credits to romainl
-function! CommandLineCompletionCR()
+function! EnhancedCR() abort
   let type = getcmdtype()
-  if type !=# ':'
+  if type ==# ':'
+    return "\<C-]>" . CommandLineCompletionCR()
+  else
     return "\<CR>"
   endif
+endfunction
+function! CommandLineCompletionCR() abort
   let cmdline = getcmdline()
   if cmdline =~ '\v\C^(ls|files|buffers)'
     " like :ls but prompts for a buffer command
@@ -250,7 +266,7 @@ function! CommandLineCompletionCR()
     return "\<CR>"
   endif
 endfunction
-cnoremap <expr> <CR> CommandLineCompletionCR()
+cnoremap <expr> <CR> EnhancedCR()
 
 augroup MakeExtensions
   autocmd!
@@ -386,13 +402,14 @@ function s:Kwbd(kwbdStage)
   endif
 endfunction
 
-function! s:ToggleTerm(termname)
-  let exists = bufexists(a:termname)
+function! s:ToggleTerm()
+  let l:termname = "term://" . &shell
+  let exists = bufexists(l:termname)
   if exists > 0
-    execute "buffer " . a:termname
+    execute "buffer " . l:termname
   else
     terminal
-    execute "keepalt file " . a:termname
+    execute "keepalt file " . l:termname
   endif
 endfunction
 
@@ -404,14 +421,3 @@ function! LightLineGitBranch()
   endif
   return ''
 endfunction
-
-" augroup Session
-"   autocmd!
-"   autocmd VimLeave * call <SID>UpdateSession(getcwd() . '/.session.vim')
-"   autocmd BufEnter * call <SID>UpdateSession(getcwd() . '/.session.vim')
-" augroup END
-" function! s:UpdateSession(filepath)
-"   if filereadable(a:filepath)
-"     execute 'mksession! ' . a:filepath
-"   endif
-" endfunction
