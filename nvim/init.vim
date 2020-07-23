@@ -2,12 +2,13 @@ let mapleader = "\<Space>"
 
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'LnL7/vim-nix'
+Plug 'derekwyatt/vim-scala'
 Plug 'elixir-editors/vim-elixir'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf', {'do': { -> fzf#install() }}
 Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-dirvish'
-Plug 'justinmk/vim-sneak'
+Plug 'ludovicchabant/vim-gutentags'
 Plug 'machakann/vim-sandwich'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
@@ -17,13 +18,13 @@ Plug 'romainl/vim-qf'
 Plug 'rust-lang/rust.vim'
 Plug 'tomasiser/vim-code-dark'
 Plug 'tommcdo/vim-lion'
-Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession' | Plug 'dhruvasagar/vim-prosession'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
+Plug 'vim-python/python-syntax'
 Plug 'wellle/targets.vim'
 if has('win32')
   Plug 'iamcco/markdown-preview.nvim', {'do': 'cd app & yarn install'}
@@ -39,24 +40,82 @@ syntax on
 filetype plugin indent on
 
 let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden --glob !.git'
-let g:prosession_dir = stdpath('data') . '/session'
+let g:dirvish_mode = ':sort ,^.*[\/],'
 let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5, 'border': 'sharp' } }
 let g:lightline = {}
 let g:lightline.active = {}
-let g:lightline.active.left = [['mode'], ['gitbranch', 'relativepath', 'modified']]
+let g:lightline.active.left = [['mode'], ['gitbranch', 'filepath', 'modified']]
 let g:lightline.colorscheme = 'codedark'
-let g:lightline.component_function = { 'gitbranch': 'LightLineGitBranch' }
+let g:lightline.component_function = { 'gitbranch': 'status#gitbranch', 'filepath': 'status#filepath' }
+let g:gutentags_cache_dir = stdpath('data') . '/tags'
+let g:gutentags_ctags_extra_args = ['--tag-relative=yes', '--fields=+ailmnS']
+let g:gutentags_generate_on_empty_buffer = 0
+let g:gutentags_generate_on_missing = 1
+let g:gutentags_generate_on_new = 1
+let g:gutentags_generate_on_write = 1
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_winsize = 25
+let g:prosession_dir = stdpath('data') . '/session'
+let g:python_highlight_all = 1
+let g:scala_use_default_keymappings = 0
 let g:sneak#label = 1
 let g:sneak#use_ic_scs = 1
+
+let g:gutentags_ctags_exclude = [
+      \ '*.git', '*.svg', '*.hg',
+      \ '*/tests/*',
+      \ 'build',
+      \ 'dist',
+      \ '*sites/*/files/*',
+      \ 'bin',
+      \ 'node_modules',
+      \ 'bower_components',
+      \ 'cache',
+      \ 'compiled',
+      \ 'docs',
+      \ 'example',
+      \ 'bundle',
+      \ 'vendor',
+      \ '*.md',
+      \ '*-lock.json',
+      \ '*.lock',
+      \ '*bundle*.js',
+      \ '*build*.js',
+      \ '.*rc*',
+      \ '*.json',
+      \ '*.min.*',
+      \ '*.map',
+      \ '*.bak',
+      \ '*.zip',
+      \ '*.pyc',
+      \ '*.class',
+      \ '*.sln',
+      \ '*.Master',
+      \ '*.csproj',
+      \ '*.tmp',
+      \ '*.csproj.user',
+      \ '*.cache',
+      \ '*.pdb',
+      \ 'tags*',
+      \ 'cscope.*',
+      \ '*.css',
+      \ '*.less',
+      \ '*.scss',
+      \ '*.exe', '*.dll',
+      \ '*.mp3', '*.ogg', '*.flac',
+      \ '*.swp', '*.swo',
+      \ '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png',
+      \ '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
+      \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
+      \ ]
 
 silent! colorscheme codedark
 
 augroup File
   autocmd!
   autocmd BufEnter,FocusGained * :checktime
+  autocmd BufRead,BufNewFile *.sbt set filetype=scala
   autocmd BufReadPost * :call RestoreLastCursorPosition()
   autocmd BufWritePre * silent! lua require("buffer").trim_whitespace()
   autocmd FileType netrw setl bufhidden=wipe
@@ -76,6 +135,12 @@ augroup Terminal
   autocmd FileType fzf tunmap <buffer> <ESC>
 augroup END
 
+augroup Dirvish
+  autocmd!
+  autocmd BufEnter dirvish :edit<CR>
+  autocmd FileType dirvish nnoremap <buffer> <Space>e :e %
+augroup END
+
 set autoread
 set background=dark
 set backspace=indent,eol,start
@@ -93,11 +158,11 @@ set incsearch
 set lazyredraw
 set mouse=
 set nobackup
+set noequalalways
 set noruler
 set noswapfile
 set path+=src/**,test/**
 set scrolloff=0
-set shiftwidth=2
 set smarttab
 set splitbelow
 set splitright
@@ -106,10 +171,6 @@ set undofile
 set updatetime=100
 set wildmenu
 set wildmode=list:longest,full
-
-if has('win32')
-  set clipboard=unnamed
-endif
 
 " noshowcmd is BUGGED, do NOT enable it. Screen tears on linux.
 " set noshowcmd
@@ -131,6 +192,7 @@ nnoremap 0 ^
 nnoremap <C-p> <C-i>
 nnoremap <Tab> :ls<CR>:b<Space>
 nnoremap <expr> <A-CR> GuiWindowFullScreen(!g:GuiWindowFullScreen)
+nnoremap <silent> ,bd :<C-u>Kwbd<CR>
 nnoremap <silent> ,cd :cd %:p:h<CR>:echom ":cd " . expand("%:p:h")<CR>
 nnoremap <silent> ,f :Files<CR>
 nnoremap <silent> ,ga :Gcommit --amend -v -q<CR>
@@ -138,19 +200,23 @@ nnoremap <silent> ,gb :Gblame<CR>
 nnoremap <silent> ,gc :Gcommit -v -q<CR>
 nnoremap <silent> ,gd :Gdiff<CR>
 nnoremap <silent> ,gl :Glog<CR>
-nnoremap <silent> ,gs :Gstatus<CR>
+nnoremap <silent> ,gs :Gedit<Space>:<CR>
 nnoremap <silent> ,gw :Gwrite<CR><CR>
 nnoremap <silent> ,ve :edit $MYVIMRC<CR>
 nnoremap <silent> ,vs :source $MYVIMRC<CR>:echom "init.vim reloaded"<CR>
 nnoremap <silent> <F5> :e %<CR>
-nnoremap <silent> <Space>bd :<C-u>Kwbd<CR>
+nnoremap <silent> <Space>P "+P
+nnoremap <silent> <Space>Y "+yg_
 nnoremap <silent> <Space>h :noh<CR>
 nnoremap <silent> <Space>ld :CocList diagnostics<CR>
 nnoremap <silent> <Space>ls :CocList symbols<CR>
+nnoremap <silent> <Space>p "+p
+nnoremap <silent> <Space>p "+p
 nnoremap <silent> <Space>q :q<CR>
 nnoremap <silent> <Space>w :w<CR>
+nnoremap <silent> <Space>y "+y
 nnoremap <silent> gV `[v`]
-nnoremap <silent> got :call <SID>ToggleTerm()<CR>
+nnoremap <silent> got :call terminus#ToggleTerm()<CR>
 nnoremap ? ms?
 nnoremap U <C-r>
 nnoremap Y y$
@@ -160,24 +226,27 @@ nnoremap gs :Grep<Space>
 nnoremap gw <C-w>
 nnoremap j gj
 nnoremap k gk
+vnoremap <silent> <Space>P "+P
+vnoremap <silent> <Space>p "+p
+vnoremap <silent> <Space>y "+y
 xnoremap coh :s///g<Left><Left>
 
 " Habit Breaks
 nnoremap <C-r> <Nop>
 nnoremap <C-w> <Nop>
+nnoremap <Space>bd <Nop>
 nnoremap <Space>t <Nop>
 nnoremap <Space>ve <Nop>
 nnoremap <Space>vs <Nop>
 nnoremap ` <Nop>
 
 " Auto Expansion
-imap {<S-CR> {<CR>
+imap (<S-CR> (<CR>
 imap [<S-CR> [<CR>
+imap {<S-CR> {<CR>
+inoremap (<CR> (<CR>)<C-o>O
+inoremap [<CR> [<CR>]<C-o>O
 inoremap {<CR> {<CR>}<C-o>O
-inoremap [<CR> [<CR>]<C-oi>O
-
-" Brace Auto Indent
-inoremap <NL> <CR><ESC>%%i<CR><ESC>kI
 
 " Text Object
 onoremap <silent> ao :<C-u>call AChunkTextObject()<CR>
@@ -185,88 +254,27 @@ onoremap <silent> io :<C-u>call InnerChunkTextObject()<CR>
 vnoremap <silent> ao <ESC>:call AChunkTextObject()<CR><ESC>gv
 vnoremap <silent> io <ESC>:call InnerChunkTextObject()<CR><ESC>gv
 
-xnoremap i% :<C-u>let z = @/\|1;/^./kz<CR>G??<CR>:let @/ = z<CR>V'z
-onoremap i% :<C-u>normal vi%<CR>
-xnoremap a% GoggV
-onoremap a% :<C-u>normal va%<CR>
-
-function! VisualNumber()
-	call search('\d\([^0-9\.]\|$\)', 'cW')
-	normal v
-	call search('\(^\|[^0-9\.]\d\)', 'becW')
-endfunction
-xnoremap in :<C-u>call VisualNumber()<CR>
-onoremap in :<C-u>normal vin<CR>
+xnoremap ie :<C-u>let z = @/\|1;/^./kz<CR>G??<CR>:let @/ = z<CR>V'z
+onoremap ie :<C-u>normal vie<CR>
+xnoremap ae GoggV
+onoremap ae :<C-u>normal vae<CR>
 
 xnoremap il g_o^
 onoremap il :<C-u>normal vil<CR>
 xnoremap al $o0
 onoremap al :<C-u>normal val<CR>
 
-for char in [ '_', '.', ':', ',', ';', '<bar>', '/', '<bslash>', '*', '+', '-', '#' ]
-	execute 'xnoremap i' . char . ' :<C-u>normal! T' . char . 'vt' . char . '<CR>'
-	execute 'onoremap i' . char . ' :normal vi' . char . '<CR>'
-	execute 'xnoremap a' . char . ' :<C-u>normal! F' . char . 'vf' . char . '<CR>'
-	execute 'onoremap a' . char . ' :normal va' . char . '<CR>'
-endfor
-
 " Abbreviation
 cnoreabbrev <expr> grep (getcmdtype() ==# ':' && getcmdline() ==# 'grep') ? 'Grep' : 'grep'
 cnoreabbrev <expr> make (getcmdtype() ==# ':' && getcmdline() ==# 'make') ? 'Make' : 'make'
-cnoreabbrev <expr> bd (getcmdtype() ==# ':' && getcmdline() ==# 'bd') ? 'Kwbd' : 'bd'
 cnoreabbrev <expr> git (getcmdtype() ==# ':' && getcmdline() ==# 'git') ? 'Git' : 'git'
 
 command! -nargs=+ -complete=file_in_path -bar Grep silent! grep! <args> | redraw! | cwindow 3
 command! -nargs=+ -complete=file_in_path -bar LGrep silent! lgrep! <args> | redraw! | lwindow 3
 command! -nargs=* Make silent make <args> | cwindow 3
-command! Kwbd call s:Kwbd(1)
+command! Kwbd call kwbd#run(1)
 
-" Credits to romainl
-function! EnhancedCR() abort
-  let type = getcmdtype()
-  if type ==# ':'
-    return "\<C-]>" . CommandLineCompletionCR()
-  else
-    return "\<CR>"
-  endif
-endfunction
-function! CommandLineCompletionCR() abort
-  let cmdline = getcmdline()
-  if cmdline =~ '\v\C^(ls|files|buffers)'
-    " like :ls but prompts for a buffer command
-    return "\<CR>:b\<Space>"
-  elseif cmdline =~ '\v\C/(#|nu|num|numb|numbe|number)$'
-    " like :g//# but prompts for a command
-    return "\<CR>:"
-  elseif cmdline =~ '\v\C^(dli|il)'
-    " like :dlist or :ilist but prompts for a count for :djump or :ijump
-    return "\<CR>:" . cmdline[0] . "j  " . split(cmdline, " ")[1] . "\<S-Left>\<Left>"
-  elseif cmdline =~ '\v\C^(cli|lli)'
-      " like :clist or :llist but prompts for an error/location number
-      return "\<CR>:sil " . repeat(cmdline[0], 2) . "\<Space>"
-  elseif cmdline =~ '\C^old'
-    " like :oldfiles but prompts for an old file to edit
-    set nomore
-    return "\<CR>:sil se more|e #<"
-  elseif cmdline =~ '\C^changes'
-    " like :changes but prompts for a change to jump to
-    set nomore
-    return "\<CR>:sil se more|norm! g;\<S-Left>"
-  elseif cmdline =~ '\C^ju'
-    " like :jumps but prompts for a position to jump to
-    set nomore
-    return "\<CR>:sil se more|norm! \<C-o>\<S-Left>"
-  elseif cmdline =~ '\C^marks'
-    " like :marks but prompts for a mark to jump to
-    return "\<CR>:norm! `"
-  elseif cmdline =~ '\C^undol'
-    " like :undolist but prompts for a change to undo
-    return "\<CR>:u "
-  else
-    return "\<CR>"
-  endif
-endfunction
-cnoremap <expr> <CR> EnhancedCR()
+cnoremap <expr> <CR> ccr#run()
 
 augroup MakeExtensions
   autocmd!
@@ -337,87 +345,4 @@ endfunction
 
 function! IsLineEmpty(lineno) abort
   return getline(a:lineno) !~ '[^\s]'
-endfunction
-
-function s:Kwbd(kwbdStage)
-  if(a:kwbdStage == 1)
-    if(&modified)
-      let answer = confirm("This buffer has been modified.  Are you sure you want to delete it?", "&Yes\n&No", 2)
-      if(answer != 1)
-        return
-      endif
-    endif
-    if(!buflisted(winbufnr(0)))
-      bd!
-      return
-    endif
-    let s:kwbdBufNum = bufnr("%")
-    let s:kwbdWinNum = winnr()
-    windo call s:Kwbd(2)
-    execute s:kwbdWinNum . 'wincmd w'
-    let s:buflistedLeft = 0
-    let s:bufFinalJump = 0
-    let l:nBufs = bufnr("$")
-    let l:i = 1
-    while(l:i <= l:nBufs)
-      if(l:i != s:kwbdBufNum)
-        if(buflisted(l:i))
-          let s:buflistedLeft = s:buflistedLeft + 1
-        else
-          if(bufexists(l:i) && !strlen(bufname(l:i)) && !s:bufFinalJump)
-            let s:bufFinalJump = l:i
-          endif
-        endif
-      endif
-      let l:i = l:i + 1
-    endwhile
-    if(!s:buflistedLeft)
-      if(s:bufFinalJump)
-        windo if(buflisted(winbufnr(0))) | execute "b! " . s:bufFinalJump | endif
-      else
-        enew
-        let l:newBuf = bufnr("%")
-        windo if(buflisted(winbufnr(0))) | execute "b! " . l:newBuf | endif
-      endif
-      execute s:kwbdWinNum . 'wincmd w'
-    endif
-    if(buflisted(s:kwbdBufNum) || s:kwbdBufNum == bufnr("%"))
-      execute "bd! " . s:kwbdBufNum
-    endif
-    if(!s:buflistedLeft)
-      set buflisted
-      set bufhidden=delete
-      set buftype=
-      setlocal noswapfile
-    endif
-  else
-    if(bufnr("%") == s:kwbdBufNum)
-      let prevbufvar = bufnr("#")
-      if(prevbufvar > 0 && buflisted(prevbufvar) && prevbufvar != s:kwbdBufNum)
-        b #
-      else
-        bn
-      endif
-    endif
-  endif
-endfunction
-
-function! s:ToggleTerm()
-  let l:termname = "term://" . &shell
-  let exists = bufexists(l:termname)
-  if exists > 0
-    execute "buffer " . l:termname
-  else
-    terminal
-    execute "keepalt file " . l:termname
-  endif
-endfunction
-
-function! LightLineGitBranch()
-  if exists('*fugitive#head') && winwidth('.') > 75
-    let bmark = '┣ '
-    let branch = fugitive#head()
-    return strlen(branch) ? bmark . branch : ''
-  endif
-  return ''
 endfunction
