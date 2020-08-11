@@ -115,11 +115,8 @@ silent! colorscheme codedark
 augroup File
   autocmd!
   autocmd BufEnter,FocusGained * :checktime
-  autocmd BufRead,BufNewFile *.sbt set filetype=scala
-  autocmd BufReadPost * :call RestoreLastCursorPosition()
+  autocmd BufReadPost * :call <SID>RestoreLastCursorPosition()
   autocmd BufWritePre * silent! lua require("buffer").trim_whitespace()
-  autocmd FileType netrw setl bufhidden=wipe
-  autocmd FileType text setlocal textwidth=78
   autocmd TextYankPost * silent! lua require("vim.highlight").on_yank()
 augroup END
 
@@ -133,13 +130,6 @@ augroup Terminal
   " Remap <ESC> to allow terminal escaping
   autocmd TermOpen * tnoremap <buffer> <ESC> <C-\><C-n>
   autocmd FileType fzf tunmap <buffer> <ESC>
-augroup END
-
-augroup Dirvish
-  autocmd!
-  autocmd BufEnter dirvish :edit<CR>
-  autocmd FileType dirvish nnoremap <buffer> <Space>e :e %
-  autocmd FileType dirvish nnoremap <buffer> <Space>d :Mkdir %
 augroup END
 
 set autoread
@@ -221,7 +211,7 @@ nnoremap <silent> <Space>ld :CocList diagnostics<CR>
 nnoremap <silent> <Space>ls :CocList symbols<CR>
 nnoremap <silent> <Space>p "+p
 nnoremap <silent> <Space>q :q<CR>
-nnoremap <silent> <Space>w :update<CR>
+nnoremap <silent> <Space>w :w<CR>
 nnoremap <silent> <Space>y "+y
 nnoremap <silent> gV `[v`]
 nnoremap <silent> goe :Dirvish<CR>
@@ -229,7 +219,7 @@ nnoremap <silent> got :call terminus#ToggleTerm()<CR>
 nnoremap coe :%s/\<<C-r>=expand('<cword>')<CR>\>//g<Left><Left>
 nnoremap cop :'{,'}s/\<<C-r>=expand('<cword>')<CR>\>//g<Left><Left>
 nnoremap g/ :silent!<Space>grep!<Space>""<Left>
-nnoremap z/ :g//#<Left><Left>
+nnoremap gy :g//#<Left><Left>
 vnoremap <silent> <Space>P "+P
 vnoremap <silent> <Space>p "+p
 vnoremap <silent> <Space>y "+y
@@ -244,11 +234,6 @@ noremap <Space>vs <Nop>
 noremap ` <Nop>
 
 " Text Object
-onoremap <silent> ao :<C-u>call AChunkTextObject()<CR>
-onoremap <silent> io :<C-u>call InnerChunkTextObject()<CR>
-vnoremap <silent> ao <ESC>:call AChunkTextObject()<CR><ESC>gv
-vnoremap <silent> io <ESC>:call InnerChunkTextObject()<CR><ESC>gv
-
 onoremap <silent> ae :<C-u>normal vae<CR>
 onoremap <silent> ie :<C-u>normal vie<CR>
 xnoremap <silent> ae GoggV
@@ -282,67 +267,8 @@ endfunction
 nnoremap <silent> gs :set operatorfunc=GrepOperator<CR>g@
 vnoremap <silent> gs :<C-u>call GrepOperator(visualmode())<CR>
 
-function! AChunkTextObject() abort
-  let [minline, maxline] = s:OutlineAChunk(line("."), indent("."))
-  call setpos(".", [0, minline, 0, 0])
-  normal! V
-  call setpos(".", [0, maxline, 0, 0])
-  normal! $
-endfunction
-
-function! InnerChunkTextObject() abort
-  let [minline, maxline] = s:OutlineInnerChunk(line("."), indent("."))
-  call setpos(".", [0, minline, 0, 0])
-  normal! V
-  call setpos(".", [0, maxline, 0, 0])
-  normal! $
-endfunction
-
-function! s:OutlineAChunk(lineno, indent) abort
-  if IsLineEmpty(a:lineno)
-    let [minline, maxline] = s:OutlineInnerChunk(a:lineno, a:indent)
-    let [_, maxline] = s:OutlineInnerChunk(maxline + 1, indent(maxline + 1))
-  else
-    let [minline, maxline] = s:OutlineInnerChunk(a:lineno, a:indent)
-    if IsLineEmpty(maxline + 1) && maxline + 1 <= line("$")
-      let [_, maxline] = s:OutlineInnerChunk(maxline + 1, indent(maxline + 1))
-    elseif IsLineEmpty(minline + 1) && minline - 1 >= 1
-      let [minline, _] = s:OutlineInnerChunk(minline - 1, indent(minline - 1))
-    endif
-  endif
-  return [minline, maxline]
-endfunction
-
-function! s:OutlineInnerChunk(lineno, indent) abort
-  if IsLineEmpty(a:lineno)
-    return s:OutlineIf(function("IsLineEmpty"), a:lineno)
-  else
-    return s:OutlineIf({ lineno -> indent(lineno) >= a:indent && !IsLineEmpty(lineno) },
-          \ a:lineno)
-  endif
-endfunction
-
-function! s:OutlineIf(condition, lineno) abort
-  let minline = AdvanceLineWhile(a:condition, a:lineno, -1)
-  let maxline = AdvanceLineWhile(a:condition, a:lineno, +1)
-  return [minline, maxline]
-endfunction
-
-function! AdvanceLineWhile(condition, initial, step)
-  let result = a:initial
-  let lastline = line("$")
-  while result > 1 && result < lastline && a:condition(result + a:step)
-    let result = result + a:step
-  endwhile
-  return result
-endfunction
-
-function! RestoreLastCursorPosition() abort
+function! s:RestoreLastCursorPosition() abort
   if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
     normal! `"
   endif
-endfunction
-
-function! IsLineEmpty(lineno) abort
-  return getline(a:lineno) !~ '[^\s]'
 endfunction
