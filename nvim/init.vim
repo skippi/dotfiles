@@ -2,12 +2,14 @@ let mapleader = "\<Space>"
 
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'LnL7/vim-nix'
+Plug 'bfrg/vim-cpp-modern'
 Plug 'derekwyatt/vim-scala'
 Plug 'elixir-editors/vim-elixir'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf', {'do': { -> fzf#install() }}
 Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-dirvish'
+Plug 'justinmk/vim-sneak'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'machakann/vim-sandwich'
 Plug 'michaeljsmith/vim-indent-object'
@@ -26,6 +28,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
 Plug 'vim-python/python-syntax'
 Plug 'wellle/targets.vim'
+Plug 'habamax/vim-godot'
 if has('win32')
   Plug 'iamcco/markdown-preview.nvim', {'do': 'cd app & yarn install'}
 endif
@@ -53,9 +56,6 @@ let g:gutentags_generate_on_empty_buffer = 0
 let g:gutentags_generate_on_missing = 1
 let g:gutentags_generate_on_new = 1
 let g:gutentags_generate_on_write = 1
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_winsize = 25
 let g:prosession_dir = stdpath('data') . '/session'
 let g:python_highlight_all = 1
 let g:scala_use_default_keymappings = 0
@@ -139,6 +139,7 @@ augroup Dirvish
   autocmd!
   autocmd BufEnter dirvish :edit<CR>
   autocmd FileType dirvish nnoremap <buffer> <Space>e :e %
+  autocmd FileType dirvish nnoremap <buffer> <Space>d :Mkdir %
 augroup END
 
 set autoread
@@ -179,18 +180,24 @@ set wildmode=list:longest,full
 " Apparently on windows term, the backspace key is mapped to <C-h>
 nmap <C-h> <BS>
 
-nmap <BS> <C-^>
+nnoremap <BS> <C-^>
+nnoremap <C-p> <C-i>
+nnoremap <Tab> :ls<CR>:b<Space>
+nnoremap U <C-r>
+nnoremap Y y$
+nnoremap gw <C-w>
+noremap ' `
+noremap / ms/
+noremap 0 ^
+noremap ? ms?
+noremap j gj
+noremap k gk
+
 nmap <silent> ,q <Plug>(qf_qf_toggle)
 nmap <silent> con <Plug>(coc-rename)
 nmap <silent> gD <Plug>(coc-implementation)
 nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> goe :Dirvish<CR>
 nmap <silent> gr <Plug>(coc-references)
-nnoremap ' `
-nnoremap / ms/
-nnoremap 0 ^
-nnoremap <C-p> <C-i>
-nnoremap <Tab> :ls<CR>:b<Space>
 nnoremap <expr> <A-CR> GuiWindowFullScreen(!g:GuiWindowFullScreen)
 nnoremap <silent> ,bd :<C-u>Kwbd<CR>
 nnoremap <silent> ,cd :cd %:p:h<CR>:echom ":cd " . expand("%:p:h")<CR>
@@ -205,40 +212,38 @@ nnoremap <silent> ,gw :Gwrite<CR><CR>
 nnoremap <silent> ,ve :edit $MYVIMRC<CR>
 nnoremap <silent> ,vs :source $MYVIMRC<CR>:echom "init.vim reloaded"<CR>
 nnoremap <silent> <F5> :e %<CR>
+nnoremap <silent> <Space>* "syiw<Esc>: let @/ = @s<CR>
 nnoremap <silent> <Space>P "+P
 nnoremap <silent> <Space>Y "+yg_
 nnoremap <silent> <Space>h :noh<CR>
 nnoremap <silent> <Space>ld :CocList diagnostics<CR>
 nnoremap <silent> <Space>ls :CocList symbols<CR>
 nnoremap <silent> <Space>p "+p
-nnoremap <silent> <Space>p "+p
 nnoremap <silent> <Space>q :q<CR>
 nnoremap <silent> <Space>w :w<CR>
 nnoremap <silent> <Space>y "+y
 nnoremap <silent> gV `[v`]
+nnoremap <silent> goe :Dirvish<CR>
 nnoremap <silent> got :call terminus#ToggleTerm()<CR>
-nnoremap ? ms?
-nnoremap U <C-r>
-nnoremap Y y$
 nnoremap coh :%s///g<Left><Left>
 nnoremap g/ :g//#<Left><Left>
-nnoremap gs :Grep<Space>
-nnoremap gw <C-w>
-nnoremap j gj
-nnoremap k gk
 vnoremap <silent> <Space>P "+P
 vnoremap <silent> <Space>p "+p
 vnoremap <silent> <Space>y "+y
 xnoremap coh :s///g<Left><Left>
 
+" Experiment
+nnoremap <silent> ,; /\<<C-R>=expand('<cword>')<CR>\>\C<CR>``cgn
+nnoremap <silent> ,, ?\<<C-R>=expand('<cword>')<CR>\>\C<CR>``cgN
+
 " Habit Breaks
-nnoremap <C-r> <Nop>
-nnoremap <C-w> <Nop>
-nnoremap <Space>bd <Nop>
-nnoremap <Space>t <Nop>
-nnoremap <Space>ve <Nop>
-nnoremap <Space>vs <Nop>
-nnoremap ` <Nop>
+noremap <C-r> <Nop>
+noremap <C-w> <Nop>
+noremap <Space>bd <Nop>
+noremap <Space>t <Nop>
+noremap <Space>ve <Nop>
+noremap <Space>vs <Nop>
+noremap ` <Nop>
 
 " Auto Expansion
 imap (<S-CR> (<CR>
@@ -259,28 +264,39 @@ onoremap ie :<C-u>normal vie<CR>
 xnoremap ae GoggV
 onoremap ae :<C-u>normal vae<CR>
 
-xnoremap il g_o^
-onoremap il :<C-u>normal vil<CR>
-xnoremap al $o0
-onoremap al :<C-u>normal val<CR>
+xnoremap i_ g_o^
+onoremap i_ :<C-u>normal vi_<CR>
+xnoremap a_ $o0
+onoremap a_ :<C-u>normal va_<CR>
 
 " Abbreviation
-cnoreabbrev <expr> grep (getcmdtype() ==# ':' && getcmdline() ==# 'grep') ? 'Grep' : 'grep'
 cnoreabbrev <expr> make (getcmdtype() ==# ':' && getcmdline() ==# 'make') ? 'Make' : 'make'
 cnoreabbrev <expr> git (getcmdtype() ==# ':' && getcmdline() ==# 'git') ? 'Git' : 'git'
 
-command! -nargs=+ -complete=file_in_path -bar Grep silent! grep! <args> | redraw! | cwindow 3
-command! -nargs=+ -complete=file_in_path -bar LGrep silent! lgrep! <args> | redraw! | lwindow 3
 command! -nargs=* Make silent make <args> | cwindow 3
 command! Kwbd call kwbd#run(1)
 
 cnoremap <expr> <CR> ccr#run()
 
-augroup MakeExtensions
-  autocmd!
-  autocmd QuickFixCmdPost [^l]* nested cwindow
-  autocmd QuickFixCmdPost l* nested lwindow
-augroup END
+function! Grep(...) abort
+	return system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
+endfunction
+command! -nargs=+ -complete=file_in_path -bar Grep cgetexpr Grep(<f-args>) | cwindow
+cnoreabbrev <expr> grep (getcmdtype() ==# ':' && getcmdline() ==# 'grep') ? 'Grep' : 'grep'
+
+function! GrepOperator(type) abort
+  if a:type ==# 'v'
+    noautocmd normal! `<v`>y
+  elseif a:type ==# 'char'
+    noautocmd normal! `[v`]y
+  else
+    return
+  endif
+  silent! execute "grep! " . shellescape(@@) " ."
+  cwindow
+endfunction
+nnoremap <silent> gs :set operatorfunc=GrepOperator<CR>g@
+vnoremap <silent> gs :<C-u>call GrepOperator(visualmode())<CR>
 
 function! AChunkTextObject() abort
   let [minline, maxline] = s:OutlineAChunk(line("."), indent("."))
@@ -338,7 +354,7 @@ function! AdvanceLineWhile(condition, initial, step)
 endfunction
 
 function! RestoreLastCursorPosition() abort
-  if 1 <= line("'\"") && line("'\"") <= line("$") && &filetype != "gitcommit"
+  if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
     normal! `"
   endif
 endfunction
