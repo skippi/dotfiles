@@ -199,6 +199,8 @@ nmap <silent> gD <Plug>(coc-implementation)
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gr <Plug>(coc-references)
 nnoremap <expr> <A-CR> GuiWindowFullScreen(!g:GuiWindowFullScreen)
+nnoremap <silent> ,, #``cgn
+nnoremap <silent> ,; *``cgn
 nnoremap <silent> ,bd :<C-u>Kwbd<CR>
 nnoremap <silent> ,cd :cd %:p:h<CR>:echom ":cd " . expand("%:p:h")<CR>
 nnoremap <silent> ,f :Files<CR>
@@ -212,7 +214,6 @@ nnoremap <silent> ,gw :Gwrite<CR><CR>
 nnoremap <silent> ,ve :edit $MYVIMRC<CR>
 nnoremap <silent> ,vs :source $MYVIMRC<CR>:echom "init.vim reloaded"<CR>
 nnoremap <silent> <F5> :e %<CR>
-nnoremap <silent> <Space>* "syiw<Esc>: let @/ = @s<CR>
 nnoremap <silent> <Space>P "+P
 nnoremap <silent> <Space>Y "+yg_
 nnoremap <silent> <Space>h :noh<CR>
@@ -220,21 +221,18 @@ nnoremap <silent> <Space>ld :CocList diagnostics<CR>
 nnoremap <silent> <Space>ls :CocList symbols<CR>
 nnoremap <silent> <Space>p "+p
 nnoremap <silent> <Space>q :q<CR>
-nnoremap <silent> <Space>w :w<CR>
+nnoremap <silent> <Space>w :update<CR>
 nnoremap <silent> <Space>y "+y
 nnoremap <silent> gV `[v`]
 nnoremap <silent> goe :Dirvish<CR>
 nnoremap <silent> got :call terminus#ToggleTerm()<CR>
-nnoremap coh :%s///g<Left><Left>
-nnoremap g/ :g//#<Left><Left>
+nnoremap coe :%s/\<<C-r>=expand('<cword>')<CR>\>//g<Left><Left>
+nnoremap cop :'{,'}s/\<<C-r>=expand('<cword>')<CR>\>//g<Left><Left>
+nnoremap g/ :silent!<Space>grep!<Space>""<Left>
+nnoremap z/ :g//#<Left><Left>
 vnoremap <silent> <Space>P "+P
 vnoremap <silent> <Space>p "+p
 vnoremap <silent> <Space>y "+y
-xnoremap coh :s///g<Left><Left>
-
-" Experiment
-nnoremap <silent> ,; /\<<C-R>=expand('<cword>')<CR>\>\C<CR>``cgn
-nnoremap <silent> ,, ?\<<C-R>=expand('<cword>')<CR>\>\C<CR>``cgN
 
 " Habit Breaks
 noremap <C-r> <Nop>
@@ -245,29 +243,21 @@ noremap <Space>ve <Nop>
 noremap <Space>vs <Nop>
 noremap ` <Nop>
 
-" Auto Expansion
-imap (<S-CR> (<CR>
-imap [<S-CR> [<CR>
-imap {<S-CR> {<CR>
-inoremap (<CR> (<CR>)<C-o>O
-inoremap [<CR> [<CR>]<C-o>O
-inoremap {<CR> {<CR>}<C-o>O
-
 " Text Object
 onoremap <silent> ao :<C-u>call AChunkTextObject()<CR>
 onoremap <silent> io :<C-u>call InnerChunkTextObject()<CR>
 vnoremap <silent> ao <ESC>:call AChunkTextObject()<CR><ESC>gv
 vnoremap <silent> io <ESC>:call InnerChunkTextObject()<CR><ESC>gv
 
-xnoremap ie :<C-u>let z = @/\|1;/^./kz<CR>G??<CR>:let @/ = z<CR>V'z
-onoremap ie :<C-u>normal vie<CR>
-xnoremap ae GoggV
-onoremap ae :<C-u>normal vae<CR>
+onoremap <silent> ae :<C-u>normal vae<CR>
+onoremap <silent> ie :<C-u>normal vie<CR>
+xnoremap <silent> ae GoggV
+xnoremap <silent> ie :<C-u>let z = @/\|1;/^./kz<CR>G??<CR>:let @/ = z<CR>V'z
 
-xnoremap i_ g_o^
-onoremap i_ :<C-u>normal vi_<CR>
-xnoremap a_ $o0
-onoremap a_ :<C-u>normal va_<CR>
+onoremap <silent> a_ :<C-u>normal va_<CR>
+onoremap <silent> i_ :<C-u>normal vi_<CR>
+xnoremap <silent> a_ $o0
+xnoremap <silent> i_ g_o^
 
 " Abbreviation
 cnoreabbrev <expr> make (getcmdtype() ==# ':' && getcmdline() ==# 'make') ? 'Make' : 'make'
@@ -277,12 +267,6 @@ command! -nargs=* Make silent make <args> | cwindow 3
 command! Kwbd call kwbd#run(1)
 
 cnoremap <expr> <CR> ccr#run()
-
-function! Grep(...) abort
-	return system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
-endfunction
-command! -nargs=+ -complete=file_in_path -bar Grep cgetexpr Grep(<f-args>) | cwindow
-cnoreabbrev <expr> grep (getcmdtype() ==# ':' && getcmdline() ==# 'grep') ? 'Grep' : 'grep'
 
 function! GrepOperator(type) abort
   if a:type ==# 'v'
