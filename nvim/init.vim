@@ -1,23 +1,17 @@
 let mapleader = "\<Space>"
 
 call plug#begin(stdpath('data') . '/plugged')
-Plug 'LnL7/vim-nix'
-Plug 'bfrg/vim-cpp-modern'
-Plug 'derekwyatt/vim-scala'
-Plug 'elixir-editors/vim-elixir'
+" Function
 Plug 'itchyny/lightline.vim'
-Plug 'junegunn/fzf', {'do': { -> fzf#install() }}
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-dirvish'
 Plug 'justinmk/vim-sneak'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'machakann/vim-sandwich'
-Plug 'michaeljsmith/vim-indent-object'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-Plug 'neovimhaskell/haskell-vim'
 Plug 'puremourning/vimspector'
 Plug 'romainl/vim-qf'
-Plug 'rust-lang/rust.vim'
 Plug 'tomasiser/vim-code-dark'
 Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-commentary'
@@ -26,14 +20,17 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession' | Plug 'dhruvasagar/vim-prosession'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
-Plug 'vim-python/python-syntax'
 Plug 'wellle/targets.vim'
+" Languages
+Plug 'bfrg/vim-cpp-modern'
+Plug 'derekwyatt/vim-scala'
+Plug 'elixir-editors/vim-elixir'
 Plug 'habamax/vim-godot'
-if has('win32')
-  Plug 'iamcco/markdown-preview.nvim', {'do': 'cd app & yarn install'}
-endif
-if !has('nvim')
-  Plug 'tpope/vim-sensible'
+Plug 'neovimhaskell/haskell-vim'
+Plug 'rust-lang/rust.vim'
+Plug 'vim-python/python-syntax'
+if has('unix')
+  Plug 'LnL7/vim-nix'
 endif
 call plug#end()
 
@@ -63,51 +60,51 @@ let g:sneak#label = 1
 let g:sneak#use_ic_scs = 1
 
 let g:gutentags_ctags_exclude = [
+      \ '*-lock.json',
+      \ '*.Master',
+      \ '*.bak',
+      \ '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png',
+      \ '*.cache',
+      \ '*.class',
+      \ '*.csproj',
+      \ '*.csproj.user',
+      \ '*.css',
+      \ '*.exe', '*.dll',
       \ '*.git', '*.svg', '*.hg',
+      \ '*.json',
+      \ '*.less',
+      \ '*.lock',
+      \ '*.map',
+      \ '*.md',
+      \ '*.min.*',
+      \ '*.mp3', '*.ogg', '*.flac',
+      \ '*.pdb',
+      \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
+      \ '*.pyc',
+      \ '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
+      \ '*.scss',
+      \ '*.sln',
+      \ '*.swp', '*.swo',
+      \ '*.tmp',
+      \ '*.zip',
       \ '*/tests/*',
-      \ 'build',
-      \ 'dist',
+      \ '*build*.js',
+      \ '*bundle*.js',
       \ '*sites/*/files/*',
+      \ '.*rc*',
       \ 'bin',
-      \ 'node_modules',
       \ 'bower_components',
+      \ 'build',
+      \ 'bundle',
       \ 'cache',
       \ 'compiled',
+      \ 'cscope.*',
+      \ 'dist',
       \ 'docs',
       \ 'example',
-      \ 'bundle',
-      \ 'vendor',
-      \ '*.md',
-      \ '*-lock.json',
-      \ '*.lock',
-      \ '*bundle*.js',
-      \ '*build*.js',
-      \ '.*rc*',
-      \ '*.json',
-      \ '*.min.*',
-      \ '*.map',
-      \ '*.bak',
-      \ '*.zip',
-      \ '*.pyc',
-      \ '*.class',
-      \ '*.sln',
-      \ '*.Master',
-      \ '*.csproj',
-      \ '*.tmp',
-      \ '*.csproj.user',
-      \ '*.cache',
-      \ '*.pdb',
+      \ 'node_modules',
       \ 'tags*',
-      \ 'cscope.*',
-      \ '*.css',
-      \ '*.less',
-      \ '*.scss',
-      \ '*.exe', '*.dll',
-      \ '*.mp3', '*.ogg', '*.flac',
-      \ '*.swp', '*.swo',
-      \ '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png',
-      \ '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
-      \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
+      \ 'vendor',
       \ ]
 
 silent! colorscheme codedark
@@ -135,12 +132,8 @@ augroup END
 set autoread
 set background=dark
 set backspace=indent,eol,start
-set expandtab tabstop=2 shiftwidth=2
 set fileformat=unix
 set fileformats=unix,dos
-set foldlevelstart=99
-set foldmethod=indent
-set foldnestmax=20
 set grepprg=rg\ --vimgrep\ --smart-case\ --follow
 set hidden
 set ignorecase smartcase
@@ -165,6 +158,9 @@ set wildmode=list:longest,full
 
 " noshowcmd is BUGGED, do NOT enable it. Screen tears on linux.
 " set noshowcmd
+
+" vim.unimpaired maps cop unless this is specified for god knows what reason
+nnoremap co <Nop>
 
 " Fixes windows backspace not doing <BS> behavior
 " Apparently on windows term, the backspace key is mapped to <C-h>
@@ -202,6 +198,7 @@ nnoremap <silent> ,gl :Glog<CR>
 nnoremap <silent> ,gs :Gedit<Space>:<CR>
 nnoremap <silent> ,gw :Gwrite<CR><CR>
 nnoremap <silent> ,ve :edit $MYVIMRC<CR>
+nnoremap <silent> ,vf :exec ":e " . stdpath('config') . '/ftplugin/' . &filetype . '.vim'<CR>
 nnoremap <silent> ,vs :source $MYVIMRC<CR>:echom "init.vim reloaded"<CR>
 nnoremap <silent> <F5> :e %<CR>
 nnoremap <silent> <Space>P "+P
@@ -214,45 +211,45 @@ nnoremap <silent> <Space>q :q<CR>
 nnoremap <silent> <Space>w :w<CR>
 nnoremap <silent> <Space>y "+y
 nnoremap <silent> gV `[v`]
+nnoremap <silent> goc :GC<CR>
 nnoremap <silent> goe :Dirvish<CR>
 nnoremap <silent> got :call terminus#ToggleTerm()<CR>
 nnoremap coe :%s/\<<C-r>=expand('<cword>')<CR>\>//g<Left><Left>
 nnoremap cop :'{,'}s/\<<C-r>=expand('<cword>')<CR>\>//g<Left><Left>
 nnoremap g/ :silent!<Space>grep!<Space>""<Left>
-nnoremap gy :g//#<Left><Left>
+nnoremap z/ :g//#<Left><Left>
 vnoremap <silent> <Space>P "+P
 vnoremap <silent> <Space>p "+p
 vnoremap <silent> <Space>y "+y
 
-" Habit Breaks
-noremap <C-r> <Nop>
-noremap <C-w> <Nop>
-noremap <Space>bd <Nop>
-noremap <Space>t <Nop>
-noremap <Space>ve <Nop>
-noremap <Space>vs <Nop>
-noremap ` <Nop>
+nnoremap <silent> gs :set operatorfunc=GrepOperator<CR>g@
+vnoremap <silent> gs :<C-u>call GrepOperator(visualmode())<CR>
 
 " Text Object
+onoremap <silent> ao :<C-u>call chunk#visual_a()<CR>
+onoremap <silent> io :<C-u>call chunk#visual_i()<CR>
+vnoremap <silent> ao <ESC>:call chunk#visual_a()<CR><ESC>gv
+vnoremap <silent> io <ESC>:call chunk#visual_i()<CR><ESC>gv
+
 onoremap <silent> ae :<C-u>normal vae<CR>
 onoremap <silent> ie :<C-u>normal vie<CR>
 xnoremap <silent> ae GoggV
 xnoremap <silent> ie :<C-u>let z = @/\|1;/^./kz<CR>G??<CR>:let @/ = z<CR>V'z
 
-onoremap <silent> a_ :<C-u>normal va_<CR>
-onoremap <silent> i_ :<C-u>normal vi_<CR>
-xnoremap <silent> a_ $o0
-xnoremap <silent> i_ g_o^
+onoremap <silent> ai :<C-u>normal vai<CR>
+onoremap <silent> ii :<C-u>normal vii<CR>
+xnoremap <silent> ai $o0
+xnoremap <silent> ii g_o^
 
 " Abbreviation
 cnoreabbrev <expr> make (getcmdtype() ==# ':' && getcmdline() ==# 'make') ? 'Make' : 'make'
 cnoreabbrev <expr> git (getcmdtype() ==# ':' && getcmdline() ==# 'git') ? 'Git' : 'git'
 
 command! -nargs=* Make silent make <args> | cwindow 3
+command! GC silent !chrome "file://%:p"
 command! Kwbd call kwbd#run(1)
 
 cnoremap <expr> <CR> ccr#run()
-
 function! GrepOperator(type) abort
   if a:type ==# 'v'
     noautocmd normal! `<v`>y
@@ -261,11 +258,9 @@ function! GrepOperator(type) abort
   else
     return
   endif
-  silent! execute "grep! " . shellescape(@@) " ."
+  silent! exec "grep! " . shellescape(escape(@@, "%#"))
   cwindow
 endfunction
-nnoremap <silent> gs :set operatorfunc=GrepOperator<CR>g@
-vnoremap <silent> gs :<C-u>call GrepOperator(visualmode())<CR>
 
 function! s:RestoreLastCursorPosition() abort
   if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
