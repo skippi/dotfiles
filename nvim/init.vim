@@ -2,26 +2,25 @@ let mapleader = "\<Space>"
 
 call plug#begin(stdpath('data') . '/plugged')
 " Function
-Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-dirvish'
 Plug 'justinmk/vim-sneak'
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'machakann/vim-sandwich'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'puremourning/vimspector'
 Plug 'romainl/vim-qf'
-Plug 'tomasiser/vim-code-dark'
 Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession' | Plug 'dhruvasagar/vim-prosession'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'wellle/targets.vim'
 " Languages
+Plug 'LnL7/vim-nix'
 Plug 'bfrg/vim-cpp-modern'
 Plug 'derekwyatt/vim-scala'
 Plug 'elixir-editors/vim-elixir'
@@ -29,12 +28,10 @@ Plug 'habamax/vim-godot'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'rust-lang/rust.vim'
 Plug 'vim-python/python-syntax'
-if has('unix')
-  Plug 'LnL7/vim-nix'
-endif
+" Visual
+Plug 'itchyny/lightline.vim'
+Plug 'tomasiser/vim-code-dark'
 call plug#end()
-
-runtime macros/sandwich/keymap/surround.vim
 
 syntax on
 filetype plugin indent on
@@ -42,17 +39,17 @@ filetype plugin indent on
 let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden --glob !.git'
 let g:dirvish_mode = ':sort ,^.*[\/],'
 let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5, 'border': 'sharp' } }
-let g:lightline = {}
-let g:lightline.active = {}
-let g:lightline.active.left = [['mode'], ['gitbranch', 'filepath', 'modified']]
-let g:lightline.colorscheme = 'codedark'
-let g:lightline.component_function = { 'gitbranch': 'status#gitbranch', 'filepath': 'status#filepath' }
 let g:gutentags_cache_dir = stdpath('data') . '/tags'
 let g:gutentags_ctags_extra_args = ['--tag-relative=yes', '--fields=+ailmnS']
 let g:gutentags_generate_on_empty_buffer = 0
 let g:gutentags_generate_on_missing = 1
 let g:gutentags_generate_on_new = 1
 let g:gutentags_generate_on_write = 1
+let g:lightline = {}
+let g:lightline.active = {}
+let g:lightline.active.left = [['mode'], ['gitbranch', 'filepath', 'modified']]
+let g:lightline.colorscheme = 'codedark'
+let g:lightline.component_function = { 'gitbranch': 'status#gitbranch', 'filepath': 'status#filepath' }
 let g:prosession_dir = stdpath('data') . '/session'
 let g:python_highlight_all = 1
 let g:scala_use_default_keymappings = 0
@@ -151,6 +148,7 @@ set smarttab
 set splitbelow
 set splitright
 set termguicolors
+set timeoutlen=500
 set undofile
 set updatetime=100
 set wildmenu
@@ -168,6 +166,7 @@ nmap <C-h> <BS>
 
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
+nnoremap <Space> <Nop>
 nnoremap <Tab> :ls<CR>:b<Space>
 nnoremap U <C-r>
 nnoremap Y y$
@@ -225,6 +224,8 @@ vnoremap <silent> <Space>y "+y
 nnoremap <silent> gs :set operatorfunc=GrepOperator<CR>g@
 vnoremap <silent> gs :<C-u>call GrepOperator(visualmode())<CR>
 
+cnoremap <expr> <CR> ccr#run()
+
 " Text Object
 onoremap <silent> ao :<C-u>call chunk#visual_a()<CR>
 onoremap <silent> io :<C-u>call chunk#visual_i()<CR>
@@ -236,10 +237,10 @@ onoremap <silent> ie :<C-u>normal vie<CR>
 xnoremap <silent> ae GoggV
 xnoremap <silent> ie :<C-u>let z = @/\|1;/^./kz<CR>G??<CR>:let @/ = z<CR>V'z
 
-onoremap <silent> ai :<C-u>normal vai<CR>
-onoremap <silent> ii :<C-u>normal vii<CR>
-xnoremap <silent> ai $o0
-xnoremap <silent> ii g_o^
+onoremap <silent> aj :<c-u>normal vai<cr>
+onoremap <silent> ij :<c-u>normal vii<cr>
+xnoremap <silent> aj $o0
+xnoremap <silent> ij g_o^
 
 " Abbreviation
 cnoreabbrev <expr> make (getcmdtype() ==# ':' && getcmdline() ==# 'make') ? 'Make' : 'make'
@@ -249,7 +250,6 @@ command! -nargs=* Make silent make <args> | cwindow 3
 command! GC silent !chrome "file://%:p"
 command! Kwbd call kwbd#run(1)
 
-cnoremap <expr> <CR> ccr#run()
 function! GrepOperator(type) abort
   if a:type ==# 'v'
     noautocmd normal! `<v`>y
