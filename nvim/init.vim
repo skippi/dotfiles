@@ -7,6 +7,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-dirvish'
 Plug 'justinmk/vim-sneak'
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'machakann/vim-sandwich'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'puremourning/vimspector'
 Plug 'romainl/vim-qf'
@@ -17,7 +18,6 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession' | Plug 'dhruvasagar/vim-prosession'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'wellle/targets.vim'
 " Languages
@@ -34,6 +34,9 @@ Plug 'vim-python/python-syntax'
 Plug 'itchyny/lightline.vim'
 Plug 'tomasiser/vim-code-dark'
 call plug#end()
+
+silent! call operator#sandwich#set('all', 'all', 'highlight', 0)
+runtime macros/sandwich/keymap/surround.vim
 
 syntax on
 filetype plugin indent on
@@ -58,6 +61,7 @@ let g:python_highlight_all = 1
 let g:scala_use_default_keymappings = 0
 let g:sneak#label = 1
 let g:sneak#use_ic_scs = 1
+let g:textobj_sandwich_no_default_key_mappings = 1
 
 let g:gutentags_ctags_exclude = [
       \ '*-lock.json',
@@ -152,11 +156,10 @@ noremap k gk
 
 nmap <silent> ,q <Plug>(qf_qf_toggle)
 nmap <silent> <Space>rW <Plug>(room-rename-cWORD)
-nmap <silent> <Space>re <Plug>(coc-rename)
 nmap <silent> <Space>ri <Plug>(room-rename-id)
+nmap <silent> <Space>re <Plug>(coc-rename)
 nmap <silent> <Space>rw <Plug>(room-rename-cword)
-nmap <silent> dsF ds)db
-nmap <silent> dsf diwds)
+nmap <silent> <Space><Space> <Plug>(room-rename-id)ip
 nmap <silent> gD <Plug>(coc-implementation)
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gr <Plug>(coc-references)

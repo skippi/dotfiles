@@ -2,20 +2,24 @@ let mapleader = "\<Space>"
 
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'justinmk/vim-sneak'
+Plug 'machakann/vim-sandwich'
 Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'wellle/targets.vim'
 call plug#end()
+
+silent! call operator#sandwich#set('all', 'all', 'highlight', 0)
+runtime macros/sandwich/keymap/surround.vim
 
 filetype plugin indent on
 
 let g:lion_squeeze_spaces = 1
 let g:sneak#label = 1
 let g:sneak#use_ic_scs = 1
+let g:textobj_sandwich_no_default_key_mappings = 1
 
 set hidden
 set ignorecase smartcase
@@ -52,12 +56,11 @@ noremap ? ms?
 noremap j gj
 noremap k gk
 
+nmap <silent> <Space><Space> <Plug>(room-rename-id)ip
 nmap <silent> <Space>rW <Plug>(room-rename-cWORD)
 nmap <silent> <Space>re :call VSCodeCall('editor.action.rename')<CR>
 nmap <silent> <Space>ri <Plug>(room-rename-id)
 nmap <silent> <Space>rw <Plug>(room-rename-cword)
-nmap <silent> dsF ds)db
-nmap <silent> dsf diwds)
 nmap <silent> gD :call VSCodeCall('editor.action.goToImplementation')<CR>
 nmap <silent> gd :call VSCodeCall('editor.action.revealDefinition')<CR>
 nmap <silent> gr :call VSCodeCall('editor.action.goToReferences')<CR>
