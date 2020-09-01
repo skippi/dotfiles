@@ -22,6 +22,12 @@ function! s:RenameIdentifierOperator(type) abort
   call s:do_rename('\<' . expand("<cword>") . '\>')
 endfunction
 
+nnoremap <Plug>(room-rename-repeat) m':set operatorfunc=<SID>RenameRepeatOperator<CR>g@
+function! s:RenameRepeatOperator(type) abort
+  normal! `'
+  execute ":'[,']&&"
+endfunction
+
 if exists('g:vscode')
   function! s:do_rename(pattern)
     execute ":'[,']s/" . a:pattern . "/" . input("Replace") . "/g"
@@ -29,6 +35,7 @@ if exists('g:vscode')
 else
   function! s:do_rename(pattern)
     call feedkeys(":'[,']s/" . a:pattern . "//g\<Left>\<Left>")
+    " silent! call repeat#set(":'[,']&&\<CR>")
   endfunction
 endif
 
@@ -42,6 +49,11 @@ function! s:GrepOperator(type) abort
   else
     return
   endif
-  silent! exec "grep! " . shellescape(escape(@@, "%#"))
-  cwindow
+  if exists('g:vscode')
+    call VSCodeCall('workbench.action.findInFiles', {"query": @@})
+    " call VSCodeNotify('workbench.action.focusPreviousGroup')
+  else
+    silent! exec "grep! " . shellescape(escape(@@, "%#"))
+    cwindow
+  endif
 endfunction
