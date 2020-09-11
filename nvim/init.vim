@@ -25,21 +25,14 @@ set updatetime=100
 " noshowcmd is BUGGED, do NOT enable it. Screen tears on linux.
 " set noshowcmd
 
-augroup File
-  autocmd!
-  autocmd BufWritePre * silent! lua require("buffer").trim_whitespace()
-  autocmd TextYankPost * silent! lua require("vim.highlight").on_yank()
-augroup END
-
-" Fixes windows backspace not doing <BS> behavior
-" Apparently on windows term, the backspace key is mapped to <C-h>
+" Fixes windows backspace not doing <BS> behavior Apparently on windows term, the backspace key is mapped to <C-h>
 nmap <C-h> <BS>
 
-nmap <silent> <Space><Space> <Plug>(room-rename-id)ip
-nmap <silent> <Space>rW <Plug>(room-rename-cWORD)
-nmap <silent> <Space>ri <Plug>(room-rename-id)
-nmap <silent> <Space>rw <Plug>(room-rename-cword)
-nmap <silent> gs <Plug>(room-grep)
+nmap <silent> <Space><Space> <Plug>(room_lift)<Plug>(room_rename)ip
+nmap <silent> <Space>r <Plug>(room_rename)
+nmap <silent> <Space>rr vg_o^<Plug>(room_rename)
+nmap <silent> gk <Plug>(room_lift)
+nmap <silent> gs <Plug>(room_grep)
 nmap <silent> gw <C-w>
 nnoremap <silent> ,, #``cgn
 nnoremap <silent> ,; *``cgn
@@ -47,14 +40,14 @@ nnoremap <silent> <C-p> <C-i>
 nnoremap <silent> <Space> <Nop>
 nnoremap <silent> <Space>P "+P
 nnoremap <silent> <Space>Y "+yg_
-nnoremap <silent> <Space>h :noh<CR>
 nnoremap <silent> <Space>p "+p
 nnoremap <silent> <Space>y "+y
-nnoremap <silent> Q <Nop>
+nnoremap <silent> Q q:
 nnoremap <silent> U <C-r>
 nnoremap <silent> Y y$
-nnoremap <silent> gj :<C-u>put =repeat(nr2char(10),v:count)<Bar>execute "'[-1"<CR>
-nnoremap <silent> gk :<C-u>put!=repeat(nr2char(10),v:count)<Bar>execute "']+1"<CR>
+nnoremap <silent> [<Space> :<C-u>put!=repeat(nr2char(10),v:count)<Bar>execute "']+1"<CR>
+nnoremap <silent> ]<Space> :<C-u>put =repeat(nr2char(10),v:count)<Bar>execute "'[-1"<CR>
+nnoremap <silent> gj :noh<CR>
 noremap / ms/
 noremap <silent> ' `
 noremap <silent> gh ^
@@ -62,8 +55,9 @@ noremap <silent> gl g_
 noremap <silent> j gj
 noremap <silent> k gk
 noremap ? ms?
-vmap <silent> <Space>r <Plug>(room-rename-visual)
-vmap <silent> gs <Plug>(room-grep)
+vmap <silent> <Space>r <Plug>(room_rename)
+vmap <silent> gk <Plug>(room_lift)
+vmap <silent> gs <Plug>(room_grep)
 vnoremap <silent> <Space>P "+P
 vnoremap <silent> <Space>p "+p
 vnoremap <silent> <space>y "+y
@@ -72,3 +66,8 @@ nmap <silent> <Space>aL <Plug>LionLeft
 nmap <silent> <Space>al <Plug>LionRight
 vmap <silent> <Space>aL <Plug>VLionLeft
 vmap <silent> <Space>al <Plug>VLionRight
+
+augroup File
+  au!
+  au TextYankPost * silent! lua require("vim.highlight").on_yank()
+augroup END

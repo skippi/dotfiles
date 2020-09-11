@@ -1,47 +1,48 @@
-vnoremap <Plug>(room-rename-visual) ym':set operatorfunc=<SID>RenameVisualOperator<CR>g@
-function! s:RenameVisualOperator(type) abort
-  normal! `'
-  call s:do_rename('\V' . escape(@@, '\/'))
-endfunction
+nnoremap <Plug>(room_rename) :set opfunc=<SID>renamefunc<CR>g@
+vnoremap <Plug>(room_rename) <ESC>:call <SID>renamefunc(visualmode(), 1)<CR>
+func! s:renamefunc(type, ...) abort
+  let sel_save = &selection
+  let &selection = "inclusive"
+  let reg_save = @@
+  if a:0
+    silent exe "noautocmd norm! gvy"
+  elseif a:type == "line"
+    silent exe "noautocmd norm! '[V']y"
+  else
+    silent exe "noautocmd norm! `[v`]y"
+  endif
+  if exists('g:vscode')
+    let subtext = input("symbolname")
+    if !empty(subtext)
+      execute ":'[,']s//" . subtext . "/g"
+      set opfunc=room#dotsubfunc
+    endif
+  else
+    call feedkeys(":'[,']s///g\|set opfunc=room#dotsubfunc\<C-Left>\<Left>\<Left>\<Left>\<Left>\<Left>\<Left>\<Left>")
+  endif
+  let &selection = sel_save
+  let @@ = reg_save
+endfunc
 
-nnoremap <Plug>(room-rename-cword) m':set operatorfunc=<SID>RenameCWordOperator<CR>g@
-function! s:RenameCWordOperator(type) abort
-  normal! `'
-  call s:do_rename(expand("<cword>"))
-endfunction
+func! room#dotsubfunc(type, ...) abort
+  let sel_save = &selection
+  let &selection = "inclusive"
+  let reg_save = @@
+  if a:0
+    silent exe "noautocmd norm! gvy"
+  elseif a:type == "line"
+    silent exe "noautocmd norm! '[V']y"
+  else
+    silent exe "noautocmd norm! `[v`]y"
+  endif
+  '[,']&&
+  let &selection = sel_save
+  let @@ = reg_save
+endfunc
 
-nnoremap <Plug>(room-rename-cWORD) m':set operatorfunc=<SID>RenameCWORDOperator<CR>g@
-function! s:RenameCWORDOperator(type) abort
-  normal! `'
-  call s:do_rename('\V' . escape(expand("<cWORD>"), '\/'))
-endfunction
-
-nnoremap <Plug>(room-rename-id) m':set operatorfunc=<SID>RenameIdentifierOperator<CR>g@
-function! s:RenameIdentifierOperator(type) abort
-  normal! `'
-  call s:do_rename('\<' . expand("<cword>") . '\>')
-endfunction
-
-nnoremap <Plug>(room-rename-repeat) m':set operatorfunc=<SID>RenameRepeatOperator<CR>g@
-function! s:RenameRepeatOperator(type) abort
-  normal! `'
-  execute ":'[,']&&"
-endfunction
-
-if exists('g:vscode')
-  function! s:do_rename(pattern)
-    execute ":'[,']s/" . a:pattern . "/" . input("Replace") . "/g"
-  endfunction
-else
-  function! s:do_rename(pattern)
-    call feedkeys(":'[,']s/" . a:pattern . "//g\<Left>\<Left>")
-    " silent! call repeat#set(":'[,']&&\<CR>")
-  endfunction
-endif
-
-nnoremap <Plug>(room-grep) :set operatorfunc=<SID>GrepOperator<CR>g@
-vnoremap <Plug>(room-grep) :<C-u>call <SID>GrepOperator(visualmode())<CR>
-function! s:GrepOperator(type) abort
+nnoremap <Plug>(room_grep) :set operatorfunc=<SID>grepfunc<CR>g@
+vnoremap <Plug>(room_grep) :<C-u>call <SID>grepfunc(visualmode())<CR>
+func! s:grepfunc(type) abort
   if a:type ==# 'v'
     noautocmd normal! `<v`>y
   elseif a:type ==# 'char'
@@ -51,9 +52,11 @@ function! s:GrepOperator(type) abort
   endif
   if exists('g:vscode')
     call VSCodeCall('workbench.action.findInFiles', {"query": @@})
-    " call VSCodeNotify('workbench.action.focusPreviousGroup')
   else
     silent! exec "grep! " . shellescape(escape(@@, "%#"))
     cwindow
   endif
-endfunction
+endfunc
+
+nnoremap <silent> <Plug>(room_lift) :let room_view = winsaveview()<CR>*N:call winrestview(room_view)<CR>
+vnoremap <silent> <Plug>(room_lift) y:let room_view = winsaveview()<CR>/\V<C-r>0<CR>N:call winrestview(room_view)<CR>
