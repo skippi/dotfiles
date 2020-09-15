@@ -11,7 +11,7 @@ set rtp+=~/src/github.com/skippi/vim-sneak
 nnoremap <BS> :call VSCodeCall('workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup') <bar> call VSCodeCall('list.select')<CR>
 nnoremap <Tab> :Find<CR>
 nnoremap gws :Split<CR>
-nnoremap gwv :Vsplit<CR><C-w>p
+nnoremap gwv :Vsplit<CR>
 
 nnoremap <silent> ,ve :exec ":Edit! " . stdpath('config') . "/vscode.vim"<CR>
 nnoremap <silent> <Space>fd :Quit<CR>
