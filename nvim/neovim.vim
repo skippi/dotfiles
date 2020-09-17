@@ -42,29 +42,29 @@ set splitright
 set termguicolors
 set wildmode=list:longest,full
 
+nmap <silent> <Space>re <Plug>(coc-rename)
 nnoremap <BS> <C-^>
 nnoremap <Tab> :ls<CR>:b<Space>
-
-nmap <silent> <Space>re <Plug>(coc-rename)
-" nnoremap <silent> - :Ex %:h<CR>
-nnoremap <silent> - :call <SID>openfm(expand("%:h"))<CR>
+nnoremap <silent> - :tab sp +lcd%:p:h\|Bash\|lcd-<CR>
 nnoremap <silent> <Space>fd :<C-u>Kwbd<CR>
-nnoremap <silent> <Space>fl :e %<CR>
+nnoremap <silent> <Space>fl :e%<CR>
 nnoremap <silent> <Space>fm :silent! make %:S<CR>
 nnoremap <silent> <Space>fo :Files<CR>
-nnoremap <silent> <Space>gd :Gdiff<CR>
+nnoremap <silent> <Space>gb :Gblame<CR>
 nnoremap <silent> <Space>gl :Glog<CR>
 nnoremap <silent> <Space>gs :Gedit :<CR>
+nnoremap <silent> <Space>ob :tab sp +Tex\ bash\ -c\ "tig\ blame\ %"<CR>
+nnoremap <silent> <Space>ot :tab sp +Tex\ bash\ -c\ tig<CR>
 nnoremap <silent> <Space>q :q<CR>
 nnoremap <silent> <Space>w :w<CR>
-nnoremap <silent> _ :Ex .<CR>
+nnoremap <silent> _ :tab sp +Bash<CR>
 nnoremap g/ :silent!<Space>grep!<Space>""<Left>
 nnoremap z/ :g//#<Left><Left>
 
 cnoremap <expr> <CR> ccr#run()
 
 command! Echrome silent !chrome "file://%:p"
-command! Ecode silent exec "!start /B code --goto " . bufname("%") . ":" . line('.') . ":" . col('.')
+command! Ecode silent exec "!code.exe --goto " . bufname("%") . ":" . line('.') . ":" . col('.')
 command! Eftp silent exe "e $RTP/after/ftplugin/" . &filetype . ".vim"
 command! Eidea silent exec "!start /B idea64 " . bufname("%") . ":" . line('.')
 command! Emacs silent exec "!start /B emacsclientw +" . line('.') . ":" . col('.') . " " . bufname("%")
@@ -82,12 +82,24 @@ func! s:flake8(args) abort
   let &l:errorformat = olderr
 endfunc
 
-func! s:openfm(path) abort
-  let cwd = getcwd()
-  exe "lcd " . a:path
-  terminal wsl
-  exe "lcd " . cwd
+command! -bar -nargs=* Bash Tex bash <args>
+command! -nargs=+ Tex
+      \ call <SID>texpre()|
+      \ set ssl|
+      \ exe "terminal" '<args>'|
+      \ set nossl
+func! s:texpre() abort
+  aug temp
+    au! BufEnter * startinsert | sil! au! temp
+  aug END
 endfunc
+
+command! -nargs=0 Syn call s:syn()
+function! s:syn()
+  for id in synstack(line("."), col("."))
+    echo synIDattr(id, "name")
+  endfor
+endfunction
 
 let g:usercmd = 0
 augroup usercmd
@@ -103,6 +115,7 @@ augroup usercmd
         \   cnoremap <buffer> f F|
         \   cnoremap <buffer> g G|
         \   cnoremap <buffer> p P|
+        \   cnoremap <buffer> s S|
         \ endif
   au CmdlineChanged,CmdlineLeave *
         \ if g:usercmd |
@@ -111,6 +124,7 @@ augroup usercmd
         \   silent! cunmap <buffer> f|
         \   silent! cunmap <buffer> g|
         \   silent! cunmap <buffer> p|
+        \   silent! cunmap <buffer> s|
         \   let g:usercmd = 0|
         \ endif
 augroup END
