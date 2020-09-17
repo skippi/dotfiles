@@ -45,8 +45,9 @@ set wildmode=list:longest,full
 nmap <silent> <Space>re <Plug>(coc-rename)
 nnoremap <BS> <C-^>
 nnoremap <Tab> :ls<CR>:b<Space>
-nnoremap <silent> - :tab sp +lcd%:p:h\|Bash\|lcd-<CR>
-nnoremap <silent> <Space>fd :<C-u>Kwbd<CR>
+" nnoremap <silent> - :tab sp +lcd%:p:h\|Bash\|lcd-<CR>
+nnoremap <silent> - :call <SID>open_nnn(expand("%:p:h"))<CR>
+nnoremap <silent> <Space>fd :Kwbd<CR>
 nnoremap <silent> <Space>fl :e%<CR>
 nnoremap <silent> <Space>fm :silent! make %:S<CR>
 nnoremap <silent> <Space>fo :Files<CR>
@@ -57,18 +58,20 @@ nnoremap <silent> <Space>ob :tab sp +Tex\ bash\ -c\ "tig\ blame\ %"<CR>
 nnoremap <silent> <Space>ot :tab sp +Tex\ bash\ -c\ tig<CR>
 nnoremap <silent> <Space>q :q<CR>
 nnoremap <silent> <Space>w :w<CR>
-nnoremap <silent> _ :tab sp +Bash<CR>
+nnoremap <silent> _ :call <SID>open_nnn(expand("."))<CR>
 nnoremap g/ :silent!<Space>grep!<Space>""<Left>
 nnoremap z/ :g//#<Left><Left>
 
 cnoremap <expr> <CR> ccr#run()
 
 command! Echrome silent !chrome "file://%:p"
+command! Hitest silent so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! Ecode silent exec "!code.exe --goto " . bufname("%") . ":" . line('.') . ":" . col('.')
 command! Eftp silent exe "e $RTP/after/ftplugin/" . &filetype . ".vim"
 command! Eidea silent exec "!start /B idea64 " . bufname("%") . ":" . line('.')
 command! Emacs silent exec "!start /B emacsclientw +" . line('.') . ":" . col('.') . " " . bufname("%")
 command! Ertp silent Ex $RTP
+command! Esyn silent exe "e $RTP/after/syntax/" . &filetype . ".vim"
 command! Kwbd call kwbd#run(1)
 
 command! -nargs=* Flake8 call <SID>flake8(<q-args>)
@@ -94,6 +97,47 @@ func! s:texpre() abort
   aug END
 endfunc
 
+func! s:open_nnn(cwd) abort
+  set ssl
+  let s:nnn_tempfile = expand(tempname())
+  " let clipath = s:vim_to_cli(s:nnn_tempfile)
+  let clipath = s:nnn_tempfile
+  let cmd = 'lf -selection-path "' . clipath . '"'
+  let opts = {'on_exit': funcref('s:nnn_exit'), 'cwd': a:cwd}
+  tabe
+  set ft=nnn
+  call termopen(cmd, opts)
+  set nossl
+endfunc
+
+func! s:nnn_exit(...) abort
+  if filereadable(s:nnn_tempfile)
+    let paths = readfile(s:nnn_tempfile)
+    if !empty(paths)
+      bd!
+      for path in paths
+        exe "e" fnamemodify(fnameescape(path), ":~:.")
+      endfor
+    endif
+  endif
+endfunc
+
+func! s:vim_to_cli(path)
+  if has("win32")
+    return "/mnt/c" . split(a:path, ":")[1]
+  else
+    return a:path
+  endif
+endfunc
+
+func! s:cli_to_vim(path)
+  if has("win32")
+    return "C:" . a:path[6:]
+  else
+    return a:path
+  endif
+endfunc
+
 command! -nargs=0 Syn call s:syn()
 function! s:syn()
   for id in synstack(line("."), col("."))
@@ -114,6 +158,7 @@ augroup usercmd
         \   cnoremap <buffer> e E|
         \   cnoremap <buffer> f F|
         \   cnoremap <buffer> g G|
+        \   cnoremap <buffer> h H|
         \   cnoremap <buffer> p P|
         \   cnoremap <buffer> s S|
         \ endif
@@ -123,6 +168,7 @@ augroup usercmd
         \   silent! cunmap <buffer> e|
         \   silent! cunmap <buffer> f|
         \   silent! cunmap <buffer> g|
+        \   silent! cunmap <buffer> h|
         \   silent! cunmap <buffer> p|
         \   silent! cunmap <buffer> s|
         \   let g:usercmd = 0|
