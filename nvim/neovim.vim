@@ -45,8 +45,7 @@ set wildmode=list:longest,full
 nmap <silent> <Space>re <Plug>(coc-rename)
 nnoremap <BS> <C-^>
 nnoremap <Tab> :ls<CR>:b<Space>
-" nnoremap <silent> - :tab sp +lcd%:p:h\|Bash\|lcd-<CR>
-nnoremap <silent> - :call <SID>open_nnn(expand("%:p:h"))<CR>
+nnoremap <silent> - :call nnn#bufopen()<CR>
 nnoremap <silent> <Space>fd :Kwbd<CR>
 nnoremap <silent> <Space>fl :e%<CR>
 nnoremap <silent> <Space>fm :silent! make %:S<CR>
@@ -58,7 +57,7 @@ nnoremap <silent> <Space>ob :tab sp +Tex\ bash\ -c\ "tig\ blame\ %"<CR>
 nnoremap <silent> <Space>ot :tab sp +Tex\ bash\ -c\ tig<CR>
 nnoremap <silent> <Space>q :q<CR>
 nnoremap <silent> <Space>w :w<CR>
-nnoremap <silent> _ :call <SID>open_nnn(expand("."))<CR>
+nnoremap <silent> _ :call nnn#open(".")<CR>
 nnoremap g/ :silent!<Space>grep!<Space>""<Left>
 nnoremap z/ :g//#<Left><Left>
 
@@ -70,7 +69,7 @@ command! Ecode silent exec "!code.exe --goto " . bufname("%") . ":" . line('.') 
 command! Eftp silent exe "e $RTP/after/ftplugin/" . &filetype . ".vim"
 command! Eidea silent exec "!start /B idea64 " . bufname("%") . ":" . line('.')
 command! Emacs silent exec "!start /B emacsclientw +" . line('.') . ":" . col('.') . " " . bufname("%")
-command! Ertp silent Ex $RTP
+command! Ertp call <SID>open_nnn(expand("$RTP"))
 command! Esyn silent exe "e $RTP/after/syntax/" . &filetype . ".vim"
 command! Kwbd call kwbd#run(1)
 
@@ -85,7 +84,6 @@ func! s:flake8(args) abort
   let &l:errorformat = olderr
 endfunc
 
-command! -bar -nargs=* Bash Tex bash <args>
 command! -nargs=+ Tex
       \ call <SID>texpre()|
       \ set ssl|
@@ -95,47 +93,6 @@ func! s:texpre() abort
   aug temp
     au! BufEnter * startinsert | sil! au! temp
   aug END
-endfunc
-
-func! s:open_nnn(cwd) abort
-  set ssl
-  let s:nnn_tempfile = expand(tempname())
-  " let clipath = s:vim_to_cli(s:nnn_tempfile)
-  let clipath = s:nnn_tempfile
-  let cmd = 'lf -selection-path "' . clipath . '"'
-  let opts = {'on_exit': funcref('s:nnn_exit'), 'cwd': a:cwd}
-  tabe
-  set ft=nnn
-  call termopen(cmd, opts)
-  set nossl
-endfunc
-
-func! s:nnn_exit(...) abort
-  if filereadable(s:nnn_tempfile)
-    let paths = readfile(s:nnn_tempfile)
-    if !empty(paths)
-      bd!
-      for path in paths
-        exe "e" fnamemodify(fnameescape(path), ":~:.")
-      endfor
-    endif
-  endif
-endfunc
-
-func! s:vim_to_cli(path)
-  if has("win32")
-    return "/mnt/c" . split(a:path, ":")[1]
-  else
-    return a:path
-  endif
-endfunc
-
-func! s:cli_to_vim(path)
-  if has("win32")
-    return "C:" . a:path[6:]
-  else
-    return a:path
-  endif
 endfunc
 
 command! -nargs=0 Syn call s:syn()
@@ -190,6 +147,13 @@ augroup quickfix
   au QuickFixCmdPost l* lwindow
 augroup END
 
+function! s:termclose() abort
+  let buf = expand('#')
+  if !empty(buf) && buflisted(buf) && bufnr(buf) != bufnr('%')
+    execute 'autocmd BufWinLeave <buffer> split' buf
+  endif
+endfunction
+
 augroup terminal
   au!
   " Automatically quit terminal after exit
@@ -197,6 +161,10 @@ augroup terminal
         \ if (expand('<afile>') !~ "fzf") && (expand('<afile>') !~ "coc") |
         \   call nvim_feedkeys("\<ESC>", 'n', v:true)|
         \ endif
+  au TermClose term://* call <SID>termclose()
   " Remap <ESC> to allow terminal escaping
-  au TermOpen * tnoremap <buffer> <ESC> <C-\><C-n>
+  au TermOpen *
+        \ if (&ft !~ "nnn")|
+        \   tnoremap <buffer> <ESC> <C-\><C-n>|
+        \ endif|
 augroup END
