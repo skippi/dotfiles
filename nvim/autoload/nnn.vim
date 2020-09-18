@@ -15,7 +15,7 @@ func! nnn#open(path) abort
     let cmd = 'wsl ' . cmd
   endif
   let opts = {'on_exit': funcref('s:nnn_exit')}
-  tabe
+  enew
   set ft=nnn
   call termopen(cmd, opts)
 endfunc

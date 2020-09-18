@@ -53,8 +53,8 @@ nnoremap <silent> <Space>fo :Files<CR>
 nnoremap <silent> <Space>gb :Gblame<CR>
 nnoremap <silent> <Space>gl :Glog<CR>
 nnoremap <silent> <Space>gs :Gedit :<CR>
-nnoremap <silent> <Space>ob :tab sp +Tex\ bash\ -c\ "tig\ blame\ %"<CR>
-nnoremap <silent> <Space>ot :tab sp +Tex\ bash\ -c\ tig<CR>
+nnoremap <silent> <Space>ob :Tex bash -c "tig blame %"<CR>
+nnoremap <silent> <Space>ot :Tex bash -c tig<CR>
 nnoremap <silent> <Space>q :q<CR>
 nnoremap <silent> <Space>w :w<CR>
 nnoremap <silent> _ :call nnn#open(".")<CR>
@@ -64,13 +64,13 @@ nnoremap z/ :g//#<Left><Left>
 cnoremap <expr> <CR> ccr#run()
 
 command! Echrome silent !chrome "file://%:p"
-command! Hitest silent so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! Ecode silent exec "!code.exe --goto " . bufname("%") . ":" . line('.') . ":" . col('.')
 command! Eftp silent exe "e $RTP/after/ftplugin/" . &filetype . ".vim"
 command! Eidea silent exec "!start /B idea64 " . bufname("%") . ":" . line('.')
 command! Emacs silent exec "!start /B emacsclientw +" . line('.') . ":" . col('.') . " " . bufname("%")
 command! Ertp call <SID>open_nnn(expand("$RTP"))
 command! Esyn silent exe "e $RTP/after/syntax/" . &filetype . ".vim"
+command! Hitest silent so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! Kwbd call kwbd#run(1)
 
 command! -nargs=* Flake8 call <SID>flake8(<q-args>)
@@ -147,13 +147,6 @@ augroup quickfix
   au QuickFixCmdPost l* lwindow
 augroup END
 
-function! s:termclose() abort
-  let buf = expand('#')
-  if !empty(buf) && buflisted(buf) && bufnr(buf) != bufnr('%')
-    execute 'autocmd BufWinLeave <buffer> split' buf
-  endif
-endfunction
-
 augroup terminal
   au!
   " Automatically quit terminal after exit
@@ -161,7 +154,8 @@ augroup terminal
         \ if (expand('<afile>') !~ "fzf") && (expand('<afile>') !~ "coc") |
         \   call nvim_feedkeys("\<ESC>", 'n', v:true)|
         \ endif
-  au TermClose term://* call <SID>termclose()
+  " Preserve window after term close
+  au TermClose term://* call term#keepwin()
   " Remap <ESC> to allow terminal escaping
   au TermOpen *
         \ if (&ft !~ "nnn")|
