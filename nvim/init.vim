@@ -1,8 +1,6 @@
 let $RTP = stdpath('config')
-let g:lion_squeeze_spaces = 1
 let g:sneak#label = 1
 let g:sneak#label_esc = "\\"
-let g:sneak#use_ic_scs = 1
 let g:textobj_sandwich_no_default_key_mappings = 1
 let mapleader = "\<Space>"
 
@@ -18,7 +16,7 @@ runtime macros/sandwich/keymap/surround.vim
 set hidden
 set ignorecase smartcase
 set noswapfile
-set timeoutlen=500
+set timeoutlen=750
 set undofile
 set updatetime=100
 
@@ -46,6 +44,12 @@ nnoremap <silent> U <C-r>
 nnoremap <silent> Y y$
 nnoremap <silent> gj :noh<CR>
 noremap <silent> ' `
+noremap <silent> [[ ?{<CR>w99[{
+noremap <silent> [] k$][%?}<CR>
+noremap <silent> ][ /}<CR>b99]}
+noremap <silent> ]] j0[[%/{<CR>
+noremap <silent> gh ^
+noremap <silent> gl g_
 noremap <silent> j gj
 noremap <silent> k gk
 vmap <Space>r <Plug>(room_rename)

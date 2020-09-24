@@ -1,7 +1,6 @@
 call plug#begin(stdpath('data') . '/plugged')
 " Plug 'skippi/vim-sneak'
 Plug 'machakann/vim-sandwich'
-Plug 'tommcdo/vim-lion'
 Plug 'tpope/vim-commentary'
 Plug 'wellle/targets.vim'
 call plug#end()
