@@ -51,22 +51,22 @@ set statusline+=%=
 set statusline+=%([%n]%)
 set statusline+=%(%<\ [%{&ff}]\ %p%%\ %l:%c\ %)
 
-nmap <silent> <Space>re <Plug>(coc-rename)
+nmap <silent> gr <Plug>(coc-rename)
 nnoremap <BS> <C-^>
 nnoremap <Tab> :ls<CR>:b<Space>
-nnoremap <silent> - :call nnn#bufopen()<CR>
-nnoremap <silent> <Space>fd :Kwbd<CR>
-nnoremap <silent> <Space>fl :e%<CR>
-nnoremap <silent> <Space>fm :silent! make %:S<CR>
-nnoremap <silent> <Space>fo :Files<CR>
-nnoremap <silent> <Space>gb :Gblame<CR>
-nnoremap <silent> <Space>gd :Gdiff<CR>
-nnoremap <silent> <Space>gl :Glog<CR>
-nnoremap <silent> <Space>gs :Gedit :<CR>
-nnoremap <silent> <Space>q :q<CR>
-nnoremap <silent> <Space>w :w<CR>
-nnoremap <silent> _ :call nnn#open(".")<CR>
-nnoremap <silent> gd :call <SID>fsearchdecl(expand("<cword>"))<CR>
+nnoremap <silent> - <Cmd>call nnn#bufopen()<CR>
+nnoremap <silent> <Space>fd <Cmd>Kwbd<CR>
+nnoremap <silent> <Space>fl <Cmd>e%<CR>
+nnoremap <silent> <Space>fm <Cmd>sil! mak %:S<CR>
+nnoremap <silent> <Space>fo <Cmd>Files<CR>
+nnoremap <silent> <Space>gb <Cmd>Gblame<CR>
+nnoremap <silent> <Space>gd <Cmd>Gdiff<CR>
+nnoremap <silent> <Space>gl <Cmd>Glog<CR>
+nnoremap <silent> <Space>gs <Cmd>Gedit :<CR>
+nnoremap <silent> <Space>q <Cmd>q<CR>
+nnoremap <silent> <Space>w <Cmd>w<CR>
+nnoremap <silent> _ <Cmd>call nnn#open(".")<CR>
+nnoremap <silent> gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
 nnoremap g/ :sil!gr!<Space>
 nnoremap z/ :g//#<Left><Left>
 
@@ -102,6 +102,12 @@ func! s:syn()
 endfunc
 
 func! s:fsearchdecl(name) abort
+  if empty(a:name)
+    echohl ErrorMsg
+    echom "No identifier under cursor"
+    echohl None
+    return
+  endif
   let @/ = '\V\<' . a:name . '\>'
   norm [[{
   let row = search(@/, 'cW')
@@ -118,34 +124,14 @@ func! s:iscomment(line, col) abort
   return synIDattr(synIDtrans(synID(line(a:line), col(a:col), 1)), "name") == "Comment"
 endfunc
 
-let g:usercmd = 0
 augroup usercmd
   au!
   au FileType *
         \ if empty(&buftype) && !mapcheck("<CR>") && &ft != "netrw"|
-        \   nnoremap <buffer> <CR> :let g:usercmd=1<CR>:|
+        \   nnoremap <buffer> <CR> <Cmd>let g:usercmd=1<CR>:|
         \ endif
-  au CmdlineEnter *
-        \ if g:usercmd |
-        \   cnoremap <buffer> d D|
-        \   cnoremap <buffer> e E|
-        \   cnoremap <buffer> f F|
-        \   cnoremap <buffer> g G|
-        \   cnoremap <buffer> h H|
-        \   cnoremap <buffer> p P|
-        \   cnoremap <buffer> s S|
-        \ endif
-  au CmdlineChanged,CmdlineLeave *
-        \ if g:usercmd |
-        \   silent! cunmap <buffer> d|
-        \   silent! cunmap <buffer> e|
-        \   silent! cunmap <buffer> f|
-        \   silent! cunmap <buffer> g|
-        \   silent! cunmap <buffer> h|
-        \   silent! cunmap <buffer> p|
-        \   silent! cunmap <buffer> s|
-        \   let g:usercmd = 0|
-        \ endif
+  au CmdlineEnter * call usercmd#map()
+  au CmdlineChanged,CmdlineLeave * call usercmd#unmap()
 augroup END
 
 augroup general 

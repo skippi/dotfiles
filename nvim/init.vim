@@ -42,7 +42,7 @@ nmap <silent> <Space>rr vg_o^<Plug>(room_rename)
 nmap <silent> gk <Plug>(room_lift)
 nmap <silent> gs <Plug>(room_grep)
 nmap <silent> gw <C-w>
-nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//gc<Left><Left><Left>
+nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
 nnoremap <silent> ,, #``cgN
 nnoremap <silent> ,; *``cgn
 nnoremap <silent> <C-p> <C-i>
@@ -53,7 +53,7 @@ nnoremap <silent> <Space>p "+p
 nnoremap <silent> <Space>y "+y
 nnoremap <silent> U <C-r>
 nnoremap <silent> Y y$
-nnoremap <silent> gj :noh<CR>
+nnoremap <silent> gj <Cmd>noh<CR>
 noremap <silent> ' `
 noremap <silent> [[ ?{<CR>w99[{
 noremap <silent> [] k$][%?}<CR>
