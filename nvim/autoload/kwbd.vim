@@ -1,4 +1,15 @@
-function kwbd#run(kwbdStage)
+let s:inuse = 0
+
+func! kwbd#run(stage) abort
+  if s:inuse
+    return
+  endif
+  let s:inuse = 1
+  call s:dobufdel(a:stage)
+  let s:inuse = 0
+endfunc
+
+func! s:dobufdel(kwbdStage) abort
   if(a:kwbdStage == 1)
     if(&modified)
       let answer = confirm("This buffer has been modified.  Are you sure you want to delete it?", "&Yes\n&No", 2)
@@ -12,7 +23,7 @@ function kwbd#run(kwbdStage)
     endif
     let s:kwbdBufNum = bufnr("%")
     let s:kwbdWinNum = winnr()
-    windo call kwbd#run(2)
+    windo call s:dobufdel(2)
     execute s:kwbdWinNum . 'wincmd w'
     let s:buflistedLeft = 0
     let s:bufFinalJump = 0
@@ -59,4 +70,4 @@ function kwbd#run(kwbdStage)
       endif
     endif
   endif
-endfunction
+endfunc

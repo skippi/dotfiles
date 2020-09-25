@@ -53,8 +53,9 @@ func! s:grepfunc(type) abort
   if exists('g:vscode')
     call VSCodeCall('workbench.action.findInFiles', {"query": @@})
   else
-    silent! exec "grep! " . shellescape(escape(@@, "%#"))
-    cwindow
+    let pattern = '"' . escape(@@, '%#"') . '"'
+    let command = "sil!gr! -F " . pattern
+    exe command
   endif
 endfunc
 

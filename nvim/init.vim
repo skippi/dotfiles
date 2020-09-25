@@ -4,6 +4,12 @@ let g:sneak#label_esc = "\\"
 let g:textobj_sandwich_no_default_key_mappings = 1
 let mapleader = "\<Space>"
 
+if has('win32')
+  let g:python3_host_prog = 'python'
+else
+  let g:python3_host_prog = 'python3'
+endif
+
 if exists('g:vscode')
   source $RTP/vscode.vim
 else
@@ -16,7 +22,7 @@ runtime macros/sandwich/keymap/surround.vim
 set hidden
 set ignorecase smartcase
 set noswapfile
-set timeoutlen=750
+set timeoutlen=500
 set undofile
 set updatetime=100
 
@@ -25,6 +31,11 @@ set updatetime=100
 
 " Fixes windows backspace not doing <BS> behavior Apparently on windows term, the backspace key is mapped to <C-h>
 nmap <C-h> <BS>
+
+" Disable on windows to prevent memory leak
+if has('win32')
+  nnoremap <C-z> <Nop>
+endif
 
 nmap <silent> <Space>r <Plug>(room_rename)
 nmap <silent> <Space>rr vg_o^<Plug>(room_rename)

@@ -1,7 +1,3 @@
-command! -buffer -nargs=1 -complete=buffer Pydoc call <SID>pydoc(<f-args>)
-func! s:pydoc(...) abort
-endfunc
-
 command! -buffer -nargs=1 -complete=shellcmd Pych call <SID>pych(<f-args>)
 func! s:pych(...) abort
   let pypath = join(a:000)

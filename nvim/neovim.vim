@@ -4,8 +4,7 @@ let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5,
 let g:netrw_altfile = 1
 let g:netrw_fastbrowse = 0
 let g:prosession_dir = stdpath('data') . '/session'
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-let g:user_emmet_leader_key = '<C-e>'
+let g:user_emmet_leader_key = '<C-z>'
 
 call plug#begin(stdpath('data') . '/plugged')
 " Function
@@ -30,29 +29,21 @@ call plug#end()
 
 silent! colorscheme codedark
 
+set cmdwinheight=10
 set fileformat=unix
 set fileformats=unix,dos
-set grepprg=rg\ --vimgrep\ --smart-case\ --follow
+set grepprg=rg\ --follow\ --hidden\ --vimgrep\ --glob\ !.git
 set inccommand=nosplit
 set lazyredraw
 set mouse=
 set noruler
-set splitbelow
 set splitright
+set splitbelow
 set termguicolors
 set wildmode=list:longest,full
 
-let g:look_up = {
-    \ '__' : '-', 'n'  : 'N',
-    \ 'i'  : 'I', 'R'  : 'R',
-    \ 'v'  : 'V', 'V'  : 'V',
-    \ 'c'  : 'C', '' : 'V',
-    \ 's'  : 'S', 'S'  : 'S',
-    \ '' : 'S', 't'  : 'T',
-    \}
-
 set statusline=
-set statusline+=%(\ %{g:look_up[mode()]}%)
+set statusline+=%(\ %{toupper(mode(0))}%)
 set statusline+=%(\ @%{fugitive#head()}%)
 set statusline+=%(\ %<%f%)
 set statusline+=\ %h%m%r%w
@@ -76,14 +67,14 @@ nnoremap <silent> <Space>q :q<CR>
 nnoremap <silent> <Space>w :w<CR>
 nnoremap <silent> _ :call nnn#open(".")<CR>
 nnoremap <silent> gd :call <SID>fsearchdecl(expand("<cword>"))<CR>
-nnoremap g/ :silent!<Space>grep!<Space>""<Left>
+nnoremap g/ :sil!gr!<Space>
 nnoremap z/ :g//#<Left><Left>
 
 cnoremap <expr> <CR> ccr#run()
 
 command! Echrome silent !chrome "file://%:p"
-command! Ecode silent exec "!code.exe --goto " . bufname("%") . ":" . line('.') . ":" . col('.')
-command! Edata silent exe "e" stdpath('data')
+command! Ecode silent exe "!code --goto " . bufname("%") . ":" . line('.') . ":" . col('.')
+command! Edata call nnn#open(stdpath('data'))
 command! Eftp silent exe "e $RTP/after/ftplugin/" . &filetype . ".vim"
 command! Eidea silent exec "!start /B idea64 " . bufname("%") . ":" . line('.')
 command! Emacs silent exec "!start /B emacsclientw +" . line('.') . ":" . col('.') . " " . bufname("%")
@@ -98,7 +89,7 @@ func! s:flake8(args) abort
   let olderr = &l:errorformat
   let &l:makeprg = get(g:, "flake8_path", "flake8")
   setlocal errorformat=%f:%l:%c:\ %t%n\ %m
-  exe "silent make! " . a:args
+  exe "sil mak!" a:args
   let &l:makeprg = oldmake
   let &l:errorformat = olderr
 endfunc
@@ -159,8 +150,6 @@ augroup END
 
 augroup general 
   au!
-  au BufLeave * let b:winview = winsaveview()
-  au BufEnter * if exists('b:winview') | call winrestview(b:winview) | endif
   au FocusGained,BufEnter * silent! checktime
   au BufReadPost *
         \ if line("'\"") > 0 && line("'\"") <= line("$") && &ft !~# 'commit'|
@@ -176,6 +165,9 @@ augroup END
 
 augroup terminal
   au!
-  au TermOpen term://* call term#on_open()
-  au TermClose term://* call term#on_close()
+  au TermOpen term://* if (&ft !~ "nnn") | tnoremap <buffer> <ESC> <C-\><C-n> | endif
+  au TermClose term://*
+        \ if (expand('<afile>') !~ "fzf") && (expand('<afile>') !~ "coc") |
+        \   exe "Kwbd" |
+        \ endif
 augroup END
