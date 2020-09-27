@@ -39,9 +39,9 @@ endif
 
 nmap <silent> <Space>r <Plug>(room_rename)
 nmap <silent> <Space>rr vg_o^<Plug>(room_rename)
-nmap <silent> gk <Plug>(room_lift)
 nmap <silent> gs <Plug>(room_grep)
 nmap <silent> gw <C-w>
+nmap <silent> gm <Plug>(room_lift)
 nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
 nnoremap <silent> ,, #``cgN
 nnoremap <silent> ,; *``cgn
@@ -64,7 +64,7 @@ noremap <silent> gl g_
 noremap <silent> j gj
 noremap <silent> k gk
 vmap <Space>r <Plug>(room_rename)
-vmap gk <Plug>(room_lift)
+vmap gm <Plug>(room_lift)
 vmap gs <Plug>(room_grep)
 vnoremap <Space><Space> y:'{,'}s/\V<C-r>=escape(@",'/\')<CR>//gc<Left><Left><Left>
 vnoremap <silent> ,, y?\V<C-R>=escape(@",'/\')<CR><CR>``cgN

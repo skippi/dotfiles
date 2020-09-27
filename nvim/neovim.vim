@@ -37,8 +37,8 @@ set inccommand=nosplit
 set lazyredraw
 set mouse=
 set noruler
-set splitright
 set splitbelow
+set splitright
 set termguicolors
 set wildmode=list:longest,full
 
@@ -56,6 +56,7 @@ nnoremap <BS> <C-^>
 nnoremap <Tab> :ls<CR>:b<Space>
 nnoremap <silent> - <Cmd>call nnn#bufopen()<CR>
 nnoremap <silent> <Space>fd <Cmd>Kwbd<CR>
+nnoremap <silent> <Space>fee <Cmd>Emacs<CR>
 nnoremap <silent> <Space>fl <Cmd>e%<CR>
 nnoremap <silent> <Space>fm <Cmd>sil! mak %:S<CR>
 nnoremap <silent> <Space>fo <Cmd>Files<CR>
@@ -76,12 +77,12 @@ command! Echrome silent !chrome "file://%:p"
 command! Ecode silent exe "!code --goto " . bufname("%") . ":" . line('.') . ":" . col('.')
 command! Edata call nnn#open(stdpath('data'))
 command! Eftp silent exe "e $RTP/after/ftplugin/" . &filetype . ".vim"
-command! Eidea silent exec "!start /B idea64 " . bufname("%") . ":" . line('.')
-command! Emacs silent exec "!start /B emacsclientw +" . line('.') . ":" . col('.') . " " . bufname("%")
+command! Eidea silent exe "!start /B idea64" bufname("%") . ":" . line('.')
+command! Emacs sil exe "!emacsclientw +" . line('.') . ":" . col('.') bufname("%")
 command! Ertp call nnn#open(expand("$RTP"))
 command! Esyn silent exe "e $RTP/after/syntax/" . &filetype . ".vim"
 command! Hitest silent so $VIMRUNTIME/syntax/hitest.vim | set ro
-command! Kwbd call kwbd#run(1)
+command! Kwbd call kwbd#run()
 
 command! -nargs=* Flake8 call <SID>flake8(<q-args>)
 func! s:flake8(args) abort
@@ -123,7 +124,6 @@ endfunc
 func! s:iscomment(line, col) abort
   return synIDattr(synIDtrans(synID(line(a:line), col(a:col), 1)), "name") == "Comment"
 endfunc
-
 augroup usercmd
   au!
   au FileType *
@@ -137,6 +137,8 @@ augroup END
 augroup general 
   au!
   au FocusGained,BufEnter * silent! checktime
+  au CmdlineEnter * set ssl
+  au CmdlineLeave * set nossl
   au BufReadPost *
         \ if line("'\"") > 0 && line("'\"") <= line("$") && &ft !~# 'commit'|
         \   exe "normal! g`\""|

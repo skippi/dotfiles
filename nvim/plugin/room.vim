@@ -1,5 +1,5 @@
-nnoremap <Plug>(room_rename) :set opfunc=<SID>renamefunc<CR>g@
-vnoremap <Plug>(room_rename) <ESC>:call <SID>renamefunc(visualmode(), 1)<CR>
+nnoremap <Plug>(room_rename) <Cmd>set opfunc=<SID>renamefunc<CR>g@
+vnoremap <Plug>(room_rename) <ESC><Cmd>call <SID>renamefunc(visualmode(), 1)<CR>
 func! s:renamefunc(type, ...) abort
   let sel_save = &selection
   let &selection = "inclusive"
@@ -40,24 +40,53 @@ func! room#dotsubfunc(type, ...) abort
   let @@ = reg_save
 endfunc
 
-nnoremap <Plug>(room_grep) :set operatorfunc=<SID>grepfunc<CR>g@
-vnoremap <Plug>(room_grep) :<C-u>call <SID>grepfunc(visualmode())<CR>
-func! s:grepfunc(type) abort
-  if a:type ==# 'v'
-    noautocmd normal! `<v`>y
-  elseif a:type ==# 'char'
-    noautocmd normal! `[v`]y
+nnoremap <Plug>(room_grep) <Cmd>set opfunc=<SID>grepfunc<CR>g@
+vnoremap <Plug>(room_grep) <ESC><Cmd>call <SID>grepfunc(visualmode(), 1)<CR>
+func! s:grepfunc(type, ...) abort
+  let sel_save = &selection
+  let reg_save = @@
+  let &selection = "inclusive"
+  if a:0
+    sil exe "noa norm! gvy"
+  elseif a:type == "line"
+    sil exe "noa norm! '[V']y"
   else
-    return
+    sil exe "noa norm! `[v`]y"
   endif
+  let @/ = @@
   if exists('g:vscode')
-    call VSCodeCall('workbench.action.findInFiles', {"query": @@})
+    call VSCodeCall('workbench.action.findInFiles', {"query": @/})
   else
-    let pattern = '"' . escape(@@, '%#"') . '"'
+    let pattern = '"' . escape(@/, '%#"') . '"'
     let command = "sil!gr! -F " . pattern
     exe command
   endif
+  if &hls
+    set hls
+  endif
+  redraw!
+  let &selection = sel_save
+  let @@ = reg_save
 endfunc
 
-nnoremap <silent> <Plug>(room_lift) :let room_view = winsaveview()<CR>*N:call winrestview(room_view)<CR>
-vnoremap <silent> <Plug>(room_lift) y:let room_view = winsaveview()<CR>/\V<C-r>0<CR>N:call winrestview(room_view)<CR>
+nnoremap <Plug>(room_lift) <Cmd>set opfunc=<SID>liftfunc<CR>g@
+vnoremap <Plug>(room_lift) <ESC><Cmd>call <SID>liftfunc(visualmode(), 1)<CR>
+func! s:liftfunc(type, ...) abort
+  let sel_save = &selection
+  let reg_save = @@
+  let &selection = "inclusive"
+  if a:0
+    sil exe "noa norm! gvy"
+  elseif a:type == "line"
+    sil exe "noa norm! '[V']y"
+  else
+    sil exe "noa norm! `[v`]y"
+  endif
+  let @/ = @@
+  if &hls
+    set hls
+  endif
+  redraw!
+  let &selection = sel_save
+  let @@ = reg_save
+endfunc

@@ -1,12 +1,13 @@
 let s:inuse = 0
 
-func! kwbd#run(stage) abort
-  if s:inuse
-    return
-  endif
+func! kwbd#run() abort
+  if s:inuse | return | endif
   let s:inuse = 1
-  call s:dobufdel(a:stage)
-  let s:inuse = 0
+  try
+    call s:dobufdel(1)
+  finally
+    let s:inuse = 0
+  endtry
 endfunc
 
 func! s:dobufdel(kwbdStage) abort

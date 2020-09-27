@@ -24,7 +24,8 @@ func! s:nnn_exit(...) abort
   if filereadable(s:nnn_tempfile)
     let paths = readfile(s:nnn_tempfile)
     if !empty(paths)
-      Kwbd
+      " Disabled because we use Kwbd by default for terms
+      " Kwbd
       for path in paths
         exe "e" fnamemodify(fnameescape(s:vimpath(path)), ":~:.")
       endfor
