@@ -74,11 +74,11 @@ nnoremap z/ :g//#<Left><Left>
 cnoremap <expr> <CR> ccr#run()
 
 command! Echrome silent !chrome "file://%:p"
-command! Ecode silent exe "!code --goto " . bufname("%") . ":" . line('.') . ":" . col('.')
+command! Ecode sil exe "!code -nwg" bufname("%") . ":" . line('.') . ":" . col('.')
 command! Edata call nnn#open(stdpath('data'))
 command! Eftp silent exe "e $RTP/after/ftplugin/" . &filetype . ".vim"
-command! Eidea silent exe "!start /B idea64" bufname("%") . ":" . line('.')
-command! Emacs sil exe "!emacsclientw +" . line('.') . ":" . col('.') bufname("%")
+command! Eidea sil exe "!idea64" bufname("%") . ":" . line('.')
+command! Emacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') bufname("%")
 command! Ertp call nnn#open(expand("$RTP"))
 command! Esyn silent exe "e $RTP/after/syntax/" . &filetype . ".vim"
 command! Hitest silent so $VIMRUNTIME/syntax/hitest.vim | set ro
