@@ -8,11 +8,12 @@ endfunc
 
 func! nnn#open(path) abort
   let s:nnn_tempfile = tempname()
-  let clipath = s:clipath(s:nnn_tempfile)
-  let tpath = s:clipath(a:path)
-  let cmd = 'SHELL=/usr/bin/fish nnn -p "' . clipath . '" "' . tpath . '"'
   if has("win32")
-    let cmd = 'wsl ' . cmd
+    let tfilesub = '$(wslpath "' . s:nnn_tempfile . '")'
+    let pathsub = '$(wslpath "' . a:path . '")'
+    let cmd = 'wsl SHELL=/usr/bin/fish nnn -p ' . tfilesub . ' ' . pathsub
+  else
+    let cmd = 'SHELL=/usr/bin/fish nnn -p "' . s:nnn_tempfile . '" "' . a:path . '"'
   endif
   let opts = {'on_exit': funcref('s:nnn_exit')}
   enew
