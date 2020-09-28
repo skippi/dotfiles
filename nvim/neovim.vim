@@ -159,3 +159,8 @@ augroup terminal
         \   exe "Kwbd" |
         \ endif
 augroup END
+
+aug wsl_preload
+  au!
+  au VimEnter * call jobstart("wsl")
+aug END
