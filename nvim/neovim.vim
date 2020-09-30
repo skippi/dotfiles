@@ -49,7 +49,7 @@ set statusline+=%(\ %<%f%)
 set statusline+=\ %h%m%r%w
 set statusline+=%=
 set statusline+=%([%n]%)
-set statusline+=%(%<\ [%{&ff}]\ %p%%\ %l:%c\ %)
+set statusline+=%(%<\ [%{&ff}]\ %y\ %l:%c\ %)
 
 nmap <silent> gC <Plug>(coc-rename)
 nmap <silent> gr <Plug>(coc-references)
