@@ -1,6 +1,7 @@
 let $RTP = stdpath('config')
 let g:sneak#label = 1
 let g:sneak#label_esc = "\\"
+let g:sneak#use_ic_scs = 1
 let g:textobj_sandwich_no_default_key_mappings = 1
 let mapleader = "\<Space>"
 

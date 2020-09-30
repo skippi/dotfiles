@@ -51,12 +51,12 @@ set statusline+=%=
 set statusline+=%([%n]%)
 set statusline+=%(%<\ [%{&ff}]\ %p%%\ %l:%c\ %)
 
-nmap <silent> gr <Plug>(coc-rename)
+nmap <silent> gC <Plug>(coc-rename)
+nmap <silent> gr <Plug>(coc-references)
 nnoremap <BS> <C-^>
 nnoremap <Tab> :ls<CR>:b<Space>
 nnoremap <silent> - <Cmd>call nnn#bufopen()<CR>
 nnoremap <silent> <Space>fd <Cmd>Kwbd<CR>
-nnoremap <silent> <Space>fee <Cmd>Emacs<CR>
 nnoremap <silent> <Space>fl <Cmd>e%<CR>
 nnoremap <silent> <Space>fm <Cmd>sil! mak %:S<CR>
 nnoremap <silent> <Space>fo <Cmd>Files<CR>
@@ -66,6 +66,8 @@ nnoremap <silent> <Space>gl <Cmd>Glog<CR>
 nnoremap <silent> <Space>gs <Cmd>Gedit :<CR>
 nnoremap <silent> <Space>q <Cmd>q<CR>
 nnoremap <silent> <Space>w <Cmd>w<CR>
+nnoremap <silent> [q <Cmd>exe v:count1 . 'cp'<CR>
+nnoremap <silent> ]q <Cmd>exe v:count1 . 'cn'<CR>
 nnoremap <silent> _ <Cmd>call nnn#open(".")<CR>
 nnoremap <silent> gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
 nnoremap g/ :sil!gr!<Space>
@@ -73,15 +75,15 @@ nnoremap z/ :g//#<Left><Left>
 
 cnoremap <expr> <CR> ccr#run()
 
-command! Echrome silent !chrome "file://%:p"
-command! Ecode sil exe "!code -nwg" bufname("%") . ":" . line('.') . ":" . col('.')
+command! Echrome sil !chrome "file://%:p"
+command! Ecode sil exe "!code -nwg" expand("%:p") . ":" . line('.') . ":" . col('.') "."
 command! Edata call nnn#open(stdpath('data'))
-command! Eftp silent exe "e $RTP/after/ftplugin/" . &filetype . ".vim"
-command! Eidea sil exe "!idea64" bufname("%") . ":" . line('.')
+command! Eftp sil exe "e" stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'
+command! Eidea sil exe "!idea64" expand("%:p") . ":" . line('.')
+command! Einit sil exe "e" stdpath('config') . '/init.vim'
 command! Emacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') bufname("%")
-command! Ertp call nnn#open(expand("$RTP"))
-command! Esyn silent exe "e $RTP/after/syntax/" . &filetype . ".vim"
-command! Hitest silent so $VIMRUNTIME/syntax/hitest.vim | set ro
+command! Esyn sil exe "e $RTP/after/syntax/" . &filetype . ".vim"
+command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! Kwbd call kwbd#run()
 
 command! -nargs=* Flake8 call <SID>flake8(<q-args>)
@@ -110,20 +112,24 @@ func! s:fsearchdecl(name) abort
     return
   endif
   let @/ = '\V\<' . a:name . '\>'
-  norm [[{
-  let row = search(@/, 'cW')
-  while row && s:iscomment(".", ".")
+  if CocHasProvider('definition') && CocAction("jumpDefinition")
+  else
+    norm [[{
     let row = search(@/, 'cW')
-  endwhile
+    while row && s:iscomment(".", ".")
+      let row = search(@/, 'cW')
+    endwhile
+  endif
   if &hls
     set hls
   endif
-  redraw!
+  redraw
 endfunc
 
 func! s:iscomment(line, col) abort
   return synIDattr(synIDtrans(synID(line(a:line), col(a:col), 1)), "name") == "Comment"
 endfunc
+
 augroup usercmd
   au!
   au FileType *
@@ -162,5 +168,5 @@ augroup END
 
 aug wsl_preload
   au!
-  au VimEnter * call jobstart("wsl")
+  au VimEnter * if has('win32') | call jobstart("wsl") | endif
 aug END

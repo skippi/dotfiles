@@ -7,23 +7,22 @@ call plug#end()
 
 set rtp+=~/src/github.com/skippi/vim-sneak
 
-nnoremap <BS> :call VSCodeCall('workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup') <bar> call VSCodeCall('list.select')<CR>
-nnoremap <Tab> :Find<CR>
-nnoremap gws :Split<CR>
-nnoremap gwv :Vsplit<CR>
+nnoremap <BS> <Cmd>call VSCodeCall('workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup') <bar> call VSCodeCall('list.select')<CR>
+nnoremap <Tab> <Cmd>Find<CR>
+nnoremap gws <Cmd>Split<CR>
+nnoremap gwv <Cmd>Vsplit<CR>
 
-nnoremap <silent> ,ve :exec ":Edit! " . stdpath('config') . "/vscode.vim"<CR>
-nnoremap <silent> <Space>fd :Quit<CR>
-nnoremap <silent> <Space>fl :Edit %<CR>
-nnoremap <silent> <Space>fo :Find<CR>
-nnoremap <silent> <Space>q :Quit<CR>
-nnoremap <silent> <Space>re :call VSCodeCall('editor.action.rename')<CR>
-nnoremap <silent> <Space>w :Write<CR>
-nnoremap <silent> _ :call VSCodeCall('workbench.view.explorer')<CR>
-nnoremap <silent> g/ :call VSCodeCall('workbench.action.findInFiles')<CR>
-nnoremap <silent> gD :call VSCodeCall('editor.action.goToImplementation')<CR>
-nnoremap <silent> gd :call VSCodeCall('editor.action.revealDefinition')<CR>
-nnoremap <silent> gr :call VSCodeCall('editor.action.goToReferences')<CR>
+nnoremap <silent> <Space>fd <Cmd>Quit<CR>
+nnoremap <silent> <Space>fl <Cmd>Edit%<CR>
+nnoremap <silent> <Space>fo <Cmd>Find<CR>
+nnoremap <silent> <Space>q <Cmd>Quit<CR>
+nnoremap <silent> <Space>w <Cmd>Write<CR>
+nnoremap <silent> - <Cmd>call VSCodeCall('workbench.view.explorer')<CR>
+nnoremap <silent> _ <Cmd>call VSCodeCall('workbench.view.explorer')<CR>
+nnoremap <silent> g/ m'<Cmd>call VSCodeCall('workbench.action.findInFiles')<CR>
+nnoremap <silent> gC *``<Cmd>call VSCodeCall('editor.action.rename')<CR>
+nnoremap <silent> gd *``<Cmd>call VSCodeCall('editor.action.revealDefinition')<CR>
+nnoremap <silent> gr m'<Cmd>call VSCodeCall('editor.action.goToReferences')<CR>
 
 nnoremap <silent> <Space>lf :call VSCodeCall('leetcode.searchProblem') <bar>sl 250m<bar>call VSCodeCall('workbench.action.focusFirstEditorGroup')<CR>
 nnoremap <silent> <Space>ll :call VSCodeCall('leetcode.switchDefaultLanguage')<bar>sl 250m<bar>call VSCodeCall('workbench.action.focusFirstEditorGroup')<CR>
