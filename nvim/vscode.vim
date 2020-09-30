@@ -24,7 +24,7 @@ nnoremap <silent> gC *``<Cmd>call VSCodeCall('editor.action.rename')<CR>
 nnoremap <silent> gd *``<Cmd>call VSCodeCall('editor.action.revealDefinition')<CR>
 nnoremap <silent> gr m'<Cmd>call VSCodeCall('editor.action.goToReferences')<CR>
 
-nnoremap <silent> <Space>lf :call VSCodeCall('leetcode.searchProblem') <bar>sl 250m<bar>call VSCodeCall('workbench.action.focusFirstEditorGroup')<CR>
-nnoremap <silent> <Space>ll :call VSCodeCall('leetcode.switchDefaultLanguage')<bar>sl 250m<bar>call VSCodeCall('workbench.action.focusFirstEditorGroup')<CR>
-nnoremap <silent> <Space>ls :call VSCodeCall('leetcode.submitSolution')<bar>sl 250m<bar>call VSCodeCall('workbench.action.focusFirstEditorGroup')<CR>
-nnoremap <silent> <Space>lt :call VSCodeCall('leetcode.testSolution')<bar>sl 250m<bar>call VSCodeCall('workbench.action.focusFirstEditorGroup')<CR>
+nnoremap <silent> <Space>lf <Cmd>call VSCodeCall('leetcode.searchProblem') <bar>sl 250m<bar>call VSCodeCall('workbench.action.focusFirstEditorGroup')<CR>
+nnoremap <silent> <Space>ll <Cmd>call VSCodeCall('leetcode.switchDefaultLanguage')<bar>sl 250m<bar>call VSCodeCall('workbench.action.focusFirstEditorGroup')<CR>
+nnoremap <silent> <Space>ls <Cmd>call VSCodeCall('leetcode.submitSolution')<bar>sl 250m<bar>call VSCodeCall('workbench.action.focusFirstEditorGroup')<CR>
+nnoremap <silent> <Space>lt <Cmd>call VSCodeCall('leetcode.testSolution')<bar>sl 250m<bar>call VSCodeCall('workbench.action.focusFirstEditorGroup')<CR>

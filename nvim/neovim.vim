@@ -130,6 +130,20 @@ func! s:iscomment(line, col) abort
   return synIDattr(synIDtrans(synID(line(a:line), col(a:col), 1)), "name") == "Comment"
 endfunc
 
+func! s:isdir(dir)
+  return !empty(a:dir) && (isdirectory(a:dir) ||
+        \ (!empty($SYSTEMDRIVE) && isdirectory('/'.tolower($SYSTEMDRIVE[0]).a:dir)))
+endfunc
+
+aug nnn_hijack
+  au!
+  au VimEnter * if exists('#FileExplorer') | exe 'au! FileExplorer *' | endif
+  au BufEnter * if <SID>isdir(expand('%'))
+        \ | let w:nnn_open_dir = expand('%')
+        \ | exe 'Kwbd'
+        \ | call nnn#open(w:nnn_open_dir) | endif
+aug END
+
 augroup usercmd
   au!
   au FileType *
