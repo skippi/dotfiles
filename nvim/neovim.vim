@@ -29,7 +29,7 @@ call plug#end()
 
 silent! colorscheme codedark
 
-set cmdwinheight=10
+set cmdwinheight=7
 set fileformat=unix
 set fileformats=unix,dos
 set grepprg=rg\ --follow\ --hidden\ --vimgrep\ --glob\ !.git
