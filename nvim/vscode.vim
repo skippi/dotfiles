@@ -20,8 +20,8 @@ nnoremap <silent> <Space>w <Cmd>Write<CR>
 nnoremap <silent> - <Cmd>call VSCodeCall('workbench.view.explorer')<CR>
 nnoremap <silent> _ <Cmd>call VSCodeCall('workbench.view.explorer')<CR>
 nnoremap <silent> g/ m'<Cmd>call VSCodeCall('workbench.action.findInFiles')<CR>
-nnoremap <silent> gC *``<Cmd>call VSCodeCall('editor.action.rename')<CR>
-nnoremap <silent> gd *``<Cmd>call VSCodeCall('editor.action.revealDefinition')<CR>
+nnoremap <silent> gC m'<Cmd>call VSCodeCall('editor.action.rename')<CR>
+nnoremap <silent> gd m'<Cmd>call VSCodeCall('editor.action.revealDefinition')<CR>
 nnoremap <silent> gr m'<Cmd>call VSCodeCall('editor.action.goToReferences')<CR>
 
 nnoremap <silent> <Space>lf <Cmd>call VSCodeCall('leetcode.searchProblem') <bar>sl 250m<bar>call VSCodeCall('workbench.action.focusFirstEditorGroup')<CR>
