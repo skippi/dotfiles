@@ -54,7 +54,7 @@ set statusline+=%(%<\ [%{&ff}]\ %y\ %l:%c\ %)
 nmap <silent> gC <Plug>(coc-rename)
 nmap <silent> gr <Plug>(coc-references)
 nnoremap <BS> <C-^>
-nnoremap <Tab> :ls<CR>:b<Space>
+nnoremap <Tab> :Lsmru<CR>:Bmru<Space>
 nnoremap <silent> - <Cmd>call nnn#bufopen()<CR>
 nnoremap <silent> <Space>fd <Cmd>Kwbd<CR>
 nnoremap <silent> <Space>fl <Cmd>e%<CR>
@@ -130,9 +130,29 @@ func! s:iscomment(line, col) abort
   return synIDattr(synIDtrans(synID(line(a:line), col(a:col), 1)), "name") == "Comment"
 endfunc
 
-func! s:isdir(dir)
+func! s:isdir(dir) abort
   return !empty(a:dir) && (isdirectory(a:dir) ||
         \ (!empty($SYSTEMDRIVE) && isdirectory('/'.tolower($SYSTEMDRIVE[0]).a:dir)))
+endfunc
+
+command! -nargs=0 Lsmru call <SID>mru_ls()
+func! s:mru_ls() abort
+  redir => output
+  sil ls at
+  sil ls ht
+  redir END
+  echo ":ls"
+  for line in split(output, '\n')[:10]
+    echo line
+  endfor
+endfunc
+
+command! -nargs=1 -complete=customlist,<SID>bmru_completion Bmru b <args>
+func! s:bmru_completion(arglead, cmdline, pos) abort
+  let bufs = getbufinfo({'buflisted': 1})
+  let sorted = sort(bufs, { x, y -> y.lastused - x.lastused })
+  let names = map(sorted, 'fnamemodify(v:val.name, ":~:.")')
+  return filter(names, 'v:val =~ a:arglead')
 endfunc
 
 aug nnn_hijack
