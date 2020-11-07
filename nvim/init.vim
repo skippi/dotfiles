@@ -27,6 +27,11 @@ set timeoutlen=500
 set undofile
 set updatetime=100
 
+set wildignore+=*.beam
+set wildignore+=*/.elixir_ls/*
+set wildignore+=*/_build/*
+set wildignore+=*/node_modules/*
+
 " noshowcmd is BUGGED, do NOT enable it. Screen tears on linux.
 " set noshowcmd
 
@@ -38,11 +43,13 @@ if has('win32')
   nnoremap <C-z> <Nop>
 endif
 
-nmap <silent> <Space>r <Plug>(room_rename)
-nmap <silent> <Space>rr vg_o^<Plug>(room_rename)
-nmap <silent> gs <Plug>(room_grep)
+map <silent> [[ ?{<CR>w99[{
+map <silent> [] k$][%?}<CR>
+map <silent> ][ /}<CR>b99]}
+map <silent> ]] j0[[%/{<CR>
+map <silent> gm <Plug>(room_lift)
+map <silent> gs <Plug>(room_grep)
 nmap <silent> gw <C-w>
-nmap <silent> gm <Plug>(room_lift)
 nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
 nnoremap <silent> ,, #``cgN
 nnoremap <silent> ,; *``cgn
@@ -56,18 +63,10 @@ nnoremap <silent> U <C-r>
 nnoremap <silent> Y y$
 nnoremap <silent> gj <Cmd>noh<CR>
 noremap <silent> ' `
-noremap <silent> [[ ?{<CR>w99[{
-noremap <silent> [] k$][%?}<CR>
-noremap <silent> ][ /}<CR>b99]}
-noremap <silent> ]] j0[[%/{<CR>
 noremap <silent> gh ^
 noremap <silent> gl g_
 noremap <silent> j gj
 noremap <silent> k gk
-vmap <Space>r <Plug>(room_rename)
-vmap gm <Plug>(room_lift)
-vmap gs <Plug>(room_grep)
-vnoremap <Space><Space> y:'{,'}s/\V<C-r>=escape(@",'/\')<CR>//gc<Left><Left><Left>
 vnoremap <silent> ,, y?\V<C-R>=escape(@",'/\')<CR><CR>``cgN
 vnoremap <silent> ,; y/\V<C-R>=escape(@",'/\')<CR><CR>``cgn
 vnoremap <silent> <Space>P "+P

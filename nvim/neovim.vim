@@ -3,29 +3,36 @@ let g:coc_global_extensions = ['coc-tsserver', 'coc-python']
 let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5, 'border': 'sharp' } }
 let g:netrw_altfile = 1
 let g:netrw_fastbrowse = 0
-let g:prosession_dir = stdpath('data') . '/session'
 let g:user_emmet_leader_key = '<C-z>'
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 call plug#begin(stdpath('data') . '/plugged')
 " Function
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'justinmk/vim-sneak'
 Plug 'machakann/vim-sandwich'
 Plug 'mattn/emmet-vim'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-obsession' | Plug 'dhruvasagar/vim-prosession'
+Plug 'tpope/vim-obsession'
+Plug 'unblevable/quick-scope'
 Plug 'wellle/targets.vim'
 " Language
+Plug 'elixir-editors/vim-elixir'
 Plug 'leafgarland/typescript-vim'
 Plug 'pangloss/vim-javascript'
 Plug 'peitalin/vim-jsx-typescript'
 " Visual
 Plug 'tomasiser/vim-code-dark'
 call plug#end()
+
+aug qs_colors
+  au!
+  au ColorScheme * hi! link QuickScopePrimary ErrorMsg
+  au ColorScheme * hi! link QuickScopeSecondary SignColumn
+aug END
 
 silent! colorscheme codedark
 
@@ -49,25 +56,30 @@ set statusline+=%(\ %<%f%)
 set statusline+=\ %h%m%r%w
 set statusline+=%=
 set statusline+=%([%n]%)
-set statusline+=%(%<\ [%{&ff}]\ %y\ %l:%c\ %)
+set statusline+=%(%<\ [%{&ff}]\ %y\ %l:%c\ %p%%\ %)
 
+inoremap <silent> (<CR> (<CR>)<Esc>O
+inoremap <silent> [<CR> [<CR>]<Esc>O
+inoremap <silent> {<CR> {<CR>}<Esc>O
+nmap <silent> <Space>] <Plug>(coc-definition)*``
 nmap <silent> gC <Plug>(coc-rename)
+nmap <silent> gI <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nnoremap <BS> <C-^>
-nnoremap <Tab> :Lsmru<CR>:Bmru<Space>
+nnoremap <Tab> :ls<CR>:b<Space>
 nnoremap <silent> - <Cmd>call nnn#bufopen()<CR>
 nnoremap <silent> <Space>fd <Cmd>Kwbd<CR>
 nnoremap <silent> <Space>fl <Cmd>e%<CR>
-nnoremap <silent> <Space>fm <Cmd>sil! mak %:S<CR>
 nnoremap <silent> <Space>fo <Cmd>Files<CR>
-nnoremap <silent> <Space>gb <Cmd>Gblame<CR>
-nnoremap <silent> <Space>gd <Cmd>Gdiff<CR>
-nnoremap <silent> <Space>gl <Cmd>Glog<CR>
-nnoremap <silent> <Space>gs <Cmd>Gedit :<CR>
+nnoremap <silent> <Space>gD <Cmd>Gvdiffsplit HEAD<CR>
+nnoremap <silent> <Space>gb <Cmd>G blame<CR>
+nnoremap <silent> <Space>gd <Cmd>Gvdiffsplit<CR>
+nnoremap <silent> <Space>gl <Cmd>Gclog<CR>
+nnoremap <silent> <Space>gs <Cmd>G<CR>
 nnoremap <silent> <Space>q <Cmd>q<CR>
 nnoremap <silent> <Space>w <Cmd>w<CR>
-nnoremap <silent> [q <Cmd>exe v:count1 . 'cp'<CR>
-nnoremap <silent> ]q <Cmd>exe v:count1 . 'cn'<CR>
+nnoremap <silent> [q <Cmd>exe v:count1 . 'cprev'<CR>
+nnoremap <silent> ]q <Cmd>exe v:count1 . 'cnext'<CR>
 nnoremap <silent> _ <Cmd>call nnn#open(".")<CR>
 nnoremap <silent> gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
 nnoremap g/ :sil!gr!<Space>
@@ -77,7 +89,7 @@ cnoremap <expr> <CR> ccr#run()
 
 command! Echrome sil !chrome "file://%:p"
 command! Ecode sil exe "!code -nwg" expand("%:p") . ":" . line('.') . ":" . col('.') "."
-command! Edata call nnn#open(stdpath('data'))
+command! Edata sil exe "e" stdpath('data')
 command! Eftp sil exe "e" stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'
 command! Eidea sil exe "!idea64" expand("%:p") . ":" . line('.')
 command! Einit sil exe "e" stdpath('config') . '/init.vim'
@@ -112,14 +124,11 @@ func! s:fsearchdecl(name) abort
     return
   endif
   let @/ = '\V\<' . a:name . '\>'
-  if CocHasProvider('definition') && CocAction("jumpDefinition")
-  else
-    norm [[{
+  norm [[{
+  let row = search(@/, 'cW')
+  while row && s:iscomment(".", ".")
     let row = search(@/, 'cW')
-    while row && s:iscomment(".", ".")
-      let row = search(@/, 'cW')
-    endwhile
-  endif
+  endwhile
   if &hls
     set hls
   endif
@@ -130,46 +139,18 @@ func! s:iscomment(line, col) abort
   return synIDattr(synIDtrans(synID(line(a:line), col(a:col), 1)), "name") == "Comment"
 endfunc
 
-func! s:isdir(dir) abort
-  return !empty(a:dir) && (isdirectory(a:dir) ||
-        \ (!empty($SYSTEMDRIVE) && isdirectory('/'.tolower($SYSTEMDRIVE[0]).a:dir)))
-endfunc
-
-command! -nargs=0 Lsmru call <SID>mru_ls()
-func! s:mru_ls() abort
-  redir => output
-  sil ls at
-  sil ls ht
-  redir END
-  echo ":ls"
-  for line in split(output, '\n')[:10]
-    echo line
-  endfor
-endfunc
-
-command! -nargs=1 -complete=customlist,<SID>bmru_completion Bmru b <args>
-func! s:bmru_completion(arglead, cmdline, pos) abort
-  let bufs = getbufinfo({'buflisted': 1})
-  let sorted = sort(bufs, { x, y -> y.lastused - x.lastused })
-  let names = map(sorted, 'fnamemodify(v:val.name, ":~:.")')
-  return filter(names, 'v:val =~ a:arglead')
-endfunc
-
 aug nnn_hijack
   au!
   au VimEnter * if exists('#FileExplorer') | exe 'au! FileExplorer *' | endif
-  au BufEnter * if <SID>isdir(expand('%'))
+  au BufEnter * if isdirectory(expand('%'))
         \ | let w:nnn_open_dir = expand('%')
         \ | exe 'Kwbd'
         \ | call nnn#open(w:nnn_open_dir) | endif
 aug END
 
+nnoremap <Space>; <Cmd>let g:usercmd=1<CR>:
 augroup usercmd
   au!
-  au FileType *
-        \ if empty(&buftype) && !mapcheck("<CR>") && &ft != "netrw"|
-        \   nnoremap <buffer> <CR> <Cmd>let g:usercmd=1<CR>:|
-        \ endif
   au CmdlineEnter * call usercmd#map()
   au CmdlineChanged,CmdlineLeave * call usercmd#unmap()
 augroup END
@@ -177,8 +158,6 @@ augroup END
 augroup general 
   au!
   au FocusGained,BufEnter * silent! checktime
-  au CmdlineEnter * set ssl
-  au CmdlineLeave * set nossl
   au BufReadPost *
         \ if line("'\"") > 0 && line("'\"") <= line("$") && &ft !~# 'commit'|
         \   exe "normal! g`\""|
