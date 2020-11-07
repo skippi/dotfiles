@@ -4,7 +4,6 @@ let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5,
 let g:netrw_altfile = 1
 let g:netrw_fastbrowse = 0
 let g:user_emmet_leader_key = '<C-z>'
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 call plug#begin(stdpath('data') . '/plugged')
 " Function
@@ -17,7 +16,6 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession'
-Plug 'unblevable/quick-scope'
 Plug 'wellle/targets.vim'
 " Language
 Plug 'elixir-editors/vim-elixir'
@@ -27,12 +25,6 @@ Plug 'peitalin/vim-jsx-typescript'
 " Visual
 Plug 'tomasiser/vim-code-dark'
 call plug#end()
-
-aug qs_colors
-  au!
-  au ColorScheme * hi! link QuickScopePrimary ErrorMsg
-  au ColorScheme * hi! link QuickScopeSecondary SignColumn
-aug END
 
 silent! colorscheme codedark
 
@@ -162,12 +154,6 @@ augroup general
         \ if line("'\"") > 0 && line("'\"") <= line("$") && &ft !~# 'commit'|
         \   exe "normal! g`\""|
         \ endif
-augroup END
-
-augroup quickfix
-  au!
-  au QuickFixCmdPost [^l]* cwindow
-  au QuickFixCmdPost l* lwindow
 augroup END
 
 augroup terminal
