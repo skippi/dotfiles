@@ -47,7 +47,6 @@ map <silent> [[ ?{<CR>w99[{
 map <silent> [] k$][%?}<CR>
 map <silent> ][ /}<CR>b99]}
 map <silent> ]] j0[[%/{<CR>
-map <silent> gm <Plug>(room_lift)
 map <silent> gs <Plug>(room_grep)
 nmap <silent> gw <C-w>
 nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
@@ -61,7 +60,6 @@ nnoremap <silent> <Space>p "+p
 nnoremap <silent> <Space>y "+y
 nnoremap <silent> U <C-r>
 nnoremap <silent> Y y$
-nnoremap <silent> gj <Cmd>noh<CR>
 noremap <silent> ' `
 noremap <silent> gh ^
 noremap <silent> gl g_

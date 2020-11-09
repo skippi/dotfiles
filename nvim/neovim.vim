@@ -35,6 +35,7 @@ set grepprg=rg\ --follow\ --hidden\ --vimgrep\ --glob\ !.git
 set inccommand=nosplit
 set lazyredraw
 set mouse=
+set nojoinspaces
 set noruler
 set splitbelow
 set splitright
@@ -50,32 +51,50 @@ set statusline+=%=
 set statusline+=%([%n]%)
 set statusline+=%(%<\ [%{&ff}]\ %y\ %l:%c\ %p%%\ %)
 
-inoremap <silent> (<CR> (<CR>)<Esc>O
-inoremap <silent> [<CR> [<CR>]<Esc>O
-inoremap <silent> {<CR> {<CR>}<Esc>O
-nmap <silent> <Space>] <Plug>(coc-definition)*``
-nmap <silent> gC <Plug>(coc-rename)
-nmap <silent> gI <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+nnoremap - <Cmd>call nnn#bufopen()<CR>
 nnoremap <BS> <C-^>
+nnoremap <Space>fd <Cmd>Kwbd<CR>
+nnoremap <Space>fo <Cmd>Files<CR>
+nnoremap <Space>gD <Cmd>Gvdiffsplit HEAD<CR>
+nnoremap <Space>gb <Cmd>G blame<CR>
+nnoremap <Space>gd <Cmd>Gvdiffsplit<CR>
+nnoremap <Space>gl <Cmd>Gclog<CR>
+nnoremap <Space>gs <Cmd>G<CR>
+nnoremap <Space>q <Cmd>q<CR>
+nnoremap <Space>w <Cmd>w<CR>
 nnoremap <Tab> :ls<CR>:b<Space>
-nnoremap <silent> - <Cmd>call nnn#bufopen()<CR>
-nnoremap <silent> <Space>fd <Cmd>Kwbd<CR>
-nnoremap <silent> <Space>fl <Cmd>e%<CR>
-nnoremap <silent> <Space>fo <Cmd>Files<CR>
-nnoremap <silent> <Space>gD <Cmd>Gvdiffsplit HEAD<CR>
-nnoremap <silent> <Space>gb <Cmd>G blame<CR>
-nnoremap <silent> <Space>gd <Cmd>Gvdiffsplit<CR>
-nnoremap <silent> <Space>gl <Cmd>Gclog<CR>
-nnoremap <silent> <Space>gs <Cmd>G<CR>
-nnoremap <silent> <Space>q <Cmd>q<CR>
-nnoremap <silent> <Space>w <Cmd>w<CR>
-nnoremap <silent> [q <Cmd>exe v:count1 . 'cprev'<CR>
-nnoremap <silent> ]q <Cmd>exe v:count1 . 'cnext'<CR>
-nnoremap <silent> _ <Cmd>call nnn#open(".")<CR>
-nnoremap <silent> gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
+nnoremap _ <Cmd>call nnn#open(".")<CR>
 nnoremap g/ :sil!gr!<Space>
+nnoremap gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
 nnoremap z/ :g//#<Left><Left>
+
+nmap q] <Plug>(coc-definition)*``
+nmap qc <Plug>(coc-rename)
+nmap qi <Plug>(coc-implementation)
+nmap qr <Plug>(coc-references)
+nnoremap Q q
+nnoremap q <Nop>
+nnoremap q/ q/
+nnoremap q: q:
+nnoremap q? q?
+nnoremap qfp <Cmd>%!python -m black --fast -q -<CR>
+nnoremap qlp <Cmd>Flake8%<CR>
+
+nnoremap <l <Cmd>exe 'lolder' v:count1<CR>
+nnoremap <q <Cmd>exe 'colder' v:count1<CR>
+nnoremap >l <Cmd>exe 'lnewer' v:count1<CR>
+nnoremap >q <Cmd>exe 'cnewer' v:count1<CR>
+nnoremap [q <Cmd>exe v:count1 . 'cprev'<CR>
+nnoremap ]q <Cmd>exe v:count1 . 'cnext'<CR>
+
+inoremap (<CR> (<CR>)<Esc>O
+inoremap [<CR> [<CR>]<Esc>O
+inoremap {<CR> {<CR>}<Esc>O
+
+nnoremap <expr> <C-L> (v:count ? '<Cmd>edit<CR>' : '')
+      \ . '<Cmd>noh<CR>'
+      \ . (has('diff') ? '<Cmd>diffupdate<CR>' : '')
+      \ . '<Cmd>redraw<CR>'
 
 cnoremap <expr> <CR> ccr#run()
 
@@ -154,6 +173,12 @@ augroup general
         \ if line("'\"") > 0 && line("'\"") <= line("$") && &ft !~# 'commit'|
         \   exe "normal! g`\""|
         \ endif
+augroup END
+
+augroup quickfix
+  au!
+  au QuickFixCmdPost [^l]* cwindow
+  au QuickFixCmdPost l* lwindow
 augroup END
 
 augroup terminal
