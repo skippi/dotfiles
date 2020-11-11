@@ -6,7 +6,6 @@ let g:netrw_altfile = 1
 let g:netrw_fastbrowse = 0
 let g:textobj_sandwich_no_default_key_mappings = 1
 let g:user_emmet_leader_key = '<C-z>'
-let mapleader = "\<Space>"
 
 call plug#begin(stdpath('data') . '/plugged')
 " Function
