@@ -8,24 +8,20 @@ let g:textobj_sandwich_no_default_key_mappings = 1
 let g:user_emmet_leader_key = '<C-z>'
 
 call plug#begin(stdpath('data') . '/plugged')
-" Function
+Plug 'AndrewRadev/splitjoin.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'machakann/vim-sandwich'
 Plug 'mattn/emmet-vim'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+Plug 'romainl/vim-qf'
+Plug 'sheerun/vim-polyglot'
+Plug 'tomasiser/vim-code-dark'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession'
 Plug 'wellle/targets.vim'
-" Language
-Plug 'elixir-editors/vim-elixir'
-Plug 'leafgarland/typescript-vim'
-Plug 'pangloss/vim-javascript'
-Plug 'peitalin/vim-jsx-typescript'
-" Visual
-Plug 'tomasiser/vim-code-dark'
 call plug#end()
 
 silent! call operator#sandwich#set('all', 'all', 'highlight', 0)
@@ -85,12 +81,24 @@ nnoremap ,; *``cgn
 nnoremap - <Cmd>call nnn#bufopen()<CR>
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
+nnoremap <Tab> :ls<CR>:b<Space>
+nnoremap U <C-r>
+nnoremap Y y$
+nnoremap _ <Cmd>call nnn#open(".")<CR>
+noremap ' `
+noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
+noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
+vnoremap ,, "hy?\V<C-R>=escape(@h,'/\')<CR><CR>``cgN
+vnoremap ,; "hy/\V<C-R>=escape(@h,'/\')<CR><CR>``cgn
+
 nnoremap <Space> <Nop>
 nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
 nnoremap <Space>P "+P
 nnoremap <Space>Y "+yg_
-nnoremap <Space>fd <Cmd>Kwbd<CR>
-nnoremap <Space>fo <Cmd>Files<CR>
+nnoremap <Space>b :buffer *
+nnoremap <Space>d <Cmd>Kwbd<CR>
+nnoremap <Space>e :Emru<Space>
+nnoremap <Space>f :find *
 nnoremap <Space>gD <Cmd>Gvdiffsplit HEAD<CR>
 nnoremap <Space>gb <Cmd>G blame<CR>
 nnoremap <Space>gd <Cmd>Gvdiffsplit<CR>
@@ -100,30 +108,23 @@ nnoremap <Space>p "+p
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>w <Cmd>w<CR>
 nnoremap <Space>y "+y
-nnoremap <Tab> :ls<CR>:b<Space>
-nnoremap U <C-r>
-nnoremap Y y$
-nnoremap _ <Cmd>call nnn#open(".")<CR>
-noremap ' `
-vnoremap ,, y?\V<C-R>=escape(@",'/\')<CR><CR>``cgN
-vnoremap ,; y/\V<C-R>=escape(@",'/\')<CR><CR>``cgn
-vnoremap <Space>P "+P
-vnoremap <Space>p "+p
-vnoremap <Space>y "+y
+nnoremap <expr> <Space>; <SID>setusercmd(':')
+noremap <expr> <Space>/ <SID>setfuzzy('/')
+noremap <expr> <Space>? <SID>setfuzzy('?')
 
 map gs <Plug>(room_grep)
-nnoremap <expr> j (v:count ? 'j' : 'gj')
-nnoremap <expr> k (v:count ? 'k' : 'gk')
 nnoremap g/ :sil!gr!<Space>
-nnoremap gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
-nnoremap z/ :g//#<Left><Left>
+noremap gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
 noremap gh ^
 noremap gl g_
 noremap gw <C-w>
 
+nnoremap z/ :g//#<Left><Left>
+
 nmap q] <Plug>(coc-definition)*``
 nmap qc <Plug>(coc-rename)
 nmap qi <Plug>(coc-implementation)
+nmap qq <Plug>(qf_qf_toggle)
 nmap qr <Plug>(coc-references)
 nnoremap Q q
 nnoremap q <Nop>
@@ -151,6 +152,7 @@ nnoremap <expr> <C-L> (v:count ? '<Cmd>edit<CR>' : '')
 
 cnoremap <expr> <CR> ccr#run()
 
+command! Scratch vnew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 command! Echrome sil !chrome "file://%:p"
 command! Ecode sil exe "!code -nwg" expand("%:p") . ":" . line('.') . ":" . col('.') "."
 command! Edata sil exe "e" stdpath('data')
@@ -180,6 +182,13 @@ func! s:syn()
   endfor
 endfunc
 
+command! -nargs=1 -complete=customlist,<sid>mrucomplete Emru edit <args>
+func! s:mrucomplete(lead, cmdline, pos)
+  let matches = filter(copy(v:oldfiles), 'v:val =~ a:lead && v:val !~ "^fugitive"')
+  return map(copy(matches), {_, m -> fnamemodify(m, ':~:.')})
+endfunc
+
+nnoremap <expr> <Space>; <SID>setusercmd(':')
 func! s:fsearchdecl(name) abort
   if empty(a:name)
     echohl ErrorMsg
@@ -199,6 +208,25 @@ func! s:fsearchdecl(name) abort
   redraw
 endfunc
 
+func! s:setfuzzy(cmd)
+  aug fuzztemp
+    au!
+    au CmdlineLeave * exe "sil! cunmap <buffer> <Space>" | au! fuzztemp
+  aug END
+  cnoremap <buffer> <Space> .*
+  return a:cmd
+endfunc
+
+func! s:setusercmd(cmd) abort
+  let g:usercmd = 1
+  aug usercmd
+    au!
+    au CmdlineEnter * call usercmd#map()
+    au CmdlineChanged,CmdlineLeave * call usercmd#unmap() | au! usercmd
+  aug END
+  return a:cmd
+endfunc
+
 func! s:iscomment(line, col) abort
   return synIDattr(synIDtrans(synID(line(a:line), col(a:col), 1)), "name") == "Comment"
 endfunc
@@ -212,13 +240,6 @@ aug nnn_hijack
         \ | call nnn#open(w:nnn_open_dir) | endif
 aug END
 
-nnoremap <Space>; <Cmd>let g:usercmd=1<CR>:
-augroup usercmd
-  au!
-  au CmdlineEnter * call usercmd#map()
-  au CmdlineChanged,CmdlineLeave * call usercmd#unmap()
-augroup END
-
 augroup general 
   au!
   au FocusGained,BufEnter * silent! checktime
@@ -226,12 +247,6 @@ augroup general
         \ if line("'\"") > 0 && line("'\"") <= line("$") && &ft !~# 'commit'|
         \   exe "normal! g`\""|
         \ endif
-augroup END
-
-augroup quickfix
-  au!
-  au QuickFixCmdPost [^l]* cwindow
-  au QuickFixCmdPost l* lwindow
 augroup END
 
 augroup terminal
