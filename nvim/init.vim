@@ -188,7 +188,6 @@ func! s:mrucomplete(lead, cmdline, pos)
   return map(copy(matches), {_, m -> fnamemodify(m, ':~:.')})
 endfunc
 
-nnoremap <expr> <Space>; <SID>setusercmd(':')
 func! s:fsearchdecl(name) abort
   if empty(a:name)
     echohl ErrorMsg
@@ -218,12 +217,17 @@ func! s:setfuzzy(cmd)
 endfunc
 
 func! s:setusercmd(cmd) abort
-  let g:usercmd = 1
   aug usercmd
     au!
-    au CmdlineEnter * call usercmd#map()
-    au CmdlineChanged,CmdlineLeave * call usercmd#unmap() | au! usercmd
+    au CmdlineChanged,CmdlineLeave * 
+          \ for i in range(97, 122) |
+          \   exe "sil! cunmap <buffer>" nr2char(i) |
+          \ endfor |
+          \ au! usercmd
   aug END
+  for i in range(97, 122) |
+    exe "cnoremap <buffer>" nr2char(i) nr2char(i - 32) |
+  endfor
   return a:cmd
 endfunc
 
