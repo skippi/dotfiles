@@ -4,6 +4,8 @@ let g:coc_global_extensions = ['coc-tsserver', 'coc-python']
 let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5, 'border': 'sharp' } }
 let g:netrw_altfile = 1
 let g:netrw_fastbrowse = 0
+let g:qf_auto_open_loclist = 0
+let g:qf_auto_open_quickfix = 0
 let g:textobj_sandwich_no_default_key_mappings = 1
 let g:user_emmet_leader_key = '<C-z>'
 
@@ -18,6 +20,7 @@ Plug 'romainl/vim-qf'
 Plug 'sheerun/vim-polyglot'
 Plug 'tomasiser/vim-code-dark'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession'
@@ -95,7 +98,6 @@ nnoremap <Space> <Nop>
 nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
 nnoremap <Space>P "+P
 nnoremap <Space>Y "+yg_
-nnoremap <Space>b :buffer *
 nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>e :Emru<Space>
 nnoremap <Space>f :find *
@@ -244,30 +246,36 @@ aug nnn_hijack
         \ | call nnn#open(w:nnn_open_dir) | endif
 aug END
 
-augroup general 
+aug qf_open
+  au!
+  au QuickFixCmdPost grep cwindow
+  au QuickFixCmdPost lgrep lwindow
+aug END
+
+aug general 
   au!
   au FocusGained,BufEnter * silent! checktime
   au BufReadPost *
         \ if line("'\"") > 0 && line("'\"") <= line("$") && &ft !~# 'commit'|
         \   exe "normal! g`\""|
         \ endif
-augroup END
+aug END
 
-augroup terminal
+aug terminal
   au!
   au TermOpen term://* if (&ft !~ "nnn") | tnoremap <buffer> <ESC> <C-\><C-n> | endif
   au TermClose term://*
         \ if (expand('<afile>') !~ "fzf") && (expand('<afile>') !~ "coc") |
         \   exe "Kwbd" |
         \ endif
-augroup END
+aug END
 
 aug wsl_preload
   au!
   au VimEnter * if has('win32') | call jobstart("wsl") | endif
 aug END
 
-augroup File
+aug file
   au!
   au TextYankPost * silent! lua require("vim.highlight").on_yank()
-augroup END
+aug END
