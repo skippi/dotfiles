@@ -7,6 +7,7 @@ let g:netrw_fastbrowse = 0
 let g:qf_auto_open_loclist = 0
 let g:qf_auto_open_quickfix = 0
 let g:textobj_sandwich_no_default_key_mappings = 1
+let g:dispatch_no_maps = 1
 let g:user_emmet_leader_key = '<C-z>'
 
 call plug#begin(stdpath('data') . '/plugged')
@@ -51,6 +52,7 @@ set termguicolors
 set timeoutlen=500
 set undofile
 set updatetime=100
+set wildcharm=<C-z>
 set wildmode=list:longest,full
 
 set statusline=
@@ -79,8 +81,6 @@ map [[ ?{<CR>w99[{
 map [] k$][%?}<CR>
 map ][ /}<CR>b99]}
 map ]] j0[[%/{<CR>
-nnoremap ,, #``cgN
-nnoremap ,; *``cgn
 nnoremap - <Cmd>call nnn#bufopen()<CR>
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
@@ -91,8 +91,6 @@ nnoremap _ <Cmd>call nnn#open(".")<CR>
 noremap ' `
 noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
 noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
-vnoremap ,, "hy?\V<C-R>=escape(@h,'/\')<CR><CR>``cgN
-vnoremap ,; "hy/\V<C-R>=escape(@h,'/\')<CR><CR>``cgn
 
 nnoremap <Space> <Nop>
 nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
@@ -114,6 +112,17 @@ nnoremap <expr> <Space>; <SID>setusercmd(':')
 noremap <expr> <Space>/ <SID>setfuzzy('/')
 noremap <expr> <Space>? <SID>setfuzzy('?')
 
+nnoremap d<CR> <Cmd>Dispatch<CR>
+nnoremap d<Space> :Dispatch<Space>
+
+nnoremap m, #``cgN
+nnoremap m; *``cgn
+nnoremap m<CR> <Cmd>Make<CR>
+nnoremap m<Space> :Make<Space>
+nnoremap m? <Cmd>Copen!<CR>
+vnoremap m, "hy?\V<C-R>=escape(@h,'/\')<CR><CR>``cgN
+vnoremap m; "hy/\V<C-R>=escape(@h,'/\')<CR><CR>``cgn
+
 map gs <Plug>(room_grep)
 nnoremap g/ :sil!gr!<Space>
 noremap gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
@@ -133,8 +142,6 @@ nnoremap q <Nop>
 nnoremap q/ q/
 nnoremap q: q:
 nnoremap q? q?
-nnoremap qfp <Cmd>%!python -m black --fast -q -<CR>
-nnoremap qlp <Cmd>Flake8%<CR>
 
 nnoremap <l <Cmd>exe 'lolder' v:count1<CR>
 nnoremap <q <Cmd>exe 'colder' v:count1<CR>
@@ -147,12 +154,17 @@ inoremap (<CR> (<CR>)<Esc>O
 inoremap [<CR> [<CR>]<Esc>O
 inoremap {<CR> {<CR>}<Esc>O
 
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
 nnoremap <expr> <C-L> (v:count ? '<Cmd>edit<CR>' : '')
       \ . '<Cmd>noh<CR>'
       \ . (has('diff') ? '<Cmd>diffupdate<CR>' : '')
       \ . '<Cmd>redraw<CR>'
 
 cnoremap <expr> <CR> ccr#run()
+cnoremap <expr> <Tab> getcmdtype() == "/" \|\| getcmdtype() == "?" ? "<CR>/<C-r>/" : "<C-z>"
+cnoremap <expr> <S-Tab> getcmdtype() == "/" \|\| getcmdtype() == "?" ? "<CR>?<C-r>/" : "<S-C-z>"
 
 command! Scratch vnew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 command! Echrome sil !chrome "file://%:p"
@@ -166,16 +178,6 @@ command! Esyn sil exe "e $RTP/after/syntax/" . &filetype . ".vim"
 command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! Kwbd call kwbd#run()
 
-command! -nargs=* Flake8 call <SID>flake8(<q-args>)
-func! s:flake8(args) abort
-  let oldmake = &l:makeprg
-  let olderr = &l:errorformat
-  let &l:makeprg = get(g:, "flake8_path", "flake8")
-  setlocal errorformat=%f:%l:%c:\ %t%n\ %m
-  exe "sil mak!" a:args
-  let &l:makeprg = oldmake
-  let &l:errorformat = olderr
-endfunc
 
 command! -nargs=0 Syn call s:syn()
 func! s:syn()
