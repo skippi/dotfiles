@@ -19,26 +19,27 @@ map [[ ?{<CR>w99[{
 map [] k$][%?}<CR>
 map ][ /}<CR>b99]}
 map ]] j0[[%/{<CR>
-nnoremap ,, #``cgN
-nnoremap ,; *``cgn
 nnoremap - <Cmd>call VSCodeCall('workbench.view.explorer')<CR>
 nnoremap <BS> <Cmd>call VSCodeCall('workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup') <bar> call VSCodeCall('list.select')<CR>
 nnoremap <C-p> <C-i>
-nnoremap <Space> <Nop>
-nnoremap <Space>fd <Cmd>Quit<CR>
-nnoremap <Space>fo <Cmd>Find<CR>
-nnoremap <Space>q <Cmd>Quit<CR>
-nnoremap <Space>w <Cmd>Write<CR>
 nnoremap <Tab> <Cmd>Find<CR>
 nnoremap U <C-r>
 nnoremap Y y$
 nnoremap _ <Cmd>call VSCodeCall('workbench.view.explorer')<CR>
 noremap ' `
-vnoremap ,, y?\V<C-R>=escape(@",'/\')<CR><CR>``cgN
-vnoremap ,; y/\V<C-R>=escape(@",'/\')<CR><CR>``cgn
 
-" nnoremap gws <Cmd>Split<CR>
-" nnoremap gwv <Cmd>Vsplit<CR>
+nnoremap <Space> <Nop>
+nnoremap <Space>d <Cmd>Quit<CR>
+nnoremap <Space>e <Cmd>call VSCodeCall('workbench.action.quickOpen')<CR>
+nnoremap <Space>f <Cmd>Find<CR>
+nnoremap <Space>q <Cmd>Quit<CR>
+nnoremap <Space>w <Cmd>Write<CR>
+
+nnoremap m, #``cgN
+nnoremap m; *``cgn
+vnoremap m, "hy?\V<C-R>=escape(@h,'/\')<CR><CR>``cgN
+vnoremap m; "hy/\V<C-R>=escape(@h,'/\')<CR><CR>``cgn
+
 map gs <Plug>(room_grep)
 map gw <C-w>
 nnoremap <silent> g/ m'<Cmd>call VSCodeCall('workbench.action.findInFiles')<CR>

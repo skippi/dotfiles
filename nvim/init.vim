@@ -25,6 +25,7 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-sleuth'
 Plug 'wellle/targets.vim'
 call plug#end()
 
@@ -53,7 +54,7 @@ set timeoutlen=500
 set undofile
 set updatetime=100
 set wildcharm=<C-z>
-set wildmode=list:longest,full
+set wildmode=list:full
 
 set statusline=
 set statusline+=%(\ %{toupper(mode(0))}%)
@@ -177,7 +178,6 @@ command! Emacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') bufn
 command! Esyn sil exe "e $RTP/after/syntax/" . &filetype . ".vim"
 command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! Kwbd call kwbd#run()
-
 
 command! -nargs=0 Syn call s:syn()
 func! s:syn()

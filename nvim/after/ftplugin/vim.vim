@@ -1,5 +1,4 @@
-set expandtab tabstop=2 shiftwidth=2
-set path=,,**
+setlocal path=,,**
 set textwidth=78
 
 nnoremap <buffer> \S :so $RTP/init.vim<CR>
