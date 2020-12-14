@@ -1,0 +1,43 @@
+set commentary
+set hlsearch
+set incsearch
+set surround
+
+nnoremap <BS> <C-6>
+nnoremap <C-p> <C-i>
+nnoremap U <C-r>
+nnoremap Y y$
+noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
+noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
+
+nnoremap <Space> <Nop>
+nnoremap <Space>d :tabc<CR>
+nnoremap <Space>e :action GotoFile<CR>
+nnoremap <Space>f :action GotoFile<CR>
+nnoremap <Space>q :q<CR>
+nnoremap <Space>vs :source ~/.ideavimrc<CR>
+nnoremap <Space>w :w<CR>
+
+nnoremap \c :action GotoClass<CR>
+
+nnoremap g/ :action FindInPath<CR>
+nnoremap gw <C-w>
+noremap gh ^
+noremap gl g_
+
+nnoremap m, #''cgN
+nnoremap m; *''cgn
+
+nnoremap Q q
+nnoremap q <Nop>
+nnoremap q/ q/
+nnoremap q: q:
+nnoremap q? q?
+nnoremap q] :action GotoDefinition<CR>
+nnoremap qc :action RenameElement<CR>
+nnoremap qr :action FindUsages<CR>
+
+nnoremap <expr> <C-L> (v:count ? '<Cmd>edit<CR>' : '')
+      \ . '<Cmd>noh<CR>'
+      \ . (has('diff') ? '<Cmd>diffupdate<CR>' : '')
+      \ . '<Cmd>redraw<CR>'
