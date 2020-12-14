@@ -65,6 +65,8 @@ set statusline+=%=
 set statusline+=%([%n]%)
 set statusline+=%(%<\ [%{&ff}]\ %y\ %l:%c\ %p%%\ %)
 
+set path=,,**
+
 set wildignore+=*.beam
 set wildignore+=*/.elixir_ls/*
 set wildignore+=*/_build/*
@@ -125,6 +127,7 @@ vnoremap m, "hy?\V<C-R>=escape(@h,'/\')<CR><CR>``cgN
 vnoremap m; "hy/\V<C-R>=escape(@h,'/\')<CR><CR>``cgn
 
 map gs <Plug>(room_grep)
+nnoremap g. :sil!gr!<Up><CR>
 nnoremap g/ :sil!gr!<Space>
 noremap gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
 noremap gh ^
@@ -144,10 +147,6 @@ nnoremap q/ q/
 nnoremap q: q:
 nnoremap q? q?
 
-nnoremap <l <Cmd>exe 'lolder' v:count1<CR>
-nnoremap <q <Cmd>exe 'colder' v:count1<CR>
-nnoremap >l <Cmd>exe 'lnewer' v:count1<CR>
-nnoremap >q <Cmd>exe 'cnewer' v:count1<CR>
 nnoremap [q <Cmd>exe v:count1 . 'cprev'<CR>
 nnoremap ]q <Cmd>exe v:count1 . 'cnext'<CR>
 
@@ -179,12 +178,10 @@ command! Esyn sil exe "e $RTP/after/syntax/" . &filetype . ".vim"
 command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! Kwbd call kwbd#run()
 
-command! -nargs=0 Syn call s:syn()
-func! s:syn()
-  for id in synstack(line("."), col("."))
-    echo synIDattr(id, "name")
-  endfor
-endfunc
+command! -nargs=0 Syn
+      \ for id in synstack(line("."), col(".")) |
+      \   echo synIDattr(id, "name") |
+      \ endfor
 
 command! -nargs=1 -complete=customlist,<sid>mrucomplete Emru edit <args>
 func! s:mrucomplete(lead, cmdline, pos)
