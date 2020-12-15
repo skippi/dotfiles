@@ -167,8 +167,20 @@ nnoremap <expr> <C-L> (v:count ? '<Cmd>edit<CR>' : '')
       \ . '<Cmd>redraw<CR>'
 
 cnoremap <expr> <CR> ccr#run()
-cnoremap <expr> <Tab> getcmdtype() == "/" \|\| getcmdtype() == "?" ? "<CR>/<C-r>/" : "<C-z>"
-cnoremap <expr> <S-Tab> getcmdtype() == "/" \|\| getcmdtype() == "?" ? "<CR>?<C-r>/" : "<S-C-z>"
+cnoremap <expr> <Tab> <SID>tabsearch(getcmdtype())
+cnoremap <expr> <S-Tab> <SID>stabsearch(getcmdtype())
+
+func! s:tabsearch(cmd) abort
+  if a:cmd == '/' | return "\<C-g>" | endif
+  if a:cmd == '?' | return "\<C-t>" | endif
+  return "\<C-z>"
+endfunc
+
+func! s:stabsearch(cmd) abort
+  if a:cmd == '/' | return "\<C-t>" | endif
+  if a:cmd == '?' | return "\<C-g>" | endif
+  return "\<S-Tab>"
+endfunc
 
 command! Scratch vnew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 command! Echrome sil !chrome "file://%:p"
