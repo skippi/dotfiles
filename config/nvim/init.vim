@@ -150,6 +150,10 @@ nnoremap q? q?
 nnoremap [q <Cmd>exe v:count1 . 'cprev'<CR>
 nnoremap ]q <Cmd>exe v:count1 . 'cnext'<CR>
 
+nnoremap '# <Cmd>Esyn<CR>
+nnoremap '$ <Cmd>Einit<CR>
+nnoremap '@ <Cmd>Eftp<CR>
+
 inoremap (<CR> (<CR>)<Esc>O
 inoremap [<CR> [<CR>]<Esc>O
 inoremap {<CR> {<CR>}<Esc>O
