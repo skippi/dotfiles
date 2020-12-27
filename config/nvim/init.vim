@@ -113,7 +113,6 @@ nnoremap <Space>p "+p
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>w <Cmd>w<CR>
 nnoremap <Space>y "+y
-nnoremap <expr> <Space>; <SID>setusercmd(':')
 noremap <expr> <Space>/ <SID>setfuzzy('/')
 noremap <expr> <Space>? <SID>setfuzzy('?')
 
@@ -236,21 +235,6 @@ func! s:setfuzzy(cmd)
   return a:cmd
 endfunc
 
-func! s:setusercmd(cmd) abort
-  aug usercmd
-    au!
-    au CmdlineChanged,CmdlineLeave * 
-          \ for i in range(97, 122) |
-          \   exe "sil! cunmap <buffer>" nr2char(i) |
-          \ endfor |
-          \ au! usercmd
-  aug END
-  for i in range(97, 122) |
-    exe "cnoremap <buffer>" nr2char(i) nr2char(i - 32) |
-  endfor
-  return a:cmd
-endfunc
-
 func! s:iscomment(line, col) abort
   return synIDattr(synIDtrans(synID(line(a:line), col(a:col), 1)), "name") == "Comment"
 endfunc
@@ -277,6 +261,12 @@ aug general
         \ if line("'\"") > 0 && line("'\"") <= line("$") && &ft !~# 'commit'|
         \   exe "normal! g`\""|
         \ endif
+aug END
+
+aug cmdcase
+  au!
+  au CmdlineEnter * set nosmartcase
+  au CmdlineLeave * set smartcase
 aug END
 
 aug terminal
