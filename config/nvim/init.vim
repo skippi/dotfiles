@@ -70,6 +70,8 @@ set path=,,**
 set wildignore+=*.beam
 set wildignore+=*/.elixir_ls/*
 set wildignore+=*/_build/*
+set wildignore+=*/build/*
+set wildignore+=*/server/*
 set wildignore+=*/node_modules/*
 
 " windows <BS> fix
@@ -122,6 +124,7 @@ nnoremap m, #``cgN
 nnoremap m; *``cgn
 nnoremap m<CR> <Cmd>Make<CR>
 nnoremap m<Space> :Make<Space>
+nnoremap m= :set makeprg=
 nnoremap m? <Cmd>Copen!<CR>
 vnoremap m, "hy?\V<C-R>=escape(@h,'/\')<CR><CR>``cgN
 vnoremap m; "hy/\V<C-R>=escape(@h,'/\')<CR><CR>``cgn
