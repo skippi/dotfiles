@@ -1,6 +1,9 @@
-set commentary
 set hlsearch
+set ignorecase
 set incsearch
+set smartcase
+
+set commentary
 set surround
 
 nnoremap <BS> <C-6>
@@ -15,10 +18,10 @@ nnoremap <Space>d :tabc<CR>
 nnoremap <Space>e :action GotoFile<CR>
 nnoremap <Space>f :action GotoFile<CR>
 nnoremap <Space>q :q<CR>
-nnoremap <Space>vs :source ~/.ideavimrc<CR>
 nnoremap <Space>w :w<CR>
 
 nnoremap \c :action GotoClass<CR>
+nnoremap \s :source ~/.ideavimrc<CR>
 
 nnoremap g/ :action FindInPath<CR>
 nnoremap gw <C-w>
@@ -33,11 +36,12 @@ nnoremap q <Nop>
 nnoremap q/ q/
 nnoremap q: q:
 nnoremap q? q?
-nnoremap q] :action GotoDefinition<CR>
+nnoremap q] :action GotoImplementation<CR>
 nnoremap qc :action RenameElement<CR>
 nnoremap qr :action FindUsages<CR>
 
-nnoremap <expr> <C-L> (v:count ? '<Cmd>edit<CR>' : '')
-      \ . '<Cmd>noh<CR>'
-      \ . (has('diff') ? '<Cmd>diffupdate<CR>' : '')
-      \ . '<Cmd>redraw<CR>'
+nnoremap <C-l> :noh<CR>
+" nnoremap <expr> <C-L> (v:count ? '<Cmd>edit<CR>' : '')
+"       \ . '<Cmd>noh<CR>'
+"       \ . (has('diff') ? '<Cmd>diffupdate<CR>' : '')
+"       \ . '<Cmd>redraw<CR>'
