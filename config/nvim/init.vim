@@ -1,24 +1,27 @@
 let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden --glob !.git'
 let $RTP = stdpath('config')
-let g:coc_global_extensions = ['coc-tsserver', 'coc-python']
+let g:completion_auto_change_source = 1
+let g:completion_sorting = "length"
+let g:dirvish_mode = ":sort ,^.*[\/],"
+let g:dispatch_no_maps = 1
 let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5, 'border': 'sharp' } }
 let g:netrw_altfile = 1
 let g:netrw_fastbrowse = 0
 let g:qf_auto_open_loclist = 0
 let g:qf_auto_open_quickfix = 0
 let g:textobj_sandwich_no_default_key_mappings = 1
-let g:dispatch_no_maps = 1
 let g:user_emmet_leader_key = '<C-z>'
 
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'justinmk/vim-dirvish'
 Plug 'machakann/vim-sandwich'
 Plug 'mattn/emmet-vim'
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/completion-nvim'
 Plug 'romainl/vim-qf'
-Plug 'sheerun/vim-polyglot'
 Plug 'tomasiser/vim-code-dark'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-dispatch'
@@ -35,6 +38,7 @@ runtime macros/sandwich/keymap/surround.vim
 silent! colorscheme codedark
 
 set cmdwinheight=7
+set completeopt=menuone,noinsert,noselect
 set fileformat=unix
 set fileformats=unix,dos
 set grepprg=rg\ --follow\ --hidden\ --vimgrep\ --glob\ !.git
@@ -46,6 +50,7 @@ set mouse=
 set nojoinspaces
 set noruler
 set noswapfile
+set shortmess+=c
 set smartcase
 set splitbelow
 set splitright
@@ -86,13 +91,11 @@ map [[ ?{<CR>w99[{
 map [] k$][%?}<CR>
 map ][ /}<CR>b99]}
 map ]] j0[[%/{<CR>
-nnoremap - <Cmd>call nnn#bufopen()<CR>
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
 nnoremap <Tab> :ls<CR>:b<Space>
 nnoremap U <C-r>
 nnoremap Y y$
-nnoremap _ <Cmd>call nnn#open(".")<CR>
 noremap ' `
 noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
 noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
@@ -138,11 +141,13 @@ noremap gw <C-w>
 
 nnoremap z/ :g//#<Left><Left>
 
-nmap q] <Plug>(coc-definition)*``
-nmap qc <Plug>(coc-rename)
-nmap qi <Plug>(coc-implementation)
+nnoremap s] <Cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap sc <Cmd>lua vim.lsp.buf.rename()<CR>
+nnoremap sd <Cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap si <Cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap sr <Cmd>lua vim.lsp.buf.references()<CR>
+
 nmap qq <Plug>(qf_qf_toggle)
-nmap qr <Plug>(coc-references)
 nnoremap Q q
 nnoremap q <Nop>
 nnoremap q/ q/
@@ -239,15 +244,6 @@ func! s:iscomment(line, col) abort
   return synIDattr(synIDtrans(synID(line(a:line), col(a:col), 1)), "name") == "Comment"
 endfunc
 
-aug nnn_hijack
-  au!
-  au VimEnter * if exists('#FileExplorer') | exe 'au! FileExplorer *' | endif
-  au BufEnter * if isdirectory(expand('%'))
-        \ | let w:nnn_open_dir = expand('%')
-        \ | exe 'Kwbd'
-        \ | call nnn#open(w:nnn_open_dir) | endif
-aug END
-
 aug qf_open
   au!
   au QuickFixCmdPost grep cwindow
@@ -271,16 +267,10 @@ aug END
 
 aug terminal
   au!
-  au TermOpen term://* if (&ft !~ "nnn") | tnoremap <buffer> <ESC> <C-\><C-n> | endif
   au TermClose term://*
         \ if (expand('<afile>') !~ "fzf") && (expand('<afile>') !~ "coc") |
         \   exe "Kwbd" |
         \ endif
-aug END
-
-aug wsl_preload
-  au!
-  au VimEnter * if has('win32') | call jobstart("wsl") | endif
 aug END
 
 aug file
@@ -292,6 +282,11 @@ aug oldfiles
   au!
   au BufWinEnter * call <SID>pusholdfiles(expand("<afile>:p"))
   au BufDelete,BufWipeout * call <SID>popoldfiles(expand("<afile>:p"))
+aug END
+
+aug completion
+  au!
+  au BufEnter * lua require'completion'.on_attach()
 aug END
 
 func! s:pusholdfiles(fname) abort
@@ -307,3 +302,8 @@ func! s:popoldfiles(fname) abort
   endif
   call filter(v:oldfiles, {_, f -> f !=# a:fname})
 endfunc
+
+lua << EOF
+require'lspconfig'.vimls.setup{}
+require'lspconfig'.pyright.setup{}
+EOF
