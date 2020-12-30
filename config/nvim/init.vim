@@ -2,7 +2,7 @@ let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden --glob !.git'
 let $RTP = stdpath('config')
 let g:completion_auto_change_source = 1
 let g:completion_sorting = "length"
-let g:dirvish_mode = ":sort ,^.*[\/],"
+let g:dirvish_mode = ':sort ,^.*[\/],'
 let g:dispatch_no_maps = 1
 let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5, 'border': 'sharp' } }
 let g:netrw_altfile = 1
@@ -210,6 +210,13 @@ command! -nargs=1 -complete=customlist,<sid>mrucomplete Emru edit <args>
 func! s:mrucomplete(lead, cmdline, pos)
   let matches = filter(copy(v:oldfiles), 'v:val =~ a:lead && v:val !~ "^fugitive"')
   return map(copy(matches), {_, m -> fnamemodify(m, ':~:.')})
+endfunc
+
+command! -nargs=* -complete=file -range -bang MShdo call <SID>mshdo(<bang>0 ? argv() : getline(<line1>, <line2>), <q-args>)
+func! s:mshdo(paths, cmd) abort
+  let res = dirvish#shdo(a:paths, a:cmd)
+  nmap <buffer> <CR> <Cmd>sil norm Z!<CR>
+  return res
 endfunc
 
 func! s:fsearchdecl(name) abort
