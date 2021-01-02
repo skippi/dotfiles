@@ -2,6 +2,7 @@ let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden --glob !.git'
 let $RTP = stdpath('config')
 let g:completion_auto_change_source = 1
 let g:completion_sorting = "length"
+let g:completion_timer_cycle = 40
 let g:dirvish_mode = ':sort ,^.*[\/],'
 let g:dispatch_no_maps = 1
 let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5, 'border': 'sharp' } }
@@ -19,6 +20,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-dirvish'
 Plug 'machakann/vim-sandwich'
 Plug 'mattn/emmet-vim'
+Plug 'mfussenegger/nvim-dap'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 Plug 'romainl/vim-qf'
@@ -39,14 +41,16 @@ silent! colorscheme codedark
 
 set cmdwinheight=7
 set completeopt=menuone,noinsert,noselect
+set completeslash=slash
 set fileformat=unix
 set fileformats=unix,dos
+set foldlevelstart=99
+set foldmethod=indent
 set grepprg=rg\ --follow\ --hidden\ --vimgrep\ --glob\ !.git
 set hidden
 set ignorecase
 set inccommand=nosplit
-set lazyredraw
-set mouse=
+set mouse=a
 set nojoinspaces
 set noruler
 set noswapfile
@@ -57,7 +61,6 @@ set splitright
 set termguicolors
 set timeoutlen=500
 set undofile
-set updatetime=100
 set wildcharm=<C-z>
 set wildmode=list:full
 
@@ -274,6 +277,7 @@ aug END
 
 aug terminal
   au!
+  au TermOpen term://* if (&ft !~ "nnn") | tnoremap <buffer> <ESC> <C-\><C-n> | endif
   au TermClose term://*
         \ if (expand('<afile>') !~ "fzf") && (expand('<afile>') !~ "coc") |
         \   exe "Kwbd" |
