@@ -1,6 +1,8 @@
 let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden --glob !.git'
 let $RTP = stdpath('config')
+let g:completion_confirm_key = ""
 let g:completion_auto_change_source = 1
+let g:completion_enable_snippet = "vim-vsnip"
 let g:completion_sorting = "length"
 let g:completion_timer_cycle = 40
 let g:dirvish_mode = ':sort ,^.*[\/],'
@@ -12,9 +14,11 @@ let g:qf_auto_open_loclist = 0
 let g:qf_auto_open_quickfix = 0
 let g:textobj_sandwich_no_default_key_mappings = 1
 let g:user_emmet_leader_key = '<C-z>'
+let g:vsnip_snippet_dir = stdpath('config') . '/vsnip'
 
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'AndrewRadev/splitjoin.vim'
+Plug 'hrsh7th/vim-vsnip'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-dirvish'
@@ -141,6 +145,7 @@ noremap gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
 noremap gh ^
 noremap gl g_
 noremap gw <C-w>
+vnoremap gy y']
 
 nnoremap z/ :g//#<Left><Left>
 
@@ -168,8 +173,11 @@ inoremap (<CR> (<CR>)<Esc>O
 inoremap [<CR> [<CR>]<Esc>O
 inoremap {<CR> {<CR>}<Esc>O
 
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+imap <C-j> <Plug>(vsnip-jump-next)
+imap <C-k> <Plug>(vsnip-jump-prev)
+imap <expr> <CR> <SID>imapcr()
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 
 nnoremap <expr> <C-L> (v:count ? '<Cmd>edit<CR>' : '')
       \ . '<Cmd>noh<CR>'
@@ -179,6 +187,19 @@ nnoremap <expr> <C-L> (v:count ? '<Cmd>edit<CR>' : '')
 cnoremap <expr> <CR> ccr#run()
 cnoremap <expr> <Tab> <SID>tabsearch(getcmdtype())
 cnoremap <expr> <S-Tab> <SID>stabsearch(getcmdtype())
+
+function! s:imaptab() abort
+  if pumvisible() | return "\<C-n>" | endif
+  if vsnip#jumpable(1) | return "\<Plug>(vsnip-jump-next)" | endif
+  return "\<Tab>"
+endfunction
+
+function! s:imapcr() abort
+  if !pumvisible() | return "\<CR>" | endif
+  if complete_info()["selected"] == "-1" | return "\<C-e>\<CR>" | endif
+  if vsnip#expandable() | return "\<Plug>(vsnip-expand)" | endif
+  return "\<Plug>(completion_confirm_completion)"
+endfunction
 
 func! s:tabsearch(cmd) abort
   if a:cmd == '/' | return "\<C-g>" | endif
@@ -241,7 +262,7 @@ func! s:fsearchdecl(name) abort
   redraw
 endfunc
 
-func! s:setfuzzy(cmd)
+func! s:setfuzzy(cmd) abort
   aug fuzztemp
     au!
     au CmdlineLeave * exe "sil! cunmap <buffer> <Space>" | au! fuzztemp
@@ -317,4 +338,20 @@ endfunc
 lua << EOF
 require'lspconfig'.vimls.setup{}
 require'lspconfig'.pyright.setup{}
+EOF
+
+lua << EOF
+local dap = require'dap'
+dap.adapters.python = {
+  type = 'executable';
+  command = 'python';
+  args = { '-m', 'debugpy.adapter' };
+}
+dap.configurations.python = {
+  {
+    type = 'python';
+    request = 'launch';
+    name = 'launch';
+  }
+}
 EOF
