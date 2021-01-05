@@ -12,7 +12,3 @@ onoremap <silent> aj :<c-u>normal v$o0<CR>
 onoremap <silent> ij :<c-u>normal vg_o^<CR>
 vnoremap <silent> aj $o0
 vnoremap <silent> ij g_o^
-
-" Unit
-onoremap <silent> iu :<C-u>normal viw%<CR>
-vnoremap <silent> iu iw%

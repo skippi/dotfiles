@@ -141,11 +141,13 @@ vnoremap m; "hy/\V<C-R>=escape(@h,'/\')<CR><CR>``cgn
 map gs <Plug>(room_grep)
 nnoremap g. :sil!gr!<Up><CR>
 nnoremap g/ :sil!gr!<Space>
+nnoremap gy <Cmd>set operatorfunc=<SID>yankpast<CR>g@
+nnoremap gyy <Cmd>set operatorfunc=<SID>yankpast<CR>g@_
 noremap gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
 noremap gh ^
 noremap gl g_
 noremap gw <C-w>
-vnoremap gy y']
+vnoremap gy :<C-U>call <SID>yankpast(visualmode(), 1)<CR>
 
 nnoremap z/ :g//#<Left><Left>
 
@@ -173,11 +175,9 @@ inoremap (<CR> (<CR>)<Esc>O
 inoremap [<CR> [<CR>]<Esc>O
 inoremap {<CR> {<CR>}<Esc>O
 
-imap <C-j> <Plug>(vsnip-jump-next)
-imap <C-k> <Plug>(vsnip-jump-prev)
 imap <expr> <CR> <SID>imapcr()
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+imap <expr> <S-Tab> <SID>imapstab()
+imap <expr> <Tab> <SID>imaptab()
 
 nnoremap <expr> <C-L> (v:count ? '<Cmd>edit<CR>' : '')
       \ . '<Cmd>noh<CR>'
@@ -192,6 +192,12 @@ function! s:imaptab() abort
   if pumvisible() | return "\<C-n>" | endif
   if vsnip#jumpable(1) | return "\<Plug>(vsnip-jump-next)" | endif
   return "\<Tab>"
+endfunction
+
+function! s:imapstab() abort
+  if pumvisible() | return "\<C-p>" | endif
+  if vsnip#jumpable(1) | return "\<Plug>(vsnip-jump-prev)" | endif
+  return "\<S-Tab>"
 endfunction
 
 function! s:imapcr() abort
@@ -334,6 +340,17 @@ func! s:popoldfiles(fname) abort
   endif
   call filter(v:oldfiles, {_, f -> f !=# a:fname})
 endfunc
+
+function! s:yankpast(type, ...) abort
+  if a:0  " Invoked from Visual mode, use gv command.
+    silent exe "normal! gvy"
+  elseif a:type == 'line'
+    silent exe "normal! '[V']y"
+  else
+    silent exe "normal! `[v`]y"
+  endif
+  silent exe "normal! `]"
+endfunction
 
 lua << EOF
 require'lspconfig'.vimls.setup{}
