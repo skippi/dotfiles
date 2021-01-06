@@ -79,12 +79,27 @@ set statusline+=%(%<\ [%{&ff}]\ %y\ %l:%c\ %p%%\ %)
 
 set path=,,**
 
+set wildignore+=*.#*,*.cbk,*.csm,*.dcp,*.dsk,*.i,*.il?,*.local,*.rsm,*.~* " C++ builder
+set wildignore+=*.[Xx][Ll][Ss]
 set wildignore+=*.beam
+set wildignore+=*.bpi,*.bpl,*.dll,*.exe,*.hlp,*.lib,*.map,*.pdi,*.tds " Windows
+set wildignore+=*.cpe
+set wildignore+=*.dll
+set wildignore+=*.lib
+set wildignore+=*.nupkg
+set wildignore+=*.o
+set wildignore+=*.pdb
+set wildignore+=*.pyc
+set wildignore+=*.xlsm
+set wildignore+=*.xlsx
 set wildignore+=*/.elixir_ls/*
+set wildignore+=*/[Dd]ebug/
+set wildignore+=*/[Rr]elease/
 set wildignore+=*/_build/*
 set wildignore+=*/build/*
-set wildignore+=*/server/*
 set wildignore+=*/node_modules/*
+set wildignore+=*/packages/*
+set wildignore+=*/server/*
 
 " windows <BS> fix
 nmap <C-h> <BS>
@@ -125,6 +140,9 @@ nnoremap <Space>w <Cmd>w<CR>
 nnoremap <Space>y "+y
 noremap <expr> <Space>/ <SID>setfuzzy('/')
 noremap <expr> <Space>? <SID>setfuzzy('?')
+vnoremap <Space>P "+P
+vnoremap <Space>p "+p
+vnoremap <Space>y "+y
 
 nnoremap d<CR> <Cmd>Dispatch<CR>
 nnoremap d<Space> :Dispatch<Space>
@@ -151,10 +169,12 @@ vnoremap gy :<C-U>call <SID>yankpast(visualmode(), 1)<CR>
 
 nnoremap z/ :g//#<Left><Left>
 
+nnoremap s <Nop>
 nnoremap s] <Cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap sc <Cmd>lua vim.lsp.buf.rename()<CR>
 nnoremap sd <Cmd>lua vim.lsp.buf.declaration()<CR>
 nnoremap si <Cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap slr <Cmd>lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR><Cmd>e<CR>
 nnoremap sr <Cmd>lua vim.lsp.buf.references()<CR>
 
 nmap qq <Plug>(qf_qf_toggle)
