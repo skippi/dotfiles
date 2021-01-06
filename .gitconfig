@@ -1,0 +1,25 @@
+[user]
+	email = jbtcao@gmail.com
+	name = skippi
+[core]
+	editor = nvim
+	autocrlf = input
+	excludesfile = ~/.config/git/ignore
+[diff]
+	tool = nvimdiff
+[difftool]
+	prompt = false
+[difftool "vscode"]
+	cmd = "code --wait --diff  "
+[merge]
+	tool = nvimdiff
+[mergetool "nvimdiff"]
+	cmd = nvim -d
+[mergetool "vscode"]
+	cmd = "code --wait "
+[init]
+	templatedir = ~/.config/git/template
+[pull]
+	rebase = false
+[alias]
+	ctags = !.git/hooks/ctags
