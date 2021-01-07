@@ -128,7 +128,7 @@ nnoremap <Space>P "+P
 nnoremap <Space>Y "+yg_
 nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>e :Emru<Space>
-nnoremap <Space>f :find *
+nnoremap <Space>f <Cmd>GFiles<CR>
 nnoremap <Space>gD <Cmd>Gvdiffsplit HEAD<CR>
 nnoremap <Space>gb <Cmd>G blame<CR>
 nnoremap <Space>gd <Cmd>Gvdiffsplit<CR>
