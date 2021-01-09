@@ -1,13 +1,14 @@
 let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden --glob !.git'
 let $RTP = stdpath('config')
-let g:completion_confirm_key = ""
 let g:completion_auto_change_source = 1
+let g:completion_confirm_key = ""
 let g:completion_enable_snippet = "vim-vsnip"
 let g:completion_sorting = "length"
 let g:completion_timer_cycle = 40
 let g:dirvish_mode = ':sort ,^.*[\/],'
 let g:dispatch_no_maps = 1
 let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5, 'border': 'sharp' } }
+let g:fzf_preview_window = []
 let g:netrw_altfile = 1
 let g:netrw_fastbrowse = 0
 let g:qf_auto_open_loclist = 0
@@ -19,7 +20,7 @@ let g:vsnip_snippet_dir = stdpath('config') . '/vsnip'
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'hrsh7th/vim-vsnip'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-dirvish'
 Plug 'machakann/vim-sandwich'
@@ -65,6 +66,7 @@ set splitright
 set termguicolors
 set timeoutlen=500
 set undofile
+set updatetime=100
 set wildcharm=<C-z>
 set wildmode=list:full
 
@@ -93,13 +95,12 @@ set wildignore+=*.pyc
 set wildignore+=*.xlsm
 set wildignore+=*.xlsx
 set wildignore+=*/.elixir_ls/*
-set wildignore+=*/[Dd]ebug/
-set wildignore+=*/[Rr]elease/
 set wildignore+=*/_build/*
 set wildignore+=*/build/*
 set wildignore+=*/node_modules/*
 set wildignore+=*/packages/*
 set wildignore+=*/server/*
+set wildignore+=Session.vim
 
 " windows <BS> fix
 nmap <C-h> <BS>
@@ -124,6 +125,7 @@ noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
 
 nnoremap <Space> <Nop>
 nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
+nnoremap <Space>F <Cmd>Files<CR>
 nnoremap <Space>P "+P
 nnoremap <Space>Y "+yg_
 nnoremap <Space>d <Cmd>Kwbd<CR>
@@ -133,11 +135,11 @@ nnoremap <Space>gD <Cmd>Gvdiffsplit HEAD<CR>
 nnoremap <Space>gb <Cmd>G blame<CR>
 nnoremap <Space>gd <Cmd>Gvdiffsplit<CR>
 nnoremap <Space>gl <Cmd>Gclog<CR>
-nnoremap <Space>gs <Cmd>G<CR>
 nnoremap <Space>p "+p
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>w <Cmd>w<CR>
 nnoremap <Space>y "+y
+nnoremap <Space>yp <Cmd>let @+ = expand("%:p")<CR>
 noremap <expr> <Space>/ <SID>setfuzzy('/')
 noremap <expr> <Space>? <SID>setfuzzy('?')
 vnoremap <Space>P "+P
@@ -159,6 +161,10 @@ vnoremap m; "hy/\V<C-R>=escape(@h,'/\')<CR><CR>``cgn
 map gs <Plug>(room_grep)
 nnoremap g. :sil!gr!<Up><CR>
 nnoremap g/ :sil!gr!<Space>
+nnoremap g<CR> <Cmd>G<CR>
+nnoremap g<Space> :G<Space>
+nnoremap goi <Cmd>EFlowCal<CR>
+nnoremap gof <Cmd>sil !FlowCalExe\_LaunchFC.cmd<CR>
 nnoremap gy <Cmd>set operatorfunc=<SID>yankpast<CR>g@
 nnoremap gyy <Cmd>set operatorfunc=<SID>yankpast<CR>g@_
 noremap gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
@@ -239,7 +245,7 @@ func! s:stabsearch(cmd) abort
   return "\<S-Tab>"
 endfunc
 
-command! Scratch vnew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
+command! EFlowCal sil !StartIDE.cmd
 command! Echrome sil !chrome "file://%:p"
 command! Ecode sil exe "!code -nwg" expand("%:p") . ":" . line('.') . ":" . col('.') "."
 command! Edata sil exe "e" stdpath('data')
@@ -250,6 +256,7 @@ command! Emacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') bufn
 command! Esyn sil exe "e $RTP/after/syntax/" . &filetype . ".vim"
 command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! Kwbd call kwbd#run()
+command! Scratch vnew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 
 command! -nargs=0 Syn
       \ for id in synstack(line("."), col(".")) |
@@ -346,6 +353,16 @@ aug completion
   au!
   au BufEnter * lua require'completion'.on_attach()
 aug END
+
+augroup filemarks
+  autocmd!
+  autocmd BufLeave * call <SID>markext(expand("%:e"))
+augroup END
+
+function! s:markext(ext) abort
+  if empty(a:ext) | return | endif
+  exe "mark" toupper(a:ext[0])
+endfunction
 
 func! s:pusholdfiles(fname) abort
   if empty(a:fname) || !filereadable(a:fname) || !&buflisted
