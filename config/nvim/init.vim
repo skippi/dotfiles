@@ -29,6 +29,7 @@ Plug 'mfussenegger/nvim-dap'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 Plug 'romainl/vim-qf'
+Plug 'sheerun/vim-polyglot'
 Plug 'tomasiser/vim-code-dark'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-dispatch'
@@ -140,8 +141,6 @@ nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>w <Cmd>w<CR>
 nnoremap <Space>y "+y
 nnoremap <Space>yp <Cmd>let @+ = expand("%:p")<CR>
-noremap <expr> <Space>/ <SID>setfuzzy('/')
-noremap <expr> <Space>? <SID>setfuzzy('?')
 vnoremap <Space>P "+P
 vnoremap <Space>p "+p
 vnoremap <Space>y "+y
@@ -163,8 +162,8 @@ nnoremap g. :sil!gr!<Up><CR>
 nnoremap g/ :sil!gr!<Space>
 nnoremap g<CR> <Cmd>G<CR>
 nnoremap g<Space> :G<Space>
-nnoremap goi <Cmd>EFlowCal<CR>
 nnoremap gof <Cmd>sil !FlowCalExe\_LaunchFC.cmd<CR>
+nnoremap goi <Cmd>EFlowCal<CR>
 nnoremap gy <Cmd>set operatorfunc=<SID>yankpast<CR>g@
 nnoremap gyy <Cmd>set operatorfunc=<SID>yankpast<CR>g@_
 noremap gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
@@ -172,6 +171,9 @@ noremap gh ^
 noremap gl g_
 noremap gw <C-w>
 vnoremap gy :<C-U>call <SID>yankpast(visualmode(), 1)<CR>
+
+" fzf bug
+tnoremap <M-c> <M-c>
 
 nnoremap z/ :g//#<Left><Left>
 
@@ -293,15 +295,6 @@ func! s:fsearchdecl(name) abort
     set hls
   endif
   redraw
-endfunc
-
-func! s:setfuzzy(cmd) abort
-  aug fuzztemp
-    au!
-    au CmdlineLeave * exe "sil! cunmap <buffer> <Space>" | au! fuzztemp
-  aug END
-  cnoremap <buffer> <Space> .*
-  return a:cmd
 endfunc
 
 func! s:iscomment(line, col) abort
