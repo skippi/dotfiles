@@ -60,7 +60,6 @@ set mouse=a
 set nojoinspaces
 set noruler
 set noswapfile
-set shortmess+=c
 set smartcase
 set splitbelow
 set splitright
@@ -118,16 +117,21 @@ map ]] j0[[%/{<CR>
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
 nnoremap <Tab> :ls<CR>:b<Space>
+nnoremap P ]P
 nnoremap U <C-r>
 nnoremap Y y$
+nnoremap p ]p
 noremap ' `
 noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
 noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
+vnoremap P ]P
+vnoremap p ]p
 
 nnoremap <Space> <Nop>
+
 nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
 nnoremap <Space>F <Cmd>Files<CR>
-nnoremap <Space>P "+P
+nnoremap <Space>P "+]P
 nnoremap <Space>Y "+yg_
 nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>e :Emru<Space>
@@ -136,13 +140,13 @@ nnoremap <Space>gD <Cmd>Gvdiffsplit HEAD<CR>
 nnoremap <Space>gb <Cmd>G blame<CR>
 nnoremap <Space>gd <Cmd>Gvdiffsplit<CR>
 nnoremap <Space>gl <Cmd>Gclog<CR>
-nnoremap <Space>p "+p
+nnoremap <Space>p "+]p
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>w <Cmd>w<CR>
 nnoremap <Space>y "+y
 nnoremap <Space>yp <Cmd>let @+ = expand("%:p")<CR>
-vnoremap <Space>P "+P
-vnoremap <Space>p "+p
+vnoremap <Space>P "+]P
+vnoremap <Space>p "+]p
 vnoremap <Space>y "+y
 
 nnoremap d<CR> <Cmd>Dispatch<CR>
@@ -172,8 +176,9 @@ noremap gl g_
 noremap gw <C-w>
 vnoremap gy :<C-U>call <SID>yankpast(visualmode(), 1)<CR>
 
-" fzf bug
+" PSReadLine bug
 tnoremap <M-c> <M-c>
+tnoremap <M-h> <M-h>
 
 nnoremap z/ :g//#<Left><Left>
 
@@ -182,7 +187,6 @@ nnoremap s] <Cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap sc <Cmd>lua vim.lsp.buf.rename()<CR>
 nnoremap sd <Cmd>lua vim.lsp.buf.declaration()<CR>
 nnoremap si <Cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap slr <Cmd>lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR><Cmd>e<CR>
 nnoremap sr <Cmd>lua vim.lsp.buf.references()<CR>
 
 nmap qq <Plug>(qf_qf_toggle)
@@ -192,7 +196,9 @@ nnoremap q/ q/
 nnoremap q: q:
 nnoremap q? q?
 
+nnoremap [p P
 nnoremap [q <Cmd>exe v:count1 . 'cprev'<CR>
+nnoremap ]p p
 nnoremap ]q <Cmd>exe v:count1 . 'cnext'<CR>
 
 nnoremap '# <Cmd>Esyn<CR>
@@ -207,7 +213,9 @@ imap <expr> <CR> <SID>imapcr()
 imap <expr> <S-Tab> <SID>imapstab()
 imap <expr> <Tab> <SID>imaptab()
 
-nnoremap <expr> <C-L> (v:count ? '<Cmd>edit<CR>' : '')
+nnoremap <expr> <C-L>
+      \ (v:count ? '<Cmd>lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR>' : '')
+      \ . (v:count ? '<Cmd>edit<CR>' : '')
       \ . '<Cmd>noh<CR>'
       \ . (has('diff') ? '<Cmd>diffupdate<CR>' : '')
       \ . '<Cmd>redraw<CR>'

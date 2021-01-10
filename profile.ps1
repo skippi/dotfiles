@@ -8,14 +8,35 @@ $Env:FZF_DEFAULT_COMMAND = ("fd --hidden --follow" +
 $Env:FZF_CTRL_T_COMMAND = $Env:FZF_DEFAULT_COMMAND
 $Env:FZF_ALT_C_COMMAND = $Env:FZF_DEFAULT_COMMAND + " -t d"
 
-if (Get-Command git -errorAction SilentlyContinue) {
-  Set-Alias -Name cg -Value Set-LocGitRoot
-  Set-Alias -Name cl -Value Set-LocAndList
-  Set-Alias -Name ls -Value Start-List
-}
+Set-Alias -Name .. -Value Set-LocUpper
+Set-Alias -Name cg -Value Set-LocGitRoot
+Set-Alias -Name cl -Value Set-LocAndList
+Set-Alias -Name gs -Value Start-GitStatus
+Set-Alias -Name ls -Value Start-List
+Set-Alias -Name nvs -Value Start-NvimSession
 
 if (Get-Module -ListAvailable -Name PSReadLine) {
   Import-Module PSReadline
+  Set-PSReadLineKeyHandler -Key Ctrl+o -ScriptBlock {
+    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
+    cl -
+    [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
+  }
+  Set-PSReadLineKeyHandler -Key Ctrl+p -ScriptBlock {
+    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
+    cl +
+    [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
+  }
+  Set-PSReadLineKeyHandler -Key Alt+h -ScriptBlock {
+    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
+    cl ..
+    [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
+  }
+  Set-PSReadLineKeyHandler -Key Ctrl+d -ScriptBlock {
+    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
+    [Microsoft.PowerShell.PSConsoleReadLine]::Insert("exit")
+    [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
+  }
 } else {
   Write-Host 'profile: ignoring PSReadLine config, module not installed'
 }
@@ -28,10 +49,6 @@ if (Get-Module -ListAvailable -Name PSFzf) {
   Set-Alias -Name fsk -Value Invoke-FuzzyKillProcess
 } else {
   Write-Host 'profile: ignoring PSFzf config, module not installed'
-}
-
-function Set-LocGitRoot {
-  Set-Location -Path $(git rev-parse --show-toplevel)
 }
 
 function Start-List {
@@ -54,3 +71,8 @@ function Set-LocAndList {
   param ($path)
   Set-Location -Path $path && Start-List .
 }
+
+function Set-LocGitRoot { Set-Location -Path $(git rev-parse --show-toplevel) }
+function Set-LocUpper { cl .. }
+function Start-GitStatus { git status }
+function Start-NvimSession { nvim -S }

@@ -1,5 +1,8 @@
+nmap <buffer> <M-h> <Plug>(dirvish_up)
+nmap <buffer> <M-j> j
+nmap <buffer> <M-k> k
+nmap <buffer> <M-l> <CR>
 nnoremap <buffer> d! <Cmd>call <SID>rmshdo(1)<CR>
-nnoremap <buffer> d<CR> <Cmd>call <SID>rmshdo(0)<CR>
 nnoremap <buffer> dd <Cmd>call <SID>rmshdo(0)<CR>
 nnoremap <buffer> gd :call mkdir(expand("%") . "", "p")<bar>Dirvish %<C-Left><C-Left><C-Left><Right>
 nnoremap <buffer> gn :sil !type NUL > %
