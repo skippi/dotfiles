@@ -169,14 +169,15 @@ nnoremap gb <Cmd>G blame<CR>
 nnoremap gof <Cmd>sil !FlowCalExe\_LaunchFC.cmd<CR>
 nnoremap goi <Cmd>EFlowCal<CR>
 nnoremap gs <Cmd>set opfunc=util#grepfunc<CR>g@
-nnoremap gy <Cmd>set operatorfunc=<SID>yankpast<CR>g@
-nnoremap gyy <Cmd>set operatorfunc=<SID>yankpast<CR>g@_
+nnoremap gss 0<Cmd>set opfunc=util#grepfunc<CR>g@$
+nnoremap gy <Cmd>set opfunc=util#yankpastfunc<CR>g@
+nnoremap gyy <Cmd>set opfunc=util#yankpastfunc<CR>g@_
 noremap gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
 noremap gh ^
 noremap gl g_
 noremap gw <C-w>
 vnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>
-vnoremap gy <Esc><Cmd>call <SID>yankpast(visualmode(), 1)<CR>
+vnoremap gy <Esc><Cmd>call util#yankpastfunc(visualmode(), 1)<CR>
 
 " PSReadLine bug
 tnoremap <M-c> <M-c>
@@ -359,13 +360,8 @@ aug END
 
 augroup filemarks
   autocmd!
-  autocmd BufLeave * call <SID>markext(expand("%:e"))
+  autocmd BufLeave * call util#mark_file_context()
 augroup END
-
-function! s:markext(ext) abort
-  if empty(a:ext) | return | endif
-  exe "mark" toupper(a:ext[0])
-endfunction
 
 func! s:pusholdfiles(fname) abort
   if empty(a:fname) || !filereadable(a:fname) || !&buflisted
@@ -380,17 +376,6 @@ func! s:popoldfiles(fname) abort
   endif
   call filter(v:oldfiles, {_, f -> f !=# a:fname})
 endfunc
-
-function! s:yankpast(type, ...) abort
-  if a:0  " Invoked from Visual mode, use gv command.
-    silent exe "normal! gvy"
-  elseif a:type == 'line'
-    silent exe "normal! '[V']y"
-  else
-    silent exe "normal! `[v`]y"
-  endif
-  silent exe "normal! `]"
-endfunction
 
 lua << EOF
 require'lspconfig'.vimls.setup{}

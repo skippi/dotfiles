@@ -1,6 +1,6 @@
 {
   "function": {
-    "prefix": ["fun"],
+    "prefix": ["fn"],
     "body": [
       "function! $1($2) abort",
       "\t$0",
