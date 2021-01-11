@@ -157,7 +157,6 @@ nnoremap m? <Cmd>Copen!<CR>
 vnoremap m, "hy?\V<C-R>=escape(@h,'/\')<CR><CR>``cgN
 vnoremap m; "hy/\V<C-R>=escape(@h,'/\')<CR><CR>``cgn
 
-map gs <Plug>(room_grep)
 nnoremap g. <Cmd>Gvdiffsplit<CR>
 nnoremap g/ :sil!gr!<Space>
 nnoremap g<CR> <Cmd>G<CR>
@@ -167,13 +166,15 @@ nnoremap gL <Cmd>Gclog<CR>
 nnoremap gb <Cmd>G blame<CR>
 nnoremap gof <Cmd>sil !FlowCalExe\_LaunchFC.cmd<CR>
 nnoremap goi <Cmd>EFlowCal<CR>
+nnoremap gs <Cmd>set opfunc=util#grepfunc<CR>g@
 nnoremap gy <Cmd>set operatorfunc=<SID>yankpast<CR>g@
 nnoremap gyy <Cmd>set operatorfunc=<SID>yankpast<CR>g@_
 noremap gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
 noremap gh ^
 noremap gl g_
 noremap gw <C-w>
-vnoremap gy :<C-U>call <SID>yankpast(visualmode(), 1)<CR>
+vnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>
+vnoremap gy <Esc><Cmd>call <SID>yankpast(visualmode(), 1)<CR>
 
 " PSReadLine bug
 tnoremap <M-c> <M-c>

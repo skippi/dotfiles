@@ -40,11 +40,12 @@ nnoremap m; *``cgn
 vnoremap m, "hy?\V<C-R>=escape(@h,'/\')<CR><CR>``cgN
 vnoremap m; "hy/\V<C-R>=escape(@h,'/\')<CR><CR>``cgn
 
-map gs <Plug>(room_grep)
 map gw <C-w>
-nnoremap <silent> g/ m'<Cmd>call VSCodeCall('workbench.action.findInFiles')<CR>
+nnoremap g/ m'<Cmd>call VSCodeCall('workbench.action.findInFiles')<CR>
+nnoremap gs <Cmd>set opfunc=util#grepfunc<CR>g@
 noremap gh ^
 noremap gl g_
+vnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>
 
 nnoremap Q q
 nnoremap q <Nop>
