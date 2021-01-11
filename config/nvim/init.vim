@@ -135,7 +135,7 @@ nnoremap <Space>F <Cmd>Files<CR>
 nnoremap <Space>P "+]P
 nnoremap <Space>Y "+yg_
 nnoremap <Space>d <Cmd>Kwbd<CR>
-nnoremap <Space>e :Emru<Space>
+nnoremap <Space>e <Cmd>History<CR>
 nnoremap <Space>f <Cmd>GFiles<CR>
 nnoremap <Space>p "+]p
 nnoremap <Space>q <Cmd>q<CR>
@@ -275,12 +275,6 @@ command! -nargs=0 Syn
       \ for id in synstack(line("."), col(".")) |
       \   echo synIDattr(id, "name") |
       \ endfor
-
-command! -nargs=1 -complete=customlist,<sid>mrucomplete Emru edit <args>
-func! s:mrucomplete(lead, cmdline, pos)
-  let matches = filter(copy(v:oldfiles), 'v:val =~ a:lead && v:val !~ "^fugitive"')
-  return map(copy(matches), {_, m -> fnamemodify(m, ':~:.')})
-endfunc
 
 command! -nargs=* -complete=file -range -bang MShdo call <SID>mshdo(<bang>0 ? argv() : getline(<line1>, <line2>), <q-args>)
 func! s:mshdo(paths, cmd) abort
