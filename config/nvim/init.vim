@@ -13,6 +13,7 @@ let g:netrw_altfile = 1
 let g:netrw_fastbrowse = 0
 let g:qf_auto_open_loclist = 0
 let g:qf_auto_open_quickfix = 0
+let g:qf_auto_quit = 0 " tab close bug
 let g:textobj_sandwich_no_default_key_mappings = 1
 let g:user_emmet_leader_key = '<C-z>'
 let g:vsnip_snippet_dir = stdpath('config') . '/vsnip'
@@ -138,6 +139,7 @@ nnoremap <Space>e :Emru<Space>
 nnoremap <Space>f <Cmd>GFiles<CR>
 nnoremap <Space>p "+]p
 nnoremap <Space>q <Cmd>q<CR>
+nnoremap <Space>t <Cmd>tabnew<CR>
 nnoremap <Space>w <Cmd>w<CR>
 nnoremap <Space>y "+y
 nnoremap <Space>yp <Cmd>let @+ = expand("%:p")<CR>
