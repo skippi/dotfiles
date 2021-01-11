@@ -136,10 +136,6 @@ nnoremap <Space>Y "+yg_
 nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>e :Emru<Space>
 nnoremap <Space>f <Cmd>GFiles<CR>
-nnoremap <Space>gD <Cmd>Gvdiffsplit HEAD<CR>
-nnoremap <Space>gb <Cmd>G blame<CR>
-nnoremap <Space>gd <Cmd>Gvdiffsplit<CR>
-nnoremap <Space>gl <Cmd>Gclog<CR>
 nnoremap <Space>p "+]p
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>w <Cmd>w<CR>
@@ -162,10 +158,13 @@ vnoremap m, "hy?\V<C-R>=escape(@h,'/\')<CR><CR>``cgN
 vnoremap m; "hy/\V<C-R>=escape(@h,'/\')<CR><CR>``cgn
 
 map gs <Plug>(room_grep)
-nnoremap g. :sil!gr!<Up><CR>
+nnoremap g. <Cmd>Gvdiffsplit<CR>
 nnoremap g/ :sil!gr!<Space>
 nnoremap g<CR> <Cmd>G<CR>
 nnoremap g<Space> :G<Space>
+nnoremap g> <Cmd>Gvdiffsplit HEAD<CR>
+nnoremap gL <Cmd>Gclog<CR>
+nnoremap gb <Cmd>G blame<CR>
 nnoremap gof <Cmd>sil !FlowCalExe\_LaunchFC.cmd<CR>
 nnoremap goi <Cmd>EFlowCal<CR>
 nnoremap gy <Cmd>set operatorfunc=<SID>yankpast<CR>g@
