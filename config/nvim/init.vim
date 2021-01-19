@@ -110,7 +110,7 @@ map ][ /}<CR>b99]}
 map ]] j0[[%/{<CR>
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
-nnoremap <Tab> :ls<CR>:b<Space>
+nnoremap <Tab> :buffer<Space>
 nnoremap P ]P
 nnoremap U <C-r>
 nnoremap Y y$
@@ -130,10 +130,11 @@ nnoremap <Space>Y "+yg_
 nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>e <Cmd>History<CR>
 nnoremap <Space>f <Cmd>GFiles<CR>
+nnoremap <Space>j :tjump /
 nnoremap <Space>p "+]p
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>t <Cmd>tabnew<CR>
-nnoremap <Space>w <Cmd>w<CR>
+nnoremap <Space>w <Cmd>update<CR>
 nnoremap <Space>y "+y
 nnoremap <Space>yp <Cmd>let @+ = expand("%:p")<CR>
 vnoremap <Space>P "+]P
@@ -153,7 +154,7 @@ vnoremap m, "hy?\V<C-R>=escape(@h,'/\')<CR><CR>``cgN
 vnoremap m; "hy/\V<C-R>=escape(@h,'/\')<CR><CR>``cgn
 
 nnoremap g. <Cmd>Gvdiffsplit<CR>
-nnoremap g/ :sil!gr!<Space>
+nnoremap g/ :sil!gr! ""<Left>
 nnoremap g<CR> <Cmd>G<CR>
 nnoremap g<Space> :G<Space>
 nnoremap g> <Cmd>Gvdiffsplit HEAD<CR>
@@ -171,6 +172,8 @@ noremap gl g_
 noremap gw <C-w>
 vnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>
 vnoremap gy <Esc><Cmd>call util#yankpastfunc(visualmode(), 1)<CR>
+
+nnoremap yon <Cmd>set number!<CR>
 
 " PSReadLine bug
 tnoremap <M-c> <M-c>
@@ -192,8 +195,10 @@ nnoremap q/ q/
 nnoremap q: q:
 nnoremap q? q?
 
+nnoremap [n <Cmd>call search('^<<<<<<<\s.*', 'b')<CR>
 nnoremap [p P
 nnoremap [q <Cmd>exe v:count1 . 'cprev'<CR>
+nnoremap ]n <Cmd>call search('^<<<<<<<\s.*')<CR>
 nnoremap ]p p
 nnoremap ]q <Cmd>exe v:count1 . 'cnext'<CR>
 
@@ -323,8 +328,8 @@ aug END
 
 aug cmdcase
   au!
-  au CmdlineEnter * set nosmartcase
-  au CmdlineLeave * set smartcase
+  au CmdlineEnter * if getcmdtype() == ':' | set nosmartcase | endif
+  au CmdlineLeave * if getcmdtype() == ':' | set smartcase | endif
 aug END
 
 aug terminal
