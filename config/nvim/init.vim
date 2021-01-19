@@ -1,10 +1,5 @@
 let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden --glob !.git'
 let $RTP = stdpath('config')
-let g:completion_auto_change_source = 1
-let g:completion_confirm_key = ""
-let g:completion_enable_snippet = "vim-vsnip"
-let g:completion_sorting = "length"
-let g:completion_timer_cycle = 40
 let g:dirvish_mode = ':sort ,^.*[\/],'
 let g:dispatch_no_maps = 1
 let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5, 'border': 'sharp' } }
@@ -28,7 +23,6 @@ Plug 'machakann/vim-sandwich'
 Plug 'mattn/emmet-vim'
 Plug 'mfussenegger/nvim-dap'
 Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/completion-nvim'
 Plug 'romainl/vim-qf'
 Plug 'sheerun/vim-polyglot'
 Plug 'tomasiser/vim-code-dark'
@@ -47,7 +41,7 @@ runtime macros/sandwich/keymap/surround.vim
 silent! colorscheme codedark
 
 set cmdwinheight=7
-set completeopt=menuone,noinsert,noselect
+set completeopt=menu,menuone,preview
 set completeslash=slash
 set fileformat=unix
 set fileformats=unix,dos
@@ -100,7 +94,6 @@ set wildignore+=*/_build/*
 set wildignore+=*/build/*
 set wildignore+=*/node_modules/*
 set wildignore+=*/packages/*
-set wildignore+=*/server/*
 set wildignore+=Session.vim
 
 " windows <BS> fix
@@ -216,6 +209,11 @@ imap <expr> <CR> <SID>imapcr()
 imap <expr> <S-Tab> <SID>imapstab()
 imap <expr> <Tab> <SID>imaptab()
 
+inoremap <expr> <C-]> pumvisible() ? "\<C-]>" : "\<C-x><C-]>"
+inoremap <expr> <C-_> pumvisible() ? "\<C-f>" : "\<C-x><C-f>"
+inoremap <expr> <C-l> pumvisible() ? "\<C-l>" : "\<C-x><C-l>"
+inoremap <expr> <C-o> pumvisible() ? "\<C-o>" : "\<C-x><C-o>"
+
 nnoremap <expr> <C-L>
       \ (v:count ? '<Cmd>lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR>' : '')
       \ . (v:count ? '<Cmd>edit<CR>' : '')
@@ -230,12 +228,14 @@ cnoremap <expr> <S-Tab> <SID>stabsearch(getcmdtype())
 function! s:imaptab() abort
   if pumvisible() | return "\<C-n>" | endif
   if vsnip#jumpable(1) | return "\<Plug>(vsnip-jump-next)" | endif
+  if util#ismatchtext('\i+$') | return "\<C-n>" | endif
   return "\<Tab>"
 endfunction
 
 function! s:imapstab() abort
   if pumvisible() | return "\<C-p>" | endif
   if vsnip#jumpable(1) | return "\<Plug>(vsnip-jump-prev)" | endif
+  if util#ismatchtext('\i+$') | return "\<C-p>" | endif
   return "\<S-Tab>"
 endfunction
 
@@ -243,7 +243,7 @@ function! s:imapcr() abort
   if !pumvisible() | return "\<CR>" | endif
   if complete_info()["selected"] == "-1" | return "\<C-e>\<CR>" | endif
   if vsnip#expandable() | return "\<Plug>(vsnip-expand)" | endif
-  return "\<Plug>(completion_confirm_completion)"
+  return "\<C-y>"
 endfunction
 
 func! s:tabsearch(cmd) abort
@@ -345,11 +345,6 @@ aug oldfiles
   au!
   au BufWinEnter * call <SID>pusholdfiles(expand("<afile>:p"))
   au BufDelete,BufWipeout * call <SID>popoldfiles(expand("<afile>:p"))
-aug END
-
-aug completion
-  au!
-  au BufEnter * lua require'completion'.on_attach()
 aug END
 
 augroup filemarks

@@ -15,13 +15,21 @@
       "endif"
     ]
   },
-  "aug": {
-    "prefix": ["aug"],
+  "augroup": {
+    "prefix": ["ag"],
     "body": [
       "augroup $1",
       "\tautocmd!",
       "\tautocmd $0",
       "augroup END"
+    ]
+  },
+  "try": {
+    "prefix": ["tr"],
+    "body": [
+      "try $1",
+      "\t$0",
+      "endtry"
     ]
   }
 }

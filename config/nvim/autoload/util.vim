@@ -37,3 +37,8 @@ function! util#yankpastfunc(type, ...) abort
   endif
   silent exe "normal! `]"
 endfunction
+
+function! util#ismatchtext(regex) abort
+  let text = getline('.')[:col('.') - 2]
+  return match(text, '\v' . a:regex) != -1
+endfunction
