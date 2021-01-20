@@ -76,19 +76,6 @@ set statusline+=%(%<\ [%{&ff}]\ %y\ %l:%c\ %p%%\ %)
 
 set path=,,**
 
-set wildignore+=*.#*,*.cbk,*.csm,*.dcp,*.dsk,*.i,*.il?,*.local,*.rsm,*.~* " C++ builder
-set wildignore+=*.[Xx][Ll][Ss]
-set wildignore+=*.beam
-set wildignore+=*.bpi,*.bpl,*.dll,*.exe,*.hlp,*.lib,*.map,*.pdi,*.tds " Windows
-set wildignore+=*.cpe
-set wildignore+=*.dll
-set wildignore+=*.lib
-set wildignore+=*.nupkg
-set wildignore+=*.o
-set wildignore+=*.pdb
-set wildignore+=*.pyc
-set wildignore+=*.xlsm
-set wildignore+=*.xlsx
 set wildignore+=*/.elixir_ls/*
 set wildignore+=*/_build/*
 set wildignore+=*/build/*
@@ -104,22 +91,18 @@ if has('win32')
   nnoremap <C-z> <Nop>
 endif
 
-map [[ ?{<CR>w99[{
-map [] k$][%?}<CR>
-map ][ /}<CR>b99]}
-map ]] j0[[%/{<CR>
+map [[ <Cmd>call search("{", "b")<CR>w99[{
+map [] k$][%<Cmd>call search("{", "b")<CR>
+map ][ <Cmd>call search("{")<CR>b99]}
+map ]] j0[[%<Cmd>call search("{")<CR>
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
 nnoremap <Tab> :buffer<Space>
-nnoremap P ]P
 nnoremap U <C-r>
 nnoremap Y y$
-nnoremap p ]p
 noremap ' `
 noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
 noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
-vnoremap P ]P
-vnoremap p ]p
 
 nnoremap <Space> <Nop>
 
@@ -196,10 +179,8 @@ nnoremap q: q:
 nnoremap q? q?
 
 nnoremap [n <Cmd>call search('^<<<<<<<\s.*', 'b')<CR>
-nnoremap [p P
 nnoremap [q <Cmd>exe v:count1 . 'cprev'<CR>
 nnoremap ]n <Cmd>call search('^<<<<<<<\s.*')<CR>
-nnoremap ]p p
 nnoremap ]q <Cmd>exe v:count1 . 'cnext'<CR>
 
 nnoremap '# <Cmd>Esyn<CR>
