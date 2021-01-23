@@ -219,14 +219,14 @@ cnoremap <expr> <Tab> <SID>tabsearch(getcmdtype())
 function! s:imaptab() abort
   if pumvisible() | return "\<C-n>" | endif
   if vsnip#jumpable(1) | return "\<Plug>(vsnip-jump-next)" | endif
-  if util#ismatchtext('\i+$') | return "\<C-n>" | endif
+  if util#ismatchtext('\k+$') | return "\<C-n>" | endif
   return "\<Tab>"
 endfunction
 
 function! s:imapstab() abort
   if pumvisible() | return "\<C-p>" | endif
   if vsnip#jumpable(1) | return "\<Plug>(vsnip-jump-prev)" | endif
-  if util#ismatchtext('\i+$') | return "\<C-p>" | endif
+  if util#ismatchtext('\k+$') | return "\<C-p>" | endif
   return "\<S-Tab>"
 endfunction
 
