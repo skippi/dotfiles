@@ -213,8 +213,8 @@ nnoremap <expr> <C-L>
       \ . '<Cmd>redraw<CR>'
 
 cnoremap <expr> <CR> ccr#run()
-cnoremap <expr> <Tab> <SID>tabsearch(getcmdtype())
 cnoremap <expr> <S-Tab> <SID>stabsearch(getcmdtype())
+cnoremap <expr> <Tab> <SID>tabsearch(getcmdtype())
 
 function! s:imaptab() abort
   if pumvisible() | return "\<C-n>" | endif
@@ -301,7 +301,7 @@ aug qf_open
   au QuickFixCmdPost lgrep lwindow
 aug END
 
-aug general 
+aug general
   au!
   au FocusGained,BufEnter * silent! checktime
   au BufReadPost *
