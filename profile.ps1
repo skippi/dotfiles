@@ -10,7 +10,7 @@ $Env:FZF_ALT_C_COMMAND = $Env:FZF_DEFAULT_COMMAND + " -t d"
 
 Set-Alias -Name .. -Value Set-LocUpper
 Set-Alias -Name cg -Value Set-LocGitRoot
-Set-Alias -Name cl -Value Set-LocAndList
+Set-Alias -Name cs -Value Set-LocAndList
 Set-Alias -Name gs -Value Start-GitStatus
 Set-Alias -Name ls -Value Start-List
 Set-Alias -Name nvs -Value Start-NvimSession
@@ -19,17 +19,17 @@ if (Get-Module -ListAvailable -Name PSReadLine) {
   Import-Module PSReadline
   Set-PSReadLineKeyHandler -Key Ctrl+o -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
-    cl -
+    Set-LocAndList -
     [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
   }
   Set-PSReadLineKeyHandler -Key Ctrl+p -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
-    cl +
+    Set-LocAndList +
     [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
   }
   Set-PSReadLineKeyHandler -Key Alt+h -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
-    cl ..
+    Set-LocAndList ..
     [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
   }
   Set-PSReadLineKeyHandler -Key Ctrl+d -ScriptBlock {
@@ -73,6 +73,6 @@ function Set-LocAndList {
 }
 
 function Set-LocGitRoot { Set-Location -Path $(git rev-parse --show-toplevel) }
-function Set-LocUpper { cl .. }
+function Set-LocUpper { Set-LocAndList .. }
 function Start-GitStatus { git status }
 function Start-NvimSession { nvim -S }
