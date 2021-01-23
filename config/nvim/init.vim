@@ -107,21 +107,21 @@ noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
 nnoremap <Space> <Nop>
 
 nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
-nnoremap <Space>F <Cmd>Files<CR>
-nnoremap <Space>P "+]P
+nnoremap <Space>P "+P
 nnoremap <Space>Y "+yg_
 nnoremap <Space>d <Cmd>Kwbd<CR>
-nnoremap <Space>e <Cmd>History<CR>
-nnoremap <Space>f <Cmd>GFiles<CR>
+nnoremap <Space>f <Cmd>Files<CR>
+nnoremap <Space>g <Cmd>GFiles<CR>
+nnoremap <Space>h <Cmd>History<CR>
 nnoremap <Space>j :tjump /
-nnoremap <Space>p "+]p
+nnoremap <Space>p "+p
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>t <Cmd>tabnew<CR>
 nnoremap <Space>w <Cmd>update<CR>
 nnoremap <Space>y "+y
 nnoremap <Space>yp <Cmd>let @+ = expand("%:p")<CR>
-vnoremap <Space>P "+]P
-vnoremap <Space>p "+]p
+vnoremap <Space>P "+P
+vnoremap <Space>p "+p
 vnoremap <Space>y "+y
 
 nnoremap d<CR> <Cmd>Dispatch<CR>
@@ -143,8 +143,6 @@ nnoremap g<Space> :G<Space>
 nnoremap g> <Cmd>Gvdiffsplit HEAD<CR>
 nnoremap gL <Cmd>Gclog<CR>
 nnoremap gb <Cmd>G blame<CR>
-nnoremap gof <Cmd>sil !FlowCalExe\_LaunchFC.cmd<CR>
-nnoremap goi <Cmd>EFlowCal<CR>
 nnoremap gs <Cmd>set opfunc=util#grepfunc<CR>g@
 nnoremap gss 0<Cmd>set opfunc=util#grepfunc<CR>g@$
 nnoremap gy <Cmd>set opfunc=util#yankpastfunc<CR>g@
