@@ -42,7 +42,7 @@ runtime macros/sandwich/keymap/surround.vim
 silent! colorscheme codedark
 
 set cmdwinheight=7
-set completeopt=menu,menuone
+set completeopt=menu
 set completeslash=slash
 set fileformat=unix
 set fileformats=unix,dos
@@ -193,11 +193,18 @@ inoremap {<CR> {<CR>}<Esc>O
 imap <expr> <CR> <SID>imapcr()
 imap <expr> <S-Tab> <SID>imapstab()
 imap <expr> <Tab> <SID>imaptab()
+smap <expr> <CR> <SID>imapcr()
+smap <expr> <S-Tab> <SID>imapstab()
+smap <expr> <Tab> <SID>imaptab()
 
 inoremap <expr> <C-]> pumvisible() ? "\<C-]>" : "\<C-x><C-]>"
 inoremap <expr> <C-_> pumvisible() ? "\<C-f>" : "\<C-x><C-f>"
 inoremap <expr> <C-l> pumvisible() ? "\<C-l>" : "\<C-x><C-l>"
 inoremap <expr> <C-o> pumvisible() ? "\<C-n>" : "\<C-x><C-o>"
+snoremap <expr> <C-]> pumvisible() ? "\<C-]>" : "\<C-x><C-]>"
+snoremap <expr> <C-_> pumvisible() ? "\<C-f>" : "\<C-x><C-f>"
+snoremap <expr> <C-l> pumvisible() ? "\<C-l>" : "\<C-x><C-l>"
+snoremap <expr> <C-o> pumvisible() ? "\<C-n>" : "\<C-x><C-o>"
 
 imap <expr> ; vsnip#expandable() ? '<Plug>(vsnip-expand)' : ';'
 smap <expr> ; vsnip#expandable() ? '<Plug>(vsnip-expand)' : ';'
