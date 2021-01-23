@@ -252,7 +252,6 @@ func! s:stabsearch(cmd) abort
   return "\<S-Tab>"
 endfunc
 
-command! EFlowCal sil !StartIDE.cmd
 command! Echrome sil !chrome "file://%:p"
 command! Ecode sil exe "!code -nwg" expand("%:p") . ":" . line('.') . ":" . col('.') "."
 command! Edata sil exe "e" stdpath('data')
