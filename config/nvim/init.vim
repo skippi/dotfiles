@@ -106,24 +106,20 @@ noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
 noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
 
 nnoremap <Space> <Nop>
-
 nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
-nnoremap <Space>P "+P
-nnoremap <Space>Y "+yg_
 nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>f <Cmd>Files<CR>
 nnoremap <Space>g <Cmd>GFiles<CR>
 nnoremap <Space>h <Cmd>History<CR>
 nnoremap <Space>j :tjump /
-nnoremap <Space>p "+p
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>t <Cmd>tabnew<CR>
 nnoremap <Space>w <Cmd>update<CR>
-nnoremap <Space>y "+y
 nnoremap <Space>yp <Cmd>let @+ = expand("%:p")<CR>
-vnoremap <Space>P "+P
-vnoremap <Space>p "+p
-vnoremap <Space>y "+y
+noremap <Space>P "+P
+noremap <Space>Y "+yg_
+noremap <Space>p "+p
+noremap <Space>y "+y
 
 nnoremap d<CR> <Cmd>Dispatch<CR>
 nnoremap d<Space> :Dispatch<Space>
@@ -163,12 +159,12 @@ tnoremap <M-h> <M-h>
 
 nnoremap z/ :g//#<Left><Left>
 
-nnoremap s <Nop>
-nnoremap s] <Cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap sc <Cmd>lua vim.lsp.buf.rename()<CR>
-nnoremap sd <Cmd>lua vim.lsp.buf.declaration()<CR>
-nnoremap si <Cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap sr <Cmd>lua vim.lsp.buf.references()<CR>
+noremap s <Nop>
+noremap s] <Cmd>lua vim.lsp.buf.definition()<CR>
+noremap sc <Cmd>lua vim.lsp.buf.rename()<CR>
+noremap sd <Cmd>lua vim.lsp.buf.declaration()<CR>
+noremap si <Cmd>lua vim.lsp.buf.implementation()<CR>
+noremap sr <Cmd>lua vim.lsp.buf.references()<CR>
 
 nmap qq <Plug>(qf_qf_toggle)
 nnoremap Q q
