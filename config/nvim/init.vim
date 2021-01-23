@@ -22,6 +22,7 @@ Plug 'justinmk/vim-dirvish'
 Plug 'machakann/vim-sandwich'
 Plug 'mattn/emmet-vim'
 Plug 'mfussenegger/nvim-dap'
+Plug 'mfussenegger/nvim-jdtls'
 Plug 'neovim/nvim-lspconfig'
 Plug 'romainl/vim-qf'
 Plug 'sheerun/vim-polyglot'
@@ -352,12 +353,15 @@ func! s:popoldfiles(fname) abort
   call filter(v:oldfiles, {_, f -> f !=# a:fname})
 endfunc
 
+augroup lsp
+  autocmd!
+  autocmd FileType java lua require'jdtls'.start_or_attach({cmd={'jdtls.bat'}, on_attach=require'lsputil'.attach})
+augroup END
+
 lua << EOF
-local attach = function(client)
-  vim.api.nvim_buf_set_option(0, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-end
-require'lspconfig'.vimls.setup{on_attach=attach}
-require'lspconfig'.pyright.setup{on_attach=attach}
+local lsputil = require'lsputil'
+require'lspconfig'.pyright.setup{on_attach=lsputil.attach}
+require'lspconfig'.vimls.setup{on_attach=lsputil.attach}
 EOF
 
 lua << EOF
