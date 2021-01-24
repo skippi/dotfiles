@@ -53,8 +53,8 @@ function M.omnifunc(findstart, base)
     blcp = strlcp(b.word, prefix)
     if alcp > blcp then return true end
     if alcp == blcp then
-      if a.word < b.word then return true end
-      if a.word == b.word and a.word:len() < b.word:len() then
+      if a.word:len() < b.word:len() then return true end
+      if a.word:len() == b.word:len() and a.word < b.word then
         return true
       end
     end
