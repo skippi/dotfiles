@@ -30,6 +30,7 @@ function M.omnifunc(findstart, base)
   local prefix = line_to_cursor:sub(textMatch+1)
 
   local complete_item_is_match = function(v)
+    if prefix == '' then return true end
     if prefix == prefix:lower() then
       return vim.fn.matchstr(v.word, '\\c^' .. prefix) ~= ''
     else
