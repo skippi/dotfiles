@@ -99,6 +99,7 @@ map ]] j0[[%<Cmd>call search("{")<CR>
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
 nnoremap <Tab> :buffer<Space>
+nnoremap S <Cmd>Scratch<CR>
 nnoremap U <C-r>
 nnoremap Y y$
 noremap ' `
@@ -258,7 +259,7 @@ command! Emacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') bufn
 command! Esyn sil exe "e $RTP/after/syntax/" . &filetype . ".vim"
 command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! Kwbd call kwbd#run()
-command! Scratch vnew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
+command! Scratch enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 
 command! -nargs=0 Syn
       \ for id in synstack(line("."), col(".")) |
