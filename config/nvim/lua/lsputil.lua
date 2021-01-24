@@ -10,6 +10,16 @@ local function ifilter(list, fn)
   return result
 end
 
+local function strlcp(str1, str2)
+  local maxdist = math.min(str1:len(), str2:len())
+  for i = 1,maxdist do
+    if str1:sub(i, i) ~= str2:sub(i, i) then
+      return i - 1
+    end
+  end
+  return maxdist
+end
+
 function M.attach(client)
   vim.api.nvim_buf_set_option(0, 'omnifunc', "v:lua.lsputil.omnifunc")
 end
@@ -39,8 +49,16 @@ function M.omnifunc(findstart, base)
   end
 
   local complete_item_cmp = function(a, b)
-    if a.word:len() < b.word:len() then return true end
-    return a.word:len() == b.word:len() and a.word < b.word
+    alcp = strlcp(a.word, prefix) 
+    blcp = strlcp(b.word, prefix)
+    if alcp > blcp then return true end
+    if alcp == blcp then
+      if a.word < b.word then return true end
+      if a.word == b.word and a.word:len() < b.word:len() then
+        return true
+      end
+    end
+    return false
   end
 
   local params = lsp.util.make_position_params()
