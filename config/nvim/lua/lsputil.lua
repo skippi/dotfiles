@@ -69,9 +69,6 @@ function M.omnifunc(findstart, base)
     local items = lsp.util.text_document_completion_list_to_complete_items(result, '')
     items = ifilter(items, complete_item_is_match)
     table.sort(items, complete_item_cmp)
-    for _, v in ipairs(items) do
-      print(v.word)
-    end
     vim.fn.complete(textMatch+1, items)
   end)
 
