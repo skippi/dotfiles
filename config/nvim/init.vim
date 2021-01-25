@@ -321,30 +321,10 @@ aug file
   au TextYankPost * silent! lua require("vim.highlight").on_yank()
 aug END
 
-aug oldfiles
-  au!
-  au BufWinEnter * call <SID>pusholdfiles(expand("<afile>:p"))
-  au BufDelete,BufWipeout * call <SID>popoldfiles(expand("<afile>:p"))
-aug END
-
 augroup filemarks
   autocmd!
   autocmd BufLeave * call util#mark_file_context()
 augroup END
-
-func! s:pusholdfiles(fname) abort
-  if empty(a:fname) || !filereadable(a:fname) || !&buflisted
-    return
-  endif
-  let v:oldfiles = [a:fname] + filter(v:oldfiles, {_, f -> f !=# a:fname})
-endfunc
-
-func! s:popoldfiles(fname) abort
-  if empty(a:fname) || filereadable(a:fname)
-    return
-  endif
-  call filter(v:oldfiles, {_, f -> f !=# a:fname})
-endfunc
 
 augroup lsp
   autocmd!
