@@ -1,1 +1,10 @@
-nnoremap <buffer> <silent> gq :Rex<CR>
+nmap <buffer> <C-j> <Plug>NetrwLocalBrowseCheck
+nmap <buffer> <Left> <Plug>VinegarUp
+nmap <buffer> <Right> <Plug>NetrwLocalBrowseCheck
+nmap <buffer> h <Plug>VinegarUp
+nmap <buffer> l <Plug>NetrwLocalBrowseCheck
+noremap <buffer> <M-h> h
+noremap <buffer> <M-j> j
+noremap <buffer> <M-k> k
+noremap <buffer> <M-l> l
+noremap <buffer> gq <Cmd>Rex<CR>

@@ -1,11 +1,8 @@
 let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden --glob !.git'
 let $RTP = stdpath('config')
-let g:dirvish_mode = ':sort ,^.*[\/],'
 let g:dispatch_no_maps = 1
 let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5, 'border': 'sharp' } }
 let g:fzf_preview_window = []
-let g:netrw_altfile = 1
-let g:netrw_fastbrowse = 0
 let g:qf_auto_open_loclist = 0
 let g:qf_auto_open_quickfix = 0
 let g:qf_auto_quit = 0 " tab close bug
@@ -18,7 +15,6 @@ Plug 'AndrewRadev/splitjoin.vim'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'justinmk/vim-dirvish'
 Plug 'machakann/vim-sandwich'
 Plug 'mattn/emmet-vim'
 Plug 'mfussenegger/nvim-dap'
@@ -33,6 +29,7 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-vinegar'
 Plug 'wellle/targets.vim'
 call plug#end()
 
@@ -265,13 +262,6 @@ command! -nargs=0 Syn
       \ for id in synstack(line("."), col(".")) |
       \   echo synIDattr(id, "name") |
       \ endfor
-
-command! -nargs=* -complete=file -range -bang MShdo call <SID>mshdo(<bang>0 ? argv() : getline(<line1>, <line2>), <q-args>)
-func! s:mshdo(paths, cmd) abort
-  let res = dirvish#shdo(a:paths, a:cmd)
-  nmap <buffer> <CR> <Cmd>sil norm Z!<CR>
-  return res
-endfunc
 
 func! s:fsearchdecl(name) abort
   if empty(a:name)
