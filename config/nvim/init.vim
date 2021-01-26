@@ -298,12 +298,6 @@ aug general
         \ endif
 aug END
 
-aug cmdcase
-  au!
-  au CmdlineEnter * if getcmdtype() == ':' | set nosmartcase | endif
-  au CmdlineLeave * if getcmdtype() == ':' | set smartcase | endif
-aug END
-
 aug terminal
   au!
   au TermOpen term://* if (&ft !~ "nnn") | tnoremap <buffer> <ESC> <C-\><C-n> | endif
