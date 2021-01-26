@@ -7,7 +7,7 @@ let g:qf_auto_open_loclist = 0
 let g:qf_auto_open_quickfix = 0
 let g:qf_auto_quit = 0 " tab close bug
 let g:textobj_sandwich_no_default_key_mappings = 1
-let g:user_emmet_leader_key = '<C-z>'
+let g:user_emmet_leader_key = '<M-a>'
 let g:vsnip_snippet_dir = stdpath('config') . '/vsnip'
 
 call plug#begin(stdpath('data') . '/plugged')
