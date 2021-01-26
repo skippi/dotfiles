@@ -75,10 +75,7 @@ set statusline+=%(%<\ [%{&ff}]\ %y\ %l:%c\ %p%%\ %)
 set path=,,**
 
 set wildignore+=*/.elixir_ls/*
-set wildignore+=*/_build/*
-set wildignore+=*/build/*
 set wildignore+=*/node_modules/*
-set wildignore+=*/packages/*
 set wildignore+=Session.vim
 
 " windows <BS> fix
