@@ -38,7 +38,7 @@ vnoremap m; "hy/\V<C-R>=escape(@h,'/\')<CR><CR>``cgn
 
 map gw <C-w>
 nnoremap g/ m'<Cmd>call VSCodeCall('workbench.action.findInFiles')<CR>
-nnoremap gs <Cmd>set opfunc=util#grepfunc<CR>g@
+nnoremap gs <Cmd>call VSCodeCall('workbench.action.findInFiles', {"query": expand("<cword>")})<CR>
 noremap gh ^
 noremap gl g_
 vnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>

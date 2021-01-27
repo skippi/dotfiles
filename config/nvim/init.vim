@@ -131,8 +131,7 @@ nnoremap g<Space> :G<Space>
 nnoremap g> <Cmd>Gvdiffsplit HEAD<CR>
 nnoremap gL <Cmd>Gclog<CR>
 nnoremap gb <Cmd>G blame<CR>
-nnoremap gs <Cmd>set opfunc=util#grepfunc<CR>g@
-nnoremap gss 0<Cmd>set opfunc=util#grepfunc<CR>g@$
+nnoremap gs :sil!gr! "\b<C-r><C-w>\b"<CR>
 nnoremap gy <Cmd>set opfunc=util#yankpastfunc<CR>g@
 nnoremap gyy <Cmd>set opfunc=util#yankpastfunc<CR>g@_
 noremap gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>

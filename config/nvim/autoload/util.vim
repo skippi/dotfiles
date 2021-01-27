@@ -18,7 +18,6 @@ func! util#grepfunc(type, ...) abort
   if exists('g:vscode')
     call VSCodeCall('workbench.action.findInFiles', {"query": @/})
   else
-    echom @@
     let pattern = '"' . escape(@@, '%#"') . '"'
     let command = "sil!gr! -F " . pattern
     exe command
