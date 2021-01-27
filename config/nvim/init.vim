@@ -121,8 +121,8 @@ nnoremap m<CR> <Cmd>Make<CR>
 nnoremap m<Space> :Make<Space>
 nnoremap m= :set makeprg=
 nnoremap m? <Cmd>Copen!<CR>
-vnoremap m, "hy?\V<C-R>=escape(@h,'/\')<CR><CR>``cgN
-vnoremap m; "hy/\V<C-R>=escape(@h,'/\')<CR><CR>``cgn
+vnoremap m, y?\V<C-R>=escape(@@,'/\')<CR><CR>``cgN
+vnoremap m; y/\V<C-R>=escape(@@,'/\')<CR><CR>``cgn
 
 nnoremap g. <Cmd>Gvdiffsplit<CR>
 nnoremap g/ :sil!gr! ""<Left>
