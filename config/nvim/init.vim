@@ -86,10 +86,6 @@ if has('win32')
   nnoremap <C-z> <Nop>
 endif
 
-map [[ <Cmd>call search("{", "b")<CR>w99[{
-map [] k$][%<Cmd>call search("{", "b")<CR>
-map ][ <Cmd>call search("{")<CR>b99]}
-map ]] j0[[%<Cmd>call search("{")<CR>
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
 nnoremap <Tab> :buffer<Space>

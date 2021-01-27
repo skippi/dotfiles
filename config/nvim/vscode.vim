@@ -15,10 +15,6 @@ set smartcase
 set timeoutlen=500
 set updatetime=100
 
-map [[ ?{<CR>w99[{
-map [] k$][%?}<CR>
-map ][ /}<CR>b99]}
-map ]] j0[[%/{<CR>
 nnoremap - <Cmd>call VSCodeCall('workbench.view.explorer')<CR>
 nnoremap <BS> <Cmd>call VSCodeCall('workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup') <bar> call VSCodeCall('list.select')<CR>
 nnoremap <C-p> <C-i>
