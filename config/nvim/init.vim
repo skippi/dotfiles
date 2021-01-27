@@ -148,7 +148,7 @@ nnoremap yon <Cmd>set number!<CR>
 tnoremap <M-c> <M-c>
 tnoremap <M-h> <M-h>
 
-nnoremap z/ :g//#<Left><Left>
+nnoremap z/ <Cmd>BLines<CR>
 
 noremap s <Nop>
 noremap s] <Cmd>lua vim.lsp.buf.definition()<CR>
