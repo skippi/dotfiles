@@ -92,7 +92,9 @@ nnoremap <Tab> :buffer<Space>
 nnoremap S <Cmd>Scratch<CR>
 nnoremap U <C-r>
 nnoremap Y y$
+noremap # ?\<<C-r><C-w>\><CR>
 noremap ' `
+noremap * /\<<C-r><C-w>\><CR>
 noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
 noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
 
@@ -115,8 +117,8 @@ noremap <Space>y "+y
 nnoremap d<CR> <Cmd>Dispatch<CR>
 nnoremap d<Space> :Dispatch<Space>
 
-nnoremap m, #``cgN
-nnoremap m; *``cgn
+nmap m, #``cgN
+nmap m; *``cgn
 nnoremap m<CR> <Cmd>Make<CR>
 nnoremap m<Space> :Make<Space>
 nnoremap m= :set makeprg=
