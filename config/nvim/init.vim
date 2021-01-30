@@ -29,6 +29,7 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 Plug 'wellle/targets.vim'
 call plug#end()
@@ -145,8 +146,6 @@ noremap gw <C-w>
 vnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>
 vnoremap gy <Esc><Cmd>call util#yankpastfunc(visualmode(), 1)<CR>
 
-nnoremap yon <Cmd>set number!<CR>
-
 " PSReadLine bug
 tnoremap <M-c> <M-c>
 tnoremap <M-h> <M-h>
@@ -167,10 +166,6 @@ nnoremap q/ q/
 nnoremap q: q:
 nnoremap q? q?
 
-nnoremap [n <Cmd>call search('^<<<<<<<\s.*', 'b')<CR>
-nnoremap [q <Cmd>exe v:count1 . 'cprev'<CR>
-nnoremap ]n <Cmd>call search('^<<<<<<<\s.*')<CR>
-nnoremap ]q <Cmd>exe v:count1 . 'cnext'<CR>
 
 nnoremap '# <Cmd>Esyn<CR>
 nnoremap '$ <Cmd>Einit<CR>
