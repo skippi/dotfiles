@@ -136,6 +136,8 @@ nnoremap gb <Cmd>G blame<CR>
 nnoremap gs :sil!gr! "\b<C-r><C-w>\b"<CR>
 nnoremap gy <Cmd>set opfunc=util#yankpastfunc<CR>g@
 nnoremap gyy <Cmd>set opfunc=util#yankpastfunc<CR>g@_
+noremap g# ?<C-r><C-w><CR>
+noremap g* /<C-r><C-w><CR>
 noremap gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
 noremap gh ^
 noremap gl g_
