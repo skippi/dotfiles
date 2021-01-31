@@ -174,6 +174,7 @@ nnoremap '@ <Cmd>Eftp<CR>
 inoremap (<CR> (<CR>)<Esc>O
 inoremap [<CR> [<CR>]<Esc>O
 inoremap {<CR> {<CR>}<Esc>O
+inoremap {; {<CR>};<Esc>O
 
 imap <expr> <CR> <SID>imapcr()
 imap <expr> <S-Tab> <SID>imapstab()
