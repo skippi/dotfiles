@@ -3,9 +3,6 @@ let $RTP = stdpath('config')
 let g:dispatch_no_maps = 1
 let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5, 'border': 'sharp' } }
 let g:fzf_preview_window = []
-let g:qf_auto_open_loclist = 0
-let g:qf_auto_open_quickfix = 0
-let g:qf_auto_quit = 0 " tab close bug
 let g:textobj_sandwich_no_default_key_mappings = 1
 let g:user_emmet_leader_key = '<M-a>'
 let g:vsnip_snippet_dir = stdpath('config') . '/vsnip'
@@ -20,7 +17,6 @@ Plug 'mattn/emmet-vim'
 Plug 'mfussenegger/nvim-dap'
 Plug 'mfussenegger/nvim-jdtls'
 Plug 'neovim/nvim-lspconfig'
-Plug 'romainl/vim-qf'
 Plug 'sheerun/vim-polyglot'
 Plug 'tomasiser/vim-code-dark'
 Plug 'tpope/vim-commentary'
@@ -33,6 +29,8 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 Plug 'wellle/targets.vim'
 call plug#end()
+
+packadd cfilter
 
 silent! call operator#sandwich#set('all', 'all', 'highlight', 0)
 runtime macros/sandwich/keymap/surround.vim
@@ -159,13 +157,15 @@ noremap sd <Cmd>lua vim.lsp.buf.declaration()<CR>
 noremap si <Cmd>lua vim.lsp.buf.implementation()<CR>
 noremap sr <Cmd>lua vim.lsp.buf.references()<CR>
 
-nmap qq <Plug>(qf_qf_toggle)
+nmap qq <Cmd>call util#toggleqf()<CR>
 nnoremap Q q
 nnoremap q <Nop>
+nnoremap q! :Cfilter!<Space>
 nnoremap q/ q/
 nnoremap q: q:
+nnoremap q<CR> <Cmd>Cfilter<CR>
+nnoremap q<Space> :Cfilter<Space>
 nnoremap q? q?
-
 
 nnoremap '# <Cmd>Esyn<CR>
 nnoremap '$ <Cmd>Einit<CR>
