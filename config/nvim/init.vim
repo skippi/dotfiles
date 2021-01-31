@@ -86,7 +86,7 @@ endif
 
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
-nnoremap <Tab> :buffer<Space>
+nnoremap <Tab> :buffer *
 nnoremap S <Cmd>Scratch<CR>
 nnoremap U <C-r>
 nnoremap Y y$
