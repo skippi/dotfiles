@@ -157,6 +157,9 @@ noremap sd <Cmd>lua vim.lsp.buf.declaration()<CR>
 noremap si <Cmd>lua vim.lsp.buf.implementation()<CR>
 noremap sr <Cmd>lua vim.lsp.buf.references()<CR>
 
+nnoremap <expr> [<M-q> '<Cmd>sil!uns' . v:count1 . 'colder<CR>'
+nnoremap <expr> ]<M-q> '<Cmd>sil!uns' . v:count1 . 'cnewer<CR>'
+
 nmap qq <Cmd>call util#toggleqf()<CR>
 nnoremap Q q
 nnoremap q <Nop>
