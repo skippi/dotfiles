@@ -132,7 +132,7 @@ nnoremap g<Space> :G<Space>
 nnoremap g> <Cmd>Gvdiffsplit HEAD<CR>
 nnoremap gL <Cmd>Gclog<CR>
 nnoremap gb <Cmd>G blame<CR>
-nnoremap gs :sil!gr! "\b<C-r><C-w>\b"<CR>
+nnoremap gs :sil!gr! "\b<C-r>=expand("<cword>")<CR>\b"<CR>
 nnoremap gy <Cmd>set opfunc=util#yankpastfunc<CR>g@
 nnoremap gyy <Cmd>set opfunc=util#yankpastfunc<CR>g@_
 noremap g# ?<C-r><C-w><CR>
