@@ -86,6 +86,7 @@ endif
 
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
+nnoremap <C-w>S <Cmd>sp +Scratch<CR>
 nnoremap <Tab> :buffer *
 nnoremap S <Cmd>Scratch<CR>
 nnoremap U <C-r>
@@ -124,6 +125,7 @@ nnoremap m? <Cmd>Copen!<CR>
 vnoremap m, y?\V<C-R>=escape(@@,'/\')<CR><CR>``cgN
 vnoremap m; y/\V<C-R>=escape(@@,'/\')<CR><CR>``cgn
 
+nmap gw <C-w>
 nnoremap g. <Cmd>Gvdiffsplit<CR>
 nnoremap g/ :sil!gr! ""<Left>
 nnoremap g<CR> <Cmd>G<CR>
@@ -139,7 +141,6 @@ noremap g* /<C-r><C-w><CR>
 noremap gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
 noremap gh ^
 noremap gl g_
-noremap gw <C-w>
 vnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>
 vnoremap gy <Esc><Cmd>call util#yankpastfunc(visualmode(), 1)<CR>
 
