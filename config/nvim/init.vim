@@ -160,6 +160,9 @@ noremap sr <Cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <expr> [<M-q> '<Cmd>sil!uns' . v:count1 . 'colder<CR>'
 nnoremap <expr> ]<M-q> '<Cmd>sil!uns' . v:count1 . 'cnewer<CR>'
 
+nnoremap <expr> <t '<Cmd>tabmove -' . v:count1 . '<CR>'
+nnoremap <expr> >t '<Cmd>tabmove +' . v:count1 . '<CR>'
+
 nmap qq <Cmd>call util#toggleqf()<CR>
 nnoremap Q q
 nnoremap q <Nop>
