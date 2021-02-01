@@ -1,7 +1,7 @@
 $Env:FZF_DEFAULT_OPTS = "--bind ctrl-a:select-all,ctrl-d:deselect-all" +
                         " --color=gutter:-1" +
                         " --marker=+"
-$Env:FZF_DEFAULT_COMMAND = ("fd --hidden --follow" +
+$Env:FZF_DEFAULT_COMMAND = ("fd --hidden --follow -t f" +
                             " --exclude .git" +
                             " --exclude node_modules" +
                             " .")
