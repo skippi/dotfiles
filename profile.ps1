@@ -1,12 +1,13 @@
 $Env:FZF_DEFAULT_OPTS = "--bind ctrl-a:select-all,ctrl-d:deselect-all" +
                         " --color=gutter:-1" +
                         " --marker=+"
-$Env:FZF_DEFAULT_COMMAND = ("fd --hidden --follow -t f" +
-                            " --exclude .git" +
-                            " --exclude node_modules" +
-                            " .")
+$FZF_BASE_COMMAND = ("fd --hidden --follow" +
+                    " --exclude .git" +
+                    " --exclude node_modules" +
+                    " .")
+$Env:FZF_DEFAULT_COMMAND = $FZF_BASE_COMMAND + " -t f"
 $Env:FZF_CTRL_T_COMMAND = $Env:FZF_DEFAULT_COMMAND
-$Env:FZF_ALT_C_COMMAND = $Env:FZF_DEFAULT_COMMAND + " -t d"
+$Env:FZF_ALT_C_COMMAND = $FZF_BASE_COMMAND + " -t d"
 
 Set-Alias -Name .. -Value Set-LocUpper
 Set-Alias -Name cg -Value Set-LocGitRoot
