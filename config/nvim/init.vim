@@ -127,13 +127,13 @@ vnoremap m; y/\V<C-R>=escape(@@,'/\')<CR><CR>``cgn
 
 nmap gw <C-w>
 nnoremap g. <Cmd>Gvdiffsplit<CR>
-nnoremap g/ :sil!gr! ""<Left>
+nnoremap g/ :sil!gr ""<Left>
 nnoremap g<CR> <Cmd>G<CR>
 nnoremap g<Space> :G<Space>
 nnoremap g> <Cmd>Gvdiffsplit HEAD<CR>
 nnoremap gL <Cmd>Gclog<CR>
 nnoremap gb <Cmd>G blame<CR>
-nnoremap gs :sil!gr! "\b<C-r>=expand("<cword>")<CR>\b"<CR>
+nnoremap gs :sil!gr "\b<C-r>=expand("<cword>")<CR>\b"<CR>
 nnoremap gy <Cmd>set opfunc=util#yankpastfunc<CR>g@
 nnoremap gyy <Cmd>set opfunc=util#yankpastfunc<CR>g@_
 noremap g# ?<C-r><C-w><CR>
