@@ -1,2 +1,4 @@
+*.out
+*.tags
 Session.vim
 tags
