@@ -61,6 +61,10 @@ set updatetime=100
 set wildcharm=<C-z>
 set wildmode=list:full
 
+if has('win32')
+  set shellcmdflag=/s\ /v\ /c
+endif
+
 set statusline=
 set statusline+=%(\ %{toupper(mode(0))}%)
 set statusline+=%(\ @%{fugitive#head()}%)
