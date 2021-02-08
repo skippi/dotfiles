@@ -254,6 +254,7 @@ command! Esyn sil exe "e $RTP/after/syntax/" . &filetype . ".vim"
 command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! Kwbd call kwbd#run()
 command! Scratch enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
+command! TrimWS %s\s\+$//e
 
 command! -nargs=0 Syn
       \ for id in synstack(line("."), col(".")) |
