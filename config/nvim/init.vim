@@ -16,7 +16,6 @@ Plug 'mattn/emmet-vim'
 Plug 'mfussenegger/nvim-dap'
 Plug 'mfussenegger/nvim-jdtls'
 Plug 'neovim/nvim-lspconfig'
-Plug 'sheerun/vim-polyglot'
 Plug 'tomasiser/vim-code-dark'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-dispatch'
@@ -27,6 +26,9 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 Plug 'wellle/targets.vim'
+" Language
+Plug 'MTDL9/vim-log-highlighting'
+Plug 'pprovost/vim-ps1'
 call plug#end()
 
 packadd cfilter
