@@ -31,8 +31,6 @@ Plug 'MTDL9/vim-log-highlighting'
 Plug 'pprovost/vim-ps1'
 call plug#end()
 
-packadd cfilter
-
 silent! call operator#sandwich#set('all', 'all', 'highlight', 0)
 runtime macros/sandwich/keymap/surround.vim
 
@@ -168,11 +166,10 @@ nnoremap <expr> >t '<Cmd>tabmove +' . v:count1 . '<CR>'
 nmap qq <Cmd>call util#toggleqf()<CR>
 nnoremap Q q
 nnoremap q <Nop>
-nnoremap q! :Cfilter!<Space>
+nnoremap q! :Cdelete<Space>
 nnoremap q/ q/
 nnoremap q: q:
-nnoremap q<CR> <Cmd>Cfilter<CR>
-nnoremap q<Space> :Cfilter<Space>
+nnoremap q<Space> :Cget<Space>
 nnoremap q? q?
 
 nnoremap '# <Cmd>Esyn<CR>
@@ -262,6 +259,24 @@ command! -nargs=0 Syn
       \ for id in synstack(line("."), col(".")) |
       \   echo synIDattr(id, "name") |
       \ endfor
+
+command! -nargs=1 -bang Cget
+      \ let s:pat = string(<f-args>) |
+      \ call setqflist(filter(getqflist(), 'v:val.text =~ ' . s:pat . ' || bufname(v:val.bufnr) =~ ' . s:pat)) |
+      \ call setqflist([], 'a', {'title': 'Cget ' . s:pat}) |
+      \ if <bang>v:true |
+      \   sil!uns cfirst |
+      \ endif |
+      \ unlet s:pat
+
+command! -nargs=1 -bang Cdelete 
+      \ let s:pat = string(<f-args>) |
+      \ call setqflist(filter(getqflist(), 'v:val.text !~ ' . s:pat . ' && bufname(v:val.bufnr) !~ ' . s:pat)) |
+      \ call setqflist([], 'a', {'title': 'Cdelete ' . s:pat}) |
+      \ if <bang>v:true |
+      \   sil!uns cfirst |
+      \ endif |
+      \ unlet s:pat
 
 func! s:fsearchdecl(name) abort
   if empty(a:name)
