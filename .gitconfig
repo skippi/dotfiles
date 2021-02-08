@@ -22,4 +22,4 @@
 [pull]
 	rebase = false
 [alias]
-	ctags = !.git/hooks/ctags
+	ctags = !$(git rev-parse --git-common-dir)/hooks/ctags
