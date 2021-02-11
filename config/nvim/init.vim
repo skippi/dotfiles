@@ -261,7 +261,7 @@ command! Esyn sil exe "e $RTP/after/syntax/" . &filetype . ".vim"
 command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! Kwbd call kwbd#run()
 command! Scratch enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
-command! TrimWS %s\s\+$//e
+command! TrimWS %s/\s\+$//e
 
 command! FMove call fzf#run({
       \ 'source': $FZF_ALT_C_COMMAND, 'sink': 'Move',
@@ -286,7 +286,7 @@ command! -nargs=1 -bang Cget
       \ endif |
       \ unlet s:pat
 
-command! -nargs=1 -bang Cdelete 
+command! -nargs=1 -bang Cdelete
       \ let s:pat = string(<f-args>) |
       \ call setqflist(filter(getqflist(), 'v:val.text !~ ' . s:pat . ' && bufname(v:val.bufnr) !~ ' . s:pat)) |
       \ call setqflist([], 'a', {'title': 'Cdelete ' . s:pat}) |
