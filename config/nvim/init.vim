@@ -103,6 +103,7 @@ noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
 
 nnoremap <Space> <Nop>
 nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
+nnoremap <Space>k <Cmd>FPsKill<CR>
 nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>f <Cmd>Files<CR>
 nnoremap <Space>g <Cmd>GFiles<CR>
@@ -260,6 +261,11 @@ command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! Kwbd call kwbd#run()
 command! Scratch enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 command! TrimWS %s\s\+$//e
+
+command! FPsKill call fzf#run({
+      \ 'source': 'tasklist /fo table /nh',
+      \ 'sink': funcref('proc#pskill_sink'),
+      \ 'window': g:fzf_layout.window})
 
 command! -nargs=0 Syn
       \ for id in synstack(line("."), col(".")) |
