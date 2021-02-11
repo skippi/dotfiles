@@ -91,6 +91,7 @@ endif
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
 nnoremap <C-w>S <Cmd>sp +Scratch<CR>
+nnoremap <M-c> <Cmd>FMove<CR>
 nnoremap <Tab> :buffer *
 nnoremap S <Cmd>Scratch<CR>
 nnoremap U <C-r>
@@ -261,6 +262,10 @@ command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! Kwbd call kwbd#run()
 command! Scratch enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 command! TrimWS %s\s\+$//e
+
+command! FMove call fzf#run({
+      \ 'source': $FZF_ALT_C_COMMAND, 'sink': 'Move',
+      \ 'window': g:fzf_layout.window})
 
 command! FPsKill call fzf#run({
       \ 'source': 'tasklist /fo table /nh',
