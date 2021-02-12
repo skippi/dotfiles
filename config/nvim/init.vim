@@ -104,7 +104,6 @@ noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
 
 nnoremap <Space> <Nop>
 nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
-nnoremap <Space>k <Cmd>FPsKill<CR>
 nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>f <Cmd>Files<CR>
 nnoremap <Space>g <Cmd>GFiles<CR>
@@ -132,6 +131,7 @@ vnoremap m, y?\V<C-R>=escape(@@,'/\')<CR><CR>``cgN
 vnoremap m; y/\V<C-R>=escape(@@,'/\')<CR><CR>``cgn
 
 nmap gw <C-w>
+nnoremap g! <Cmd>FPsKill<CR>
 nnoremap g. <Cmd>Gvdiffsplit<CR>
 nnoremap g/ mS:sil!gr ""<Left>
 nnoremap g<CR> <Cmd>G<CR>
