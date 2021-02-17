@@ -270,6 +270,7 @@ command! FMove call fzf#run({
 command! FPsKill call fzf#run({
       \ 'source': 'tasklist /fo table /nh',
       \ 'sink': funcref('proc#pskill_sink'),
+      \ 'options': '--multi',
       \ 'window': g:fzf_layout.window})
 
 command! -nargs=0 Syn
