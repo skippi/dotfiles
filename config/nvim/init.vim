@@ -260,7 +260,7 @@ command! Einit sil exe "e" stdpath('config') . '/init.vim'
 command! Emacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') bufname("%")
 command! Esyn sil exe "e $RTP/after/syntax/" . &filetype . ".vim"
 command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
-command! Kwbd call kwbd#run()
+command! -bang Kwbd call kwbd#run(<bang>0)
 command! Scratch enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 command! TrimWS %s/\s\+$//e
 

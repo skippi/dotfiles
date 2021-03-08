@@ -1,18 +1,18 @@
 let s:inuse = 0
 
-func! kwbd#run() abort
+func! kwbd#run(bang) abort
   if s:inuse | return | endif
   let s:inuse = 1
   try
-    call s:dobufdel(1)
+    call s:dobufdel(1, a:bang)
   finally
     let s:inuse = 0
   endtry
 endfunc
 
-func! s:dobufdel(kwbdStage) abort
+func! s:dobufdel(kwbdStage, bang) abort
   if(a:kwbdStage == 1)
-    if(&modified)
+    if(&modified && !a:bang)
       let answer = confirm("This buffer has been modified.  Are you sure you want to delete it?", "&Yes\n&No", 2)
       if(answer != 1)
         return
@@ -24,7 +24,7 @@ func! s:dobufdel(kwbdStage) abort
     endif
     let s:kwbdBufNum = bufnr("%")
     let s:kwbdWinNum = winnr()
-    windo call s:dobufdel(2)
+    windo call s:dobufdel(2, a:bang)
     execute s:kwbdWinNum . 'wincmd w'
     let s:buflistedLeft = 0
     let s:bufFinalJump = 0
