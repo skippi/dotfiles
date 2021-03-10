@@ -219,17 +219,26 @@ cnoremap <expr> <CR> ccr#run()
 cnoremap <expr> <S-Tab> <SID>stabsearch(getcmdtype())
 cnoremap <expr> <Tab> <SID>tabsearch(getcmdtype())
 
+function! s:choose_ins_complete_key(rev) abort
+  let info = complete_info(['mode'])
+  if info.mode == 'keyword' || info.mode == ''
+    return a:rev ? "\<C-n>" : "\<C-p>"
+  else
+    return a:rev ? "\<C-p>" : "\<C-n>"
+  endif
+endfunction
+
 function! s:imaptab() abort
-  if pumvisible() | return "\<C-n>" | endif
+  if pumvisible() | return <SID>choose_ins_complete_key(0) | endif
   if vsnip#jumpable(1) | return "\<Plug>(vsnip-jump-next)" | endif
-  if util#ismatchtext('\k+$') | return "\<C-n>" | endif
+  if util#ismatchtext('\k+$') | return <SID>choose_ins_complete_key(0) | endif
   return "\<Tab>"
 endfunction
 
 function! s:imapstab() abort
-  if pumvisible() | return "\<C-p>" | endif
+  if pumvisible() | return <SID>choose_ins_complete_key(1) | endif
   if vsnip#jumpable(1) | return "\<Plug>(vsnip-jump-prev)" | endif
-  if util#ismatchtext('\k+$') | return "\<C-p>" | endif
+  if util#ismatchtext('\k+$') | return <SID>choose_ins_complete_key(1) | endif
   return "\<S-Tab>"
 endfunction
 
