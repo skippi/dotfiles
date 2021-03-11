@@ -111,7 +111,7 @@ nnoremap <Space>g <Cmd>GFiles<CR>
 nnoremap <Space>h <Cmd>History<CR>
 nnoremap <Space>j :tjump /
 nnoremap <Space>q <Cmd>q<CR>
-nnoremap <Space>t <Cmd>tabnew<CR>
+nnoremap <Space>t <Cmd>tab sb<CR>
 nnoremap <Space>w <Cmd>update<CR>
 nnoremap <Space>yp <Cmd>let @+ = expand("%:p")<CR>
 noremap <Space>P "+P
