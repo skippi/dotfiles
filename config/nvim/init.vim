@@ -228,17 +228,30 @@ function! s:choose_ins_complete_key(rev) abort
   endif
 endfunction
 
+let g:pumactive = 0
+
+augroup completion
+  autocmd!
+  autocmd CompleteDone * let g:pumactive = 0
+augroup END
+
 function! s:imaptab() abort
-  if pumvisible() | return <SID>choose_ins_complete_key(0) | endif
+  if g:pumactive | return <SID>choose_ins_complete_key(0) | endif
   if vsnip#jumpable(1) | return "\<Plug>(vsnip-jump-next)" | endif
-  if util#ismatchtext('\k+$') | return <SID>choose_ins_complete_key(0) | endif
+  if util#ismatchtext('\k+$')
+    let g:pumactive = 1
+    return <SID>choose_ins_complete_key(0)
+  endif
   return "\<Tab>"
 endfunction
 
 function! s:imapstab() abort
-  if pumvisible() | return <SID>choose_ins_complete_key(1) | endif
+  if g:pumactive | return <SID>choose_ins_complete_key(1) | endif
   if vsnip#jumpable(1) | return "\<Plug>(vsnip-jump-prev)" | endif
-  if util#ismatchtext('\k+$') | return <SID>choose_ins_complete_key(1) | endif
+  if util#ismatchtext('\k+$')
+    let g:pumactive = 1
+    return <SID>choose_ins_complete_key(1)
+  endif
   return "\<S-Tab>"
 endfunction
 
