@@ -131,6 +131,8 @@ nnoremap m? <Cmd>Copen!<CR>
 vnoremap m, y?\V<C-R>=escape(@@,'/\')<CR><CR>``cgN
 vnoremap m; y/\V<C-R>=escape(@@,'/\')<CR><CR>``cgn
 
+nmap gm, g*``cgN
+nmap gm; g#``cgn
 nmap gw <C-w>
 nnoremap g! <Cmd>FPsKill<CR>
 nnoremap g. <Cmd>Gvdiffsplit<CR>
