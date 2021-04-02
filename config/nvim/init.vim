@@ -112,7 +112,7 @@ nnoremap <Space>h <Cmd>History<CR>
 nnoremap <Space>j :tjump /
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>t <Cmd>tab sb<CR>
-nnoremap <Space>w <Cmd>update<CR>
+nnoremap <Space>w <Cmd>echo "IDIOT"<bar>sleep 4<CR>
 nnoremap <Space>yp <Cmd>let @+ = expand("%:p")<CR>
 noremap <Space>P "+P
 noremap <Space>Y "+yg_
@@ -352,6 +352,8 @@ aug END
 
 aug general
   au!
+  au TextChanged,InsertLeave * nested
+        \ if &readonly == 0 && filereadable(bufname('%')) | silent update | endif
   au FocusGained,BufEnter * silent! checktime
   au BufReadPost *
         \ if line("'\"") > 0 && line("'\"") <= line("$") && &ft !~# 'commit'|
