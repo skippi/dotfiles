@@ -98,6 +98,7 @@ nnoremap S <Cmd>Scratch<CR>
 nnoremap U <C-r>
 nnoremap Y y$
 nnoremap y"% <Cmd>call setreg(v:register, @%)<CR>
+nnoremap yp <Cmd>call setreg(v:register, expand("%:p"))<CR>
 noremap # ?\<<C-r><C-w>\><CR>
 noremap ' `
 noremap * /\<<C-r><C-w>\><CR>
@@ -114,7 +115,6 @@ nnoremap <Space>j :tjump /
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>t <Cmd>tab sb<CR>
 nnoremap <Space>w <Cmd>echo "IDIOT"<bar>sleep 4<CR>
-nnoremap <Space>yp <Cmd>let @+ = expand("%:p")<CR>
 noremap <Space>P "+P
 noremap <Space>Y "+yg_
 noremap <Space>p "+p
