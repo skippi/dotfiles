@@ -97,6 +97,7 @@ nnoremap <Tab> :buffer *
 nnoremap S <Cmd>Scratch<CR>
 nnoremap U <C-r>
 nnoremap Y y$
+nnoremap y"% <Cmd>call setreg(v:register, @%)<CR>
 noremap # ?\<<C-r><C-w>\><CR>
 noremap ' `
 noremap * /\<<C-r><C-w>\><CR>
