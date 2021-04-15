@@ -105,10 +105,10 @@ noremap * /\<<C-r><C-w>\><CR>
 noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
 noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
 
-map <Space>P "+P
-map <Space>Y "+yg_
-map <Space>p "+p
-map <Space>y "+y
+nmap <Space>P "+P
+nmap <Space>Y "+yg_
+nmap <Space>p "+p
+nmap <Space>y "+y
 nnoremap <Space> <Nop>
 nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
 nnoremap <Space>d <Cmd>Kwbd<CR>
@@ -119,6 +119,10 @@ nnoremap <Space>j :tjump /
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>t <Cmd>tab sb<CR>
 nnoremap <Space>w <Cmd>echo "IDIOT"<bar>sleep 4<CR>
+vmap <Space>P "+P
+vmap <Space>Y "+yg_
+vmap <Space>p "+p
+vmap <Space>y "+y
 
 nnoremap d<CR> <Cmd>Dispatch<CR>
 nnoremap d<Space> :Dispatch<Space>
