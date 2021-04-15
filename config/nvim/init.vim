@@ -92,6 +92,7 @@ endif
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
 nnoremap <C-w>S <Cmd>sp +Scratch<CR>
+nnoremap <C-w>: :windo<Space>
 nnoremap <M-c> <Cmd>FMove<CR>
 nnoremap <Tab> :buffer *
 nnoremap S <Cmd>Scratch<CR>
