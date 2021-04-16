@@ -181,12 +181,12 @@ nnoremap <expr> >t '<Cmd>tabmove +' . v:count1 . '<CR>'
 nmap qq <Cmd>call util#toggleqf()<CR>
 nnoremap Q q
 nnoremap q <Nop>
-nnoremap q! :Cdelete<Space>
 nnoremap q/ q/
 nnoremap q: q:
-nnoremap q<Space> :Cget<Space>
 nnoremap q? q?
 
+nnoremap c! :Cdelete<Space>
+nnoremap c<Space> :Cget<Space>
 nnoremap c: :cdo<Space>
 
 nnoremap '# <Cmd>Esyn<CR>
