@@ -187,6 +187,8 @@ nnoremap q: q:
 nnoremap q<Space> :Cget<Space>
 nnoremap q? q?
 
+nnoremap c: :cdo<Space>
+
 nnoremap '# <Cmd>Esyn<CR>
 nnoremap '$ <Cmd>Einit<CR>
 nnoremap '@ <Cmd>Eftp<CR>
