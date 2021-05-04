@@ -93,7 +93,6 @@ endif
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
 nnoremap <C-w>S <Cmd>sp +Scratch<CR>
-nnoremap <C-w>: :windo<Space>
 nnoremap <M-c> <Cmd>FMove<CR>
 nnoremap <Tab> :buffer *
 nnoremap S <Cmd>Scratch<CR>
@@ -147,7 +146,9 @@ nnoremap g/ mS:sil!gr ""<Left>
 nnoremap g<CR> <Cmd>G<CR>
 nnoremap g<Space> :G<Space>
 nnoremap g> <Cmd>Gvdiffsplit HEAD<CR>
+nnoremap gC :cdo<Space>
 nnoremap gL <Cmd>Gclog<CR>
+nnoremap gW :windo<Space>
 nnoremap gb <Cmd>G blame<CR>
 nnoremap gs mS:sil!gr "\b<C-r>=expand("<cword>")<CR>\b"<CR>
 nnoremap gy <Cmd>set opfunc=util#yankpastfunc<CR>g@
@@ -188,7 +189,6 @@ nnoremap q? q?
 
 nnoremap c! :Cdelete<Space>
 nnoremap c<Space> :Cget<Space>
-nnoremap c: :cdo<Space>
 
 nnoremap '# <Cmd>Esyn<CR>
 nnoremap '$ <Cmd>Einit<CR>
