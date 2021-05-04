@@ -60,6 +60,7 @@ set timeoutlen=500
 set undofile
 set updatetime=100
 set wildcharm=<C-z>
+set shortmess+=c
 set wildmode=list:full
 
 if has('win32')
