@@ -28,8 +28,8 @@ nnoremap gw <C-w>
 noremap gh ^
 noremap gl g_
 
-nnoremap m, #''cgN
-nnoremap m; *''cgn
+nnoremap m, #``cgN
+nnoremap m; *``cgn
 
 nnoremap Q q
 nnoremap q <Nop>
