@@ -93,7 +93,6 @@ endif
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
 nnoremap <C-w>S <Cmd>sp +Scratch<CR>
-nnoremap <M-c> <Cmd>FMove<CR>
 nnoremap <Tab> :buffer *
 nnoremap S <Cmd>Scratch<CR>
 nnoremap U <C-r>
@@ -119,7 +118,6 @@ nnoremap <Space>h <Cmd>History<CR>
 nnoremap <Space>j :tjump /
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>t <Cmd>tab sb<CR>
-nnoremap <Space>w <Cmd>echo "IDIOT"<bar>sleep 4<CR>
 vmap <Space>P "+P
 vmap <Space>Y "+yg_
 vmap <Space>p "+p
@@ -155,7 +153,6 @@ nnoremap gy <Cmd>set opfunc=util#yankpastfunc<CR>g@
 nnoremap gyy <Cmd>set opfunc=util#yankpastfunc<CR>g@_
 noremap g# ?<C-r><C-w><CR>
 noremap g* /<C-r><C-w><CR>
-noremap gd <Cmd>call <SID>fsearchdecl(expand("<cword>"))<CR>
 noremap gh ^
 noremap gl g_
 vnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>
@@ -284,9 +281,7 @@ func! s:stabsearch(cmd) abort
   return "\<S-Tab>"
 endfunc
 
-command! Echrome sil !chrome "file://%:p"
 command! Ecode sil exe "!code -nwg" expand("%:p") . ":" . line('.') . ":" . col('.') "."
-command! Edata sil exe "e" stdpath('data')
 command! Eftp sil exe "e" stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'
 command! Eidea sil exe "!idea64" expand("%:p") . ":" . line('.')
 command! Einit sil exe "e" stdpath('config') . '/init.vim'
@@ -296,10 +291,6 @@ command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! -bang Kwbd call kwbd#run(<bang>0)
 command! Scratch enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 command! TrimWS %s/\s\+$//e
-
-command! FMove call fzf#run({
-      \ 'source': $FZF_ALT_C_COMMAND, 'sink': 'Move',
-      \ 'window': g:fzf_layout.window})
 
 command! FPsKill call fzf#run({
       \ 'source': 'tasklist /fo table /nh',
@@ -329,25 +320,6 @@ command! -nargs=1 -bang Cdelete
       \   sil!uns cfirst |
       \ endif |
       \ unlet s:pat
-
-func! s:fsearchdecl(name) abort
-  if empty(a:name)
-    echohl ErrorMsg
-    echom "No identifier under cursor"
-    echohl None
-    return
-  endif
-  let @/ = '\V\<' . a:name . '\>'
-  norm [[{
-  let row = search(@/, 'cW')
-  while row && s:iscomment(".", ".")
-    let row = search(@/, 'cW')
-  endwhile
-  if &hls
-    set hls
-  endif
-  redraw
-endfunc
 
 func! s:iscomment(line, col) abort
   return synIDattr(synIDtrans(synID(line(a:line), col(a:col), 1)), "name") == "Comment"
