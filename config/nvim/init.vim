@@ -1,16 +1,17 @@
 let $RTP = stdpath('config')
 let g:dispatch_no_maps = 1
-let g:fzf_layout = { 'window': { 'width': 0.5461, 'height': 0.6, 'yoffset': 0.5, 'border': 'sharp' } }
-let g:fzf_preview_window = []
 let g:textobj_sandwich_no_default_key_mappings = 1
 let g:user_emmet_leader_key = '<M-a>'
 let g:vsnip_snippet_dir = stdpath('config') . '/vsnip'
 
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'AndrewRadev/splitjoin.vim'
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'hrsh7th/nvim-compe'
 Plug 'hrsh7th/vim-vsnip'
-Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
 Plug 'machakann/vim-sandwich'
 Plug 'mattn/emmet-vim'
 Plug 'mfussenegger/nvim-dap'
@@ -38,7 +39,7 @@ runtime macros/sandwich/keymap/surround.vim
 silent! colorscheme codedark
 
 set cmdwinheight=7
-set completeopt=menu
+set completeopt=menuone,noselect
 set completeslash=slash
 set fileformat=unix
 set fileformats=unix,dos
@@ -52,6 +53,8 @@ set mouse=a
 set nojoinspaces
 set noruler
 set noswapfile
+set pumheight=15
+set shortmess+=c
 set smartcase
 set splitbelow
 set splitright
@@ -60,7 +63,6 @@ set timeoutlen=500
 set undofile
 set updatetime=100
 set wildcharm=<C-z>
-set shortmess+=c
 set wildmode=list:full
 
 if has('win32')
@@ -112,10 +114,10 @@ nmap <Space>y "+y
 nnoremap <Space> <Nop>
 nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
 nnoremap <Space>d <Cmd>Kwbd<CR>
-nnoremap <Space>f <Cmd>Files<CR>
-nnoremap <Space>g <Cmd>GFiles<CR>
-nnoremap <Space>h <Cmd>History<CR>
-nnoremap <Space>j :tjump /
+nnoremap <Space>f <Cmd>Telescope find_files<CR>
+nnoremap <Space>g <Cmd>Telescope git_files<CR>
+nnoremap <Space>h <Cmd>Telescope old_files<CR>
+nnoremap <Space>j <Cmd>Telescope tags<CR>
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>t <Cmd>tab sb<CR>
 vmap <Space>P "+P
@@ -138,7 +140,7 @@ vnoremap m; y/\V<C-R>=escape(@@,'/\')<CR><CR>``cgn
 nmap gm, g#``cgN
 nmap gm; g*``cgn
 nmap gw <C-w>
-nnoremap g! <Cmd>FPsKill<CR>
+nnoremap g! <Cmd>lua require("skippi.picker").pkill{}<CR>
 nnoremap g. <Cmd>Gvdiffsplit<CR>
 nnoremap g/ mS:sil!gr ""<Left>
 nnoremap g<CR> <Cmd>G<CR>
@@ -162,14 +164,18 @@ vnoremap gy <Esc><Cmd>call util#yankpastfunc(visualmode(), 1)<CR>
 tnoremap <M-c> <M-c>
 tnoremap <M-h> <M-h>
 
-nnoremap z/ <Cmd>BLines<CR>
+nnoremap z/ <Cmd>Telescope current_buffer_fuzzy_find<CR>
 
 noremap s <Nop>
-noremap s] <Cmd>lua vim.lsp.buf.definition()<CR>
+noremap sL <Cmd>Telescope lsp_workspace_diagnostics<CR>
+noremap s] <Cmd>Telescope lsp_definitions<CR>
+noremap sa <Cmd>lua require'jdtls'.code_action()<CR>
 noremap sc <Cmd>lua vim.lsp.buf.rename()<CR>
 noremap sd <Cmd>lua vim.lsp.buf.declaration()<CR>
-noremap si <Cmd>lua vim.lsp.buf.implementation()<CR>
-noremap sr <Cmd>lua vim.lsp.buf.references()<CR>
+noremap si <Cmd>Telescope lsp_implementations<CR>
+noremap sl <Cmd>exe "e" v:lua.vim.lsp.get_log_path()<CR>
+noremap sr <Cmd>Telescope lsp_references<CR>
+noremap ss <Cmd>Telescope lsp_workspace_symbols<CR>
 
 nnoremap <expr> [<M-q> '<Cmd>sil!uns' . v:count1 . 'colder<CR>'
 nnoremap <expr> ]<M-q> '<Cmd>sil!uns' . v:count1 . 'cnewer<CR>'
@@ -196,24 +202,22 @@ inoremap [<CR> [<CR>]<Esc>O
 inoremap {<CR> {<CR>}<Esc>O
 inoremap {; {<CR>};<Esc>O
 
-imap <expr> <CR> <SID>imapcr()
 imap <expr> <S-Tab> <SID>imapstab()
 imap <expr> <Tab> <SID>imaptab()
-smap <expr> <CR> <SID>imapcr()
 smap <expr> <S-Tab> <SID>imapstab()
 smap <expr> <Tab> <SID>imaptab()
 
-inoremap <expr> <C-]> pumvisible() ? "\<C-]>" : "\<C-x><C-]>"
-inoremap <expr> <C-_> pumvisible() ? "\<C-f>" : "\<C-x><C-f>"
-inoremap <expr> <C-l> pumvisible() ? "\<C-l>" : "\<C-x><C-l>"
-inoremap <expr> <C-o> pumvisible() ? "\<C-n>" : "\<C-x><C-o>"
-snoremap <expr> <C-]> pumvisible() ? "\<C-]>" : "\<C-x><C-]>"
-snoremap <expr> <C-_> pumvisible() ? "\<C-f>" : "\<C-x><C-f>"
-snoremap <expr> <C-l> pumvisible() ? "\<C-l>" : "\<C-x><C-l>"
-snoremap <expr> <C-o> pumvisible() ? "\<C-n>" : "\<C-x><C-o>"
+inoremap <expr> <C-e> compe#close('<C-e>')
+inoremap <expr> <CR> compe#confirm('<CR>')
 
-imap <expr> ; vsnip#expandable() ? '<Plug>(vsnip-expand)' : ';'
-smap <expr> ; vsnip#expandable() ? '<Plug>(vsnip-expand)' : ';'
+imap <expr> <C-]> pumvisible() ? "\<C-e>\<C-]>" : "\<C-x><C-]>"
+imap <expr> <C-_> pumvisible() ? "\<C-e>\<C-f>" : "\<C-x><C-f>"
+imap <expr> <C-l> pumvisible() ? "\<C-e>\<C-l>" : "\<C-x><C-l>"
+imap <expr> <C-o> pumvisible() ? "\<C-e>\<C-n>" : "\<C-x><C-o>"
+smap <expr> <C-]> pumvisible() ? "\<C-e>\<C-]>" : "\<C-x><C-]>"
+smap <expr> <C-_> pumvisible() ? "\<C-e>\<C-f>" : "\<C-x><C-f>"
+smap <expr> <C-l> pumvisible() ? "\<C-e>\<C-l>" : "\<C-x><C-l>"
+smap <expr> <C-o> pumvisible() ? "\<C-e>\<C-n>" : "\<C-x><C-o>"
 
 nnoremap <expr> <C-L>
       \ (v:count ? '<Cmd>lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR>' : '')
@@ -245,8 +249,7 @@ augroup END
 
 function! s:imaptab() abort
   if g:pumactive | return <SID>choose_ins_complete_key(0) | endif
-  if vsnip#jumpable(1) | return "\<Plug>(vsnip-jump-next)" | endif
-  if util#ismatchtext('\k+$')
+  if util#ismatchtext('\k+$|\.')
     let g:pumactive = 1
     return <SID>choose_ins_complete_key(0)
   endif
@@ -255,18 +258,11 @@ endfunction
 
 function! s:imapstab() abort
   if g:pumactive | return <SID>choose_ins_complete_key(1) | endif
-  if vsnip#jumpable(1) | return "\<Plug>(vsnip-jump-prev)" | endif
-  if util#ismatchtext('\k+$')
+  if util#ismatchtext('\k+$|\\.$')
     let g:pumactive = 1
     return <SID>choose_ins_complete_key(1)
   endif
   return "\<S-Tab>"
-endfunction
-
-function! s:imapcr() abort
-  if !pumvisible() | return "\<CR>" | endif
-  if complete_info()["selected"] == "-1" | return "\<C-e>\<CR>" | endif
-  return "\<C-y>"
 endfunction
 
 func! s:tabsearch(cmd) abort
@@ -291,17 +287,6 @@ command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! -bang Kwbd call kwbd#run(<bang>0)
 command! Scratch enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 command! TrimWS %s/\s\+$//e
-
-command! FPsKill call fzf#run({
-      \ 'source': 'tasklist /fo table /nh',
-      \ 'sink': funcref('proc#pskill_sink'),
-      \ 'options': '--multi',
-      \ 'window': g:fzf_layout.window})
-
-command! -nargs=0 Syn
-      \ for id in synstack(line("."), col(".")) |
-      \   echo synIDattr(id, "name") |
-      \ endfor
 
 command! -nargs=1 -bang Cget
       \ let s:pat = string(<f-args>) |
@@ -367,9 +352,8 @@ augroup lsp
 augroup END
 
 lua << EOF
-local lsputil = require'lsputil'
-require'lspconfig'.pyright.setup{on_attach=lsputil.attach}
-require'lspconfig'.vimls.setup{on_attach=lsputil.attach}
+require'lspconfig'.pyright.setup{}
+require'lspconfig'.vimls.setup{}
 EOF
 
 lua << EOF
@@ -386,4 +370,41 @@ dap.configurations.python = {
     name = 'launch';
   }
 }
+EOF
+
+lua << EOF
+require('compe').setup{
+  source_timeout = 100,
+  throttle_time = 20,
+  source = {
+    buffer = true,
+    calc = true,
+    nvim_lsp = true,
+    nvim_lua = true,
+    path = true,
+    tags = true,
+    vsnip = true,
+  },
+}
+EOF
+
+lua << EOF
+require('telescope').setup{
+  defaults = {
+    mappings = {
+      i = {
+        ["<C-a>"] = require('skippi.actions').toggle_selection_all,
+      },
+    },
+  },
+  extensions = {
+    fzf = {
+      override_generic_sorter = true,
+      override_file_sorter = true,
+      case_mode = "smart_case",
+    }
+  },
+}
+require('telescope').load_extension('fzf')
+require('jdtls.ui').pick_one_async = require('skippi.picker').jdtls_ui_picker
 EOF
