@@ -220,8 +220,7 @@ smap <expr> <C-l> pumvisible() ? "\<C-e>\<C-l>" : "\<C-x><C-l>"
 smap <expr> <C-o> pumvisible() ? "\<C-e>\<C-n>" : "\<C-x><C-o>"
 
 nnoremap <expr> <C-L>
-      \ (v:count ? '<Cmd>lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR>' : '')
-      \ . (v:count ? '<Cmd>edit<CR>' : '')
+      \ (v:count ? '<Cmd>edit<CR>' : '')
       \ . '<Cmd>noh<CR>'
       \ . (has('diff') ? '<Cmd>diffupdate<CR>' : '')
       \ . '<Cmd>redraw<CR>'
