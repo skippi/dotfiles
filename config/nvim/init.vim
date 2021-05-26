@@ -117,7 +117,7 @@ nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>f <Cmd>Telescope find_files<CR>
 nnoremap <Space>g <Cmd>Telescope git_files<CR>
 nnoremap <Space>h <Cmd>Telescope old_files<CR>
-nnoremap <Space>j <Cmd>Telescope tags<CR>
+nnoremap <Space>j <Cmd>lua require('telescope.builtin').tags{entry_maker=require('skippi.make_entry').gen_from_ctags{}}<CR>
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>t <Cmd>tab sb<CR>
 vmap <Space>P "+P
