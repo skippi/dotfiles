@@ -54,7 +54,7 @@ function M.pkill(opts)
     },
     sorter = conf.generic_sorter(opts),
     attach_mappings = function()
-      action_set.select_default:replace(function(prompt_bufnr, _)
+      action_set.select:replace(function(prompt_bufnr, _)
         local picker = action_state.get_current_picker(prompt_bufnr)
         local entries = {action_state.get_selected_entry()}
         for _, entry in ipairs(picker:get_multi_selection()) do
