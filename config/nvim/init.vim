@@ -381,7 +381,6 @@ require('compe').setup{
     nvim_lsp = true,
     nvim_lua = true,
     path = true,
-    tags = true,
     vsnip = true,
   },
 }
