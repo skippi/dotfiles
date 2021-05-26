@@ -22,10 +22,12 @@ function M.gen_from_ctags(opts)
     end
     local tag, file, scode, tail = string.match(line, '([^\t]+)\t([^\t]+)\t/^\t?(.*)/;"\t+[a-z](.*)')
     local fields = {}
-    for kv in tail:gmatch('\t[a-z]+:[^\t\r\n]+') do
-      local k, v = string.match(kv, "([a-z]+):([^\t\r\n]+)")
-      if k and v then
-        fields[k] = v
+    if tail then
+      for kv in tail:gmatch('\t[a-z]+:[^\t\r\n]+') do
+        local k, v = string.match(kv, "([a-z]+):([^\t\r\n]+)")
+        if k and v then
+          fields[k] = v
+        end
       end
     end
 
