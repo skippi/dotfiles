@@ -31,7 +31,10 @@ function M.gen_from_ctags(opts)
       end
     end
 
-    local ordinal = tag .. ' ' .. file
+    local ordinal = tag
+    if file then
+      ordinal = ordinal .. ' ' .. file
+    end
     for k, v in pairs(fields) do
       ordinal = ordinal .. ' ' .. k .. ':' .. v
     end
