@@ -103,13 +103,11 @@ function M.tags(opts)
   local displayer = entry_display.create{
     separator = " │ ",
     items = {
-      { width = 30 },
       { remaining = true },
     },
   }
   local make_display = function(entry)
     return displayer{
-      entry.filename,
       entry.ordinal,
     }
   end
