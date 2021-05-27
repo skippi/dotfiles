@@ -119,7 +119,7 @@ function M.tags(opts)
     end
     return {
       valid = true,
-      ordinal = (item.class and item.class .. "." or "") .. item.name .. (item.signature or ""),
+      ordinal = (item.namespace and item.namespace .. "::" or "") .. (item.class and item.class .. "#" or "") .. item.name .. (item.signature or ""),
       display = make_display,
       cmd = item.cmd,
       name = item.name,
