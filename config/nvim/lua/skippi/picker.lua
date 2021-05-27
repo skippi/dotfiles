@@ -110,22 +110,16 @@ function M.tags(opts)
   local make_display = function(entry)
     return displayer{
       entry.filename,
-      entry.name,
+      entry.ordinal,
     }
   end
   local entry_maker = function(item)
     if item.cmd == '' or item.cmd:sub(1, 1) == '!' then
       return nil
     end
-    local ordinal = item.name
-    for k, v in pairs(item) do
-      if k ~= "name" then
-        ordinal = ordinal .. ' ' .. k .. ':' .. v or ''
-      end
-    end
     return {
       valid = true,
-      ordinal = ordinal,
+      ordinal = (item.class and item.class .. "." or "") .. item.name .. (item.signature or ""),
       display = make_display,
       cmd = item.cmd,
       name = item.name,
