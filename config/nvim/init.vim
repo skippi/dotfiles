@@ -389,6 +389,11 @@ EOF
 lua << EOF
 require('telescope').setup{
   defaults = {
+    layout_defaults = {
+      horizontal = {
+        preview_width = 60,
+      },
+    },
     mappings = {
       i = {
         ["<C-a>"] = require('skippi.actions').toggle_selection_all,
