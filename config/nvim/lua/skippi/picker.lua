@@ -5,6 +5,7 @@ local conf = require('telescope.config').values
 local entry_display = require('telescope.pickers.entry_display')
 local finders = require('telescope.finders')
 local pickers = require('telescope.pickers')
+local previewers = require('telescope.previewers')
 
 local M = {}
 
@@ -95,6 +96,62 @@ function M.jdtls_ui_picker(items, prompt, label_fn, cb)
       end)
       return true
     end,
+  }):find()
+end
+
+function M.tags(opts)
+  local displayer = entry_display.create{
+    separator = " │ ",
+    items = {
+      { width = 30 },
+      { remaining = true },
+    },
+  }
+  local make_display = function(entry)
+    return displayer{
+      entry.filename,
+      entry.name,
+    }
+  end
+  local entry_maker = function(item)
+    if item.cmd == '' or item.cmd:sub(1, 1) == '!' then
+      return nil
+    end
+    local ordinal = item.name
+    for k, v in pairs(item) do
+      if k ~= "name" then
+        ordinal = ordinal .. ' ' .. k .. ':' .. v or ''
+      end
+    end
+    return {
+      valid = true,
+      ordinal = ordinal,
+      display = make_display,
+      cmd = item.cmd,
+      name = item.name,
+      filename = item.filename,
+      lnum = 1,
+    }
+  end
+  pickers.new(opts, {
+    prompt = 'Tags',
+    finder = finders.new_table {
+      results = assert(vim.fn.taglist('.*')),
+      entry_maker = entry_maker,
+    },
+    previewer = previewers.ctags.new(opts),
+    sorter = conf.generic_sorter(opts),
+    attach_mappings = function()
+      action_set.select:enhance {
+        post = function()
+          local selection = action_state.get_selected_entry()
+          vim.cmd('norm! gg')
+          vim.fn.search(selection.cmd:sub(2, selection.cmd:len() - 1))
+          vim.cmd('norm! zz')
+        end,
+      }
+      return true
+    end
   }):find()
 end
 
