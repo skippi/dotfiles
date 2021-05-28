@@ -133,7 +133,7 @@ function M.tags(opts)
     return
   elseif #results == 1 then
     vim.cmd('keepjumps norm! gg')
-    vim.fn.search(results[1].scode)
+    vim.fn.search(results[1].cmd:sub(2, results[1].cmd:len() - 1))
     vim.cmd('norm! zz')
     return
   end
