@@ -132,7 +132,7 @@ function M.tags(opts)
     vim.cmd("echohl None")
     return
   elseif #results == 1 then
-    vim.cmd('norm! gg')
+    vim.cmd('keepjumps norm! gg')
     vim.fn.search(results[1].scode)
     vim.cmd('norm! zz')
     return
@@ -148,7 +148,7 @@ function M.tags(opts)
     attach_mappings = function()
       action_set.select:enhance {
         post = function()
-          vim.cmd('norm! gg')
+          vim.cmd('keepjumps norm! gg')
           vim.fn.search(action_state.get_selected_entry().scode)
           vim.cmd('norm! zz')
         end,
