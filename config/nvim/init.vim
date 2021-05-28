@@ -117,9 +117,10 @@ nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>f <Cmd>Telescope find_files<CR>
 nnoremap <Space>g <Cmd>Telescope git_files<CR>
 nnoremap <Space>h <Cmd>Telescope old_files<CR>
-nnoremap <Space>j <Cmd>lua require('skippi.picker').tags{}<CR>
+nnoremap <Space>j :TJump<Space>*
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>t <Cmd>tab sb<CR>
+nnoremap <Space>] :TJump <C-r>=expand("<cword>")<CR><CR>
 vmap <Space>P "+P
 vmap <Space>Y "+yg_
 vmap <Space>p "+p
@@ -286,6 +287,7 @@ command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! -bang Kwbd call kwbd#run(<bang>0)
 command! Scratch enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 command! TrimWS %s/\s\+$//e
+command! -nargs=1 -complete=tag_listfiles TJump lua require('skippi.picker').tags{search=<f-args>}
 
 command! -nargs=1 -bang Cget
       \ let s:pat = string(<f-args>) |

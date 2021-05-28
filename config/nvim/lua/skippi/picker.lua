@@ -119,16 +119,28 @@ function M.tags(opts)
       valid = true,
       ordinal = (item.namespace and item.namespace .. "::" or "") .. (item.class and item.class .. "#" or "") .. item.name .. (item.signature or ""),
       display = make_display,
-      cmd = item.cmd,
       name = item.name,
       filename = item.filename,
+      scode = item.cmd:sub(2, item.cmd:len() - 1),
       lnum = 1,
     }
+  end
+  local results = assert(vim.fn.taglist(opts.search and '\\C^' .. opts.search .. '$' or '.*'))
+  if #results == 0 then
+    vim.cmd("echohl ErrorMsg")
+    vim.cmd('echomsg "E492: tag not found: ' .. opts.search .. '"')
+    vim.cmd("echohl None")
+    return
+  elseif #results == 1 then
+    vim.cmd('norm! gg')
+    vim.fn.search(results[1].scode)
+    vim.cmd('norm! zz')
+    return
   end
   pickers.new(opts, {
     prompt = 'Tags',
     finder = finders.new_table {
-      results = assert(vim.fn.taglist('.*')),
+      results = results,
       entry_maker = entry_maker,
     },
     previewer = previewers.ctags.new(opts),
@@ -136,9 +148,8 @@ function M.tags(opts)
     attach_mappings = function()
       action_set.select:enhance {
         post = function()
-          local selection = action_state.get_selected_entry()
           vim.cmd('norm! gg')
-          vim.fn.search(selection.cmd:sub(2, selection.cmd:len() - 1))
+          vim.fn.search(action_state.get_selected_entry().scode)
           vim.cmd('norm! zz')
         end,
       }
