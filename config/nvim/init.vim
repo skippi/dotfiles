@@ -158,6 +158,8 @@ tnoremap <M-h> <M-h>
 
 nnoremap z/ <Cmd>Telescope current_buffer_fuzzy_find<CR>
 
+inoremap <C-k> <Cmd>lua vim.lsp.buf.hover()<CR>
+noremap <C-k> <Cmd>lua vim.lsp.buf.hover()<CR>
 noremap s <Nop>
 noremap sL <Cmd>Telescope lsp_workspace_diagnostics<CR>
 noremap s] <Cmd>Telescope lsp_definitions<CR>
