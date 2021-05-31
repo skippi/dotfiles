@@ -1,5 +1,4 @@
 let $RTP = stdpath('config')
-let g:dispatch_no_maps = 1
 let g:textobj_sandwich_no_default_key_mappings = 1
 let g:user_emmet_leader_key = '<M-a>'
 let g:vsnip_snippet_dir = stdpath('config') . '/vsnip'
@@ -19,7 +18,6 @@ Plug 'mfussenegger/nvim-jdtls'
 Plug 'neovim/nvim-lspconfig'
 Plug 'tomasiser/vim-code-dark'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession'
@@ -127,15 +125,8 @@ vmap <Space>Y "+yg_
 vmap <Space>p "+p
 vmap <Space>y "+y
 
-nnoremap d<CR> <Cmd>Dispatch<CR>
-nnoremap d<Space> :Dispatch<Space>
-
 nmap m, #``cgN
 nmap m; *``cgn
-nnoremap m<CR> <Cmd>Make<CR>
-nnoremap m<Space> :Make<Space>
-nnoremap m= :set makeprg=
-nnoremap m? <Cmd>Copen!<CR>
 vnoremap m, y?\V<C-R>=escape(@@,'/\')<CR><CR>``cgN
 vnoremap m; y/\V<C-R>=escape(@@,'/\')<CR><CR>``cgn
 
