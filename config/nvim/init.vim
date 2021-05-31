@@ -93,6 +93,7 @@ if has('win32')
 endif
 
 nnoremap <BS> <C-^>
+nnoremap <C-j> <Cmd>lua require('skippi.picker').tags{}<CR>
 nnoremap <C-p> <C-i>
 nnoremap <C-w>S <Cmd>sp +Scratch<CR>
 nnoremap <Tab> :buffer *
