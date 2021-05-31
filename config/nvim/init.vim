@@ -142,7 +142,7 @@ nnoremap gC :cdo<Space>
 nnoremap gL <Cmd>Gclog<CR>
 nnoremap gW :windo<Space>
 nnoremap gb <Cmd>G blame<CR>
-nnoremap gs mS:sil!gr "\b<C-r>=expand("<cword>")<CR>\b"<CR>
+nnoremap gs mS:sil!gr "\b<C-r>=escape(expand("<cword>"), "#")<CR>\b"<CR>
 nnoremap gy <Cmd>set opfunc=util#yankpastfunc<CR>g@
 nnoremap gyy <Cmd>set opfunc=util#yankpastfunc<CR>g@_
 noremap g# ?<C-r><C-w><CR>
