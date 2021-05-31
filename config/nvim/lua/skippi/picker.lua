@@ -132,6 +132,8 @@ function M.tags(opts)
     vim.cmd("echohl None")
     return
   elseif #results == 1 then
+    vim.cmd("mark '")
+    vim.cmd("e " .. results[1].filename)
     vim.cmd('keepjumps norm! gg')
     vim.fn.search(results[1].cmd:sub(2, results[1].cmd:len() - 1))
     vim.cmd('norm! zz')
