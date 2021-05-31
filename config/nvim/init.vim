@@ -111,7 +111,6 @@ nmap <Space>Y "+yg_
 nmap <Space>p "+p
 nmap <Space>y "+y
 nnoremap <Space> <Nop>
-nnoremap <Space><Space> :'{,'}s/\<<C-r><C-w>\>//g<Left><Left>
 nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>f <Cmd>Telescope find_files<CR>
 nnoremap <Space>g <Cmd>Telescope git_files<CR>
@@ -186,9 +185,9 @@ nnoremap q? q?
 nnoremap c! :Cdelete<Space>
 nnoremap c<Space> :Cget<Space>
 
-nnoremap '# <Cmd>Esyn<CR>
-nnoremap '$ <Cmd>Einit<CR>
-nnoremap '@ <Cmd>Eftp<CR>
+nnoremap '# <Cmd>sil exe "e" "$RTP/after/syntax/" . &filetype . ".vim"<CR>
+nnoremap '$ <Cmd>sil exe "e" stdpath('config') . '/init.vim'<CR>
+nnoremap '@ <Cmd>sil exe "e" stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'<CR>
 
 inoremap (<CR> (<CR>)<Esc>O
 inoremap [<CR> [<CR>]<Esc>O
@@ -232,26 +231,17 @@ function! s:choose_ins_complete_key(rev) abort
   endif
 endfunction
 
-let g:pumactive = 0
-
-augroup completion
-  autocmd!
-  autocmd CompleteDone * let g:pumactive = 0
-augroup END
-
 function! s:imaptab() abort
-  if g:pumactive | return <SID>choose_ins_complete_key(0) | endif
+  if pumvisible() | return <SID>choose_ins_complete_key(0) | endif
   if util#ismatchtext('\k+$|\.')
-    let g:pumactive = 1
     return <SID>choose_ins_complete_key(0)
   endif
   return "\<Tab>"
 endfunction
 
 function! s:imapstab() abort
-  if g:pumactive | return <SID>choose_ins_complete_key(1) | endif
+  if pumvisible() | return <SID>choose_ins_complete_key(1) | endif
   if util#ismatchtext('\k+$|\\.$')
-    let g:pumactive = 1
     return <SID>choose_ins_complete_key(1)
   endif
   return "\<S-Tab>"
@@ -270,11 +260,8 @@ func! s:stabsearch(cmd) abort
 endfunc
 
 command! Ecode sil exe "!code -nwg" expand("%:p") . ":" . line('.') . ":" . col('.') "."
-command! Eftp sil exe "e" stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'
 command! Eidea sil exe "!idea64" expand("%:p") . ":" . line('.')
-command! Einit sil exe "e" stdpath('config') . '/init.vim'
 command! Emacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') bufname("%")
-command! Esyn sil exe "e $RTP/after/syntax/" . &filetype . ".vim"
 command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! -bang Kwbd call kwbd#run(<bang>0)
 command! Scratch enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
@@ -322,11 +309,8 @@ aug END
 
 aug terminal
   au!
-  au TermOpen term://* if (&ft !~ "nnn") | tnoremap <buffer> <ESC> <C-\><C-n> | endif
-  au TermClose term://*
-        \ if (expand('<afile>') !~ "fzf") && (expand('<afile>') !~ "coc") |
-        \   exe "Kwbd" |
-        \ endif
+  au TermOpen term://* tnoremap <buffer> <ESC> <C-\><C-n>
+  au TermClose term://* exe "Kwbd"
 aug END
 
 aug file
