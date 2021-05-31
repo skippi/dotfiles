@@ -118,7 +118,6 @@ nnoremap <Space>h <Cmd>Telescope old_files<CR>
 nnoremap <Space>j :TJump<Space>*
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>t <Cmd>tab sb<CR>
-nnoremap <Space>] :TJump <C-r>=expand("<cword>")<CR><CR>
 vmap <Space>P "+P
 vmap <Space>Y "+yg_
 vmap <Space>p "+p
@@ -135,6 +134,7 @@ nmap gw <C-w>
 nnoremap g! <Cmd>lua require("skippi.picker").pkill{}<CR>
 nnoremap g. <Cmd>Gvdiffsplit<CR>
 nnoremap g/ mS:sil!gr ""<Left>
+nnoremap g<C-]> :TJump <C-r><C-w><CR>
 nnoremap g<CR> <Cmd>G<CR>
 nnoremap g<Space> :G<Space>
 nnoremap g> <Cmd>Gvdiffsplit HEAD<CR>
