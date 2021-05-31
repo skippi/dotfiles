@@ -125,13 +125,13 @@ vmap <Space>Y "+yg_
 vmap <Space>p "+p
 vmap <Space>y "+y
 
-nmap m, #``cgN
-nmap m; *``cgn
-vnoremap m, y?\V<C-R>=escape(@@,'/\')<CR><CR>``cgN
-vnoremap m; y/\V<C-R>=escape(@@,'/\')<CR><CR>``cgn
+nmap m, #NcgN
+nmap m; *Ncgn
+vnoremap m, y?\V<C-R>=escape(@@,'/\')<CR><CR>NcgN
+vnoremap m; y/\V<C-R>=escape(@@,'/\')<CR><CR>Ncgn
 
-nmap gm, g#``cgN
-nmap gm; g*``cgn
+nmap gm, g#NcgN
+nmap gm; g*Ncgn
 nmap gw <C-w>
 nnoremap g! <Cmd>lua require("skippi.picker").pkill{}<CR>
 nnoremap g. <Cmd>Gvdiffsplit<CR>
