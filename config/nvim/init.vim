@@ -219,6 +219,7 @@ nnoremap <expr> <C-L>
       \ . (has('diff') ? '<Cmd>diffupdate<CR>' : '')
       \ . '<Cmd>redraw<CR>'
 
+cnoremap <C-r><C-d> <C-r>=expand("%:p:h")<CR>/
 cnoremap <C-r><C-t> <C-r>=expand("%:t")<CR>
 cnoremap <expr> <CR> ccr#run()
 cnoremap <expr> <S-Tab> <SID>stabsearch(getcmdtype())
