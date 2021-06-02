@@ -133,7 +133,12 @@ function M.tags(opts)
     return
   elseif #results == 1 then
     vim.cmd("mark '")
-    vim.cmd("e " .. results[1].filename)
+    bufnr = vim.fn.bufnr(results[1].filename)
+    if bufnr ~= -1 then
+      vim.cmd("sil b " .. bufnr)
+    else
+      vim.cmd("sil e " .. results[1].filename)
+    end
     vim.cmd('keepjumps norm! gg')
     vim.fn.search(results[1].cmd:sub(2, results[1].cmd:len() - 1))
     vim.cmd("tag " .. results[1].name)
