@@ -142,7 +142,6 @@ function M.tags(opts)
     vim.cmd('keepjumps norm! gg')
     vim.fn.search(results[1].cmd:sub(2, results[1].cmd:len() - 1))
     vim.cmd("tag " .. results[1].name)
-    vim.cmd('norm! zz')
     return
   end
   pickers.new(opts, {
@@ -159,7 +158,6 @@ function M.tags(opts)
           vim.cmd('keepjumps norm! gg')
           vim.fn.search(action_state.get_selected_entry().scode)
           vim.cmd("tag " .. action_state.get_selected_entry().name)
-          vim.cmd('norm! zz')
         end,
       }
       return true
