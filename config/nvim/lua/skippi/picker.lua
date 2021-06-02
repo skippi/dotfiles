@@ -132,7 +132,7 @@ function M.tags(opts)
     vim.cmd("echohl None")
     return
   elseif #results == 1 then
-    vim.cmd("mark '")
+    vim.cmd("norm m'")
     bufnr = vim.fn.bufnr(results[1].filename)
     if bufnr ~= -1 then
       vim.cmd("sil b " .. bufnr)
