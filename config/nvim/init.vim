@@ -94,6 +94,7 @@ endif
 nnoremap <BS> <C-^>
 nnoremap <C-j> <Cmd>lua require('skippi.picker').tags{}<CR>
 nnoremap <C-p> <C-i>
+nnoremap <C-q> <Cmd>Telescope quickfix<CR>
 nnoremap <C-w>S <Cmd>sp +Scratch<CR>
 nnoremap <Tab> :buffer *
 nnoremap S <Cmd>Scratch<CR>
@@ -185,9 +186,6 @@ nnoremap q/ q/
 nnoremap q: q:
 nnoremap q? q?
 
-nnoremap c! :Cdelete<Space>
-nnoremap c<Space> :Cget<Space>
-
 nnoremap '# <Cmd>sil exe "e" "$RTP/after/syntax/" . &filetype . ".vim"<CR>
 nnoremap '$ <Cmd>sil exe "e" stdpath('config') . '/init.vim'<CR>
 nnoremap '@ <Cmd>sil exe "e" stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'<CR>
@@ -272,24 +270,6 @@ command! Scratch enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswa
 command! TrimWS %s/\s\+$//e
 command! -nargs=1 -complete=tag_listfiles TJump lua require('skippi.picker').tags{search=<f-args>}
 
-command! -nargs=1 -bang Cget
-      \ let s:pat = string(<f-args>) |
-      \ call setqflist(filter(getqflist(), 'v:val.text =~ ' . s:pat . ' || bufname(v:val.bufnr) =~ ' . s:pat)) |
-      \ call setqflist([], 'a', {'title': 'Cget ' . s:pat}) |
-      \ if <bang>v:true |
-      \   sil!uns cfirst |
-      \ endif |
-      \ unlet s:pat
-
-command! -nargs=1 -bang Cdelete
-      \ let s:pat = string(<f-args>) |
-      \ call setqflist(filter(getqflist(), 'v:val.text !~ ' . s:pat . ' && bufname(v:val.bufnr) !~ ' . s:pat)) |
-      \ call setqflist([], 'a', {'title': 'Cdelete ' . s:pat}) |
-      \ if <bang>v:true |
-      \   sil!uns cfirst |
-      \ endif |
-      \ unlet s:pat
-
 func! s:iscomment(line, col) abort
   return synIDattr(synIDtrans(synID(line(a:line), col(a:col), 1)), "name") == "Comment"
 endfunc
@@ -371,14 +351,10 @@ EOF
 lua << EOF
 require('telescope').setup{
   defaults = {
-    layout_defaults = {
-      horizontal = {
-        preview_width = 60,
-      },
-    },
     mappings = {
       i = {
         ["<C-a>"] = require('skippi.actions').toggle_selection_all,
+        ["<C-q>"] = require('skippi.actions').send_to_qflist,
       },
     },
   },
