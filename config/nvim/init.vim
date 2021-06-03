@@ -212,7 +212,7 @@ smap <expr> <C-_> pumvisible() ? "\<C-e>\<C-f>" : "\<C-x><C-f>"
 smap <expr> <C-l> pumvisible() ? "\<C-e>\<C-l>" : "\<C-x><C-l>"
 smap <expr> <C-o> pumvisible() ? "\<C-e>\<C-n>" : "\<C-x><C-o>"
 
-nnoremap <expr> <C-L>
+noremap <expr> <C-L>
       \ (v:count ? '<Cmd>edit<CR>' : '')
       \ . '<Cmd>noh<CR>'
       \ . (has('diff') ? '<Cmd>diffupdate<CR>' : '')
