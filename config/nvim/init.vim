@@ -92,9 +92,9 @@ if has('win32')
 endif
 
 nnoremap <BS> <C-^>
-nnoremap <C-j> <Cmd>lua require('skippi.picker').tags{}<CR>
 nnoremap <C-p> <C-i>
 nnoremap <C-q> <Cmd>Telescope quickfix<CR>
+nnoremap <C-s> <Cmd>lua require('telescope.builtin').tagstack{}<CR>
 nnoremap <C-w>S <Cmd>sp +Scratch<CR>
 nnoremap <Tab> :buffer *
 nnoremap S <Cmd>Scratch<CR>
@@ -117,7 +117,7 @@ nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>f <Cmd>Telescope find_files<CR>
 nnoremap <Space>g <Cmd>Telescope git_files<CR>
 nnoremap <Space>h <Cmd>Telescope oldfiles<CR>
-nnoremap <Space>j :TJump<Space>*
+nnoremap <Space>j :tag<Space>*
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>t <Cmd>tab sb<CR>
 vmap <Space>P "+P
@@ -133,7 +133,6 @@ vnoremap m; y/\V<C-R>=escape(@@,'/\')<CR><CR>Ncgn
 nmap gm, g#NcgN
 nmap gm; g*Ncgn
 nmap gw <C-w>
-nnoremap <silent> g<C-]> :TJump <C-r><C-w><CR>
 nnoremap g! <Cmd>lua require("skippi.picker").pkill{}<CR>
 nnoremap g. <Cmd>Gvdiffsplit<CR>
 nnoremap g/ mS:sil!gr ""<Left>
@@ -268,7 +267,6 @@ command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! -bang Kwbd call kwbd#run(<bang>0)
 command! Scratch enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 command! TrimWS %s/\s\+$//e
-command! -nargs=1 -complete=tag_listfiles TJump lua require('skippi.picker').tags{search=<f-args>}
 
 func! s:iscomment(line, col) abort
   return synIDattr(synIDtrans(synID(line(a:line), col(a:col), 1)), "name") == "Comment"

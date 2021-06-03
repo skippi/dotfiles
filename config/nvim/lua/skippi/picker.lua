@@ -5,7 +5,6 @@ local conf = require('telescope.config').values
 local entry_display = require('telescope.pickers.entry_display')
 local finders = require('telescope.finders')
 local pickers = require('telescope.pickers')
-local previewers = require('telescope.previewers')
 
 local M = {}
 
@@ -96,72 +95,6 @@ function M.jdtls_ui_picker(items, prompt, label_fn, cb)
       end)
       return true
     end,
-  }):find()
-end
-
-function M.tags(opts)
-  local displayer = entry_display.create{
-    separator = " │ ",
-    items = {
-      { remaining = true },
-    },
-  }
-  local make_display = function(entry)
-    return displayer{
-      entry.ordinal,
-    }
-  end
-  local entry_maker = function(item)
-    if item.cmd == '' or item.cmd:sub(1, 1) == '!' then
-      return nil
-    end
-    return {
-      valid = true,
-      ordinal = (item.namespace and item.namespace .. "::" or "") .. (item.class and item.class .. "." or "") .. item.name .. (item.signature or ""),
-      display = make_display,
-      name = item.name,
-      filename = item.filename,
-      scode = item.cmd:sub(2, item.cmd:len() - 1),
-      lnum = 1,
-    }
-  end
-  local results = assert(vim.fn.taglist(opts.search and '\\c^' .. opts.search .. '$' or '.*'))
-  if #results == 0 then
-    vim.cmd("echohl ErrorMsg")
-    vim.cmd('echomsg "E492: tag not found: ' .. opts.search .. '"')
-    vim.cmd("echohl None")
-    return
-  elseif #results == 1 then
-    vim.cmd("norm m'")
-    bufnr = vim.fn.bufnr(results[1].filename)
-    if bufnr ~= -1 then
-      vim.cmd("sil b " .. bufnr)
-    else
-      vim.cmd("sil e " .. results[1].filename)
-    end
-    vim.cmd('keepjumps norm! gg')
-    vim.fn.search(results[1].cmd:sub(2, results[1].cmd:len() - 1))
-    vim.cmd("tag " .. results[1].name)
-    return
-  end
-  pickers.new(opts, {
-    prompt = 'Tags',
-    finder = finders.new_table {
-      results = results,
-      entry_maker = entry_maker,
-    },
-    previewer = previewers.ctags.new(opts),
-    sorter = conf.generic_sorter(opts),
-    attach_mappings = function()
-      action_set.select:enhance {
-        post = function()
-          vim.cmd('keepjumps norm! gg')
-          vim.fn.search(action_state.get_selected_entry().scode)
-          vim.cmd("tag " .. action_state.get_selected_entry().name)
-        end,
-      }
-      return true
-    end
   }):find()
 end
 
