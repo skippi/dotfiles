@@ -125,7 +125,7 @@ function M.tags(opts)
       lnum = 1,
     }
   end
-  local results = assert(vim.fn.taglist(opts.search and '\\C^' .. opts.search .. '$' or '.*'))
+  local results = assert(vim.fn.taglist(opts.search and '\\c^' .. opts.search .. '$' or '.*'))
   if #results == 0 then
     vim.cmd("echohl ErrorMsg")
     vim.cmd('echomsg "E492: tag not found: ' .. opts.search .. '"')
