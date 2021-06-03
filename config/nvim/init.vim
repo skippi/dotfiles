@@ -133,10 +133,10 @@ vnoremap m; y/\V<C-R>=escape(@@,'/\')<CR><CR>Ncgn
 nmap gm, g#NcgN
 nmap gm; g*Ncgn
 nmap gw <C-w>
+nnoremap <silent> g<C-]> :TJump <C-r><C-w><CR>
 nnoremap g! <Cmd>lua require("skippi.picker").pkill{}<CR>
 nnoremap g. <Cmd>Gvdiffsplit<CR>
 nnoremap g/ mS:sil!gr ""<Left>
-nnoremap g<C-]> :TJump <C-r><C-w><CR>
 nnoremap g<CR> <Cmd>G<CR>
 nnoremap g<Space> :G<Space>
 nnoremap g> <Cmd>Gvdiffsplit HEAD<CR>
