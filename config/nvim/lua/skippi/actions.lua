@@ -43,4 +43,11 @@ function M.insert_cword(prompt_bufnr)
   vim.fn.feedkeys(word)
 end
 
+function M.insert_cWORD(prompt_bufnr)
+  local word = vim.api.nvim_buf_call(vim.fn.bufnr('#'), function()
+    return vim.fn.expand("<cWORD>")
+  end)
+  vim.fn.feedkeys(word)
+end
+
 return M
