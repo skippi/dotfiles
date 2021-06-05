@@ -36,4 +36,11 @@ function M.send_to_qflist(prompt_bufnr)
   vim.fn.setqflist(qf_entries)
 end
 
+function M.insert_cword(prompt_bufnr)
+  local word = vim.api.nvim_buf_call(vim.fn.bufnr('#'), function()
+    return vim.fn.expand("<cword>")
+  end)
+  vim.fn.feedkeys(word)
+end
+
 return M
