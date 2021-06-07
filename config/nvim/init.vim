@@ -234,17 +234,12 @@ endfunction
 
 function! s:imaptab() abort
   if pumvisible() | return <SID>choose_ins_complete_key(0) | endif
-  if util#ismatchtext('\k+$|\.')
-    return <SID>choose_ins_complete_key(0)
-  endif
+  if vsnip#available(1) | return "\<Plug>(vsnip-expand-or-jump)" | endif
   return "\<Tab>"
 endfunction
 
 function! s:imapstab() abort
   if pumvisible() | return <SID>choose_ins_complete_key(1) | endif
-  if util#ismatchtext('\k+$|\\.$')
-    return <SID>choose_ins_complete_key(1)
-  endif
   return "\<S-Tab>"
 endfunction
 
