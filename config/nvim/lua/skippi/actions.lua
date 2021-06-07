@@ -34,6 +34,7 @@ function M.send_to_qflist(prompt_bufnr)
   end
   actions.close(prompt_bufnr)
   vim.fn.setqflist(qf_entries)
+  vim.cmd("cc")
 end
 
 function M.insert_cword(prompt_bufnr)
