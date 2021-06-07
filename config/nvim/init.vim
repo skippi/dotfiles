@@ -303,12 +303,13 @@ augroup END
 
 augroup lsp
   autocmd!
-  autocmd FileType java lua require'jdtls'.start_or_attach({cmd={'jdtls.bat'}, on_attach=require'lsputil'.attach})
+  autocmd FileType java lua require'jdtls'.start_or_attach{cmd={'jdtls.bat'},
+        \ capabilities=require("skippi.lsp").capabilities}
 augroup END
 
 lua << EOF
-require'lspconfig'.pyright.setup{}
-require'lspconfig'.vimls.setup{}
+require'lspconfig'.pyright.setup{capabilities=require("skippi.lsp").capabilities}
+require'lspconfig'.vimls.setup{capabilities=require("skippi.lsp").capabilities}
 EOF
 
 lua << EOF
