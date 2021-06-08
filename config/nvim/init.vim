@@ -117,7 +117,7 @@ nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>f <Cmd>Telescope find_files<CR>
 nnoremap <Space>g <Cmd>Telescope git_files<CR>
 nnoremap <Space>h <Cmd>Telescope oldfiles<CR>
-nnoremap <Space>j :tag<Space>*
+nnoremap <Space>j :tag<Space>/
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>t <Cmd>tab sb<CR>
 vmap <Space>P "+P
