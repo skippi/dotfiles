@@ -94,7 +94,7 @@ endif
 nnoremap <BS> <C-^>
 nnoremap <C-p> <C-i>
 nnoremap <C-q> <Cmd>Telescope quickfix<CR>
-nnoremap <C-s> <Cmd>lua require('telescope.builtin').tagstack{}<CR>
+nnoremap <C-s> <Cmd>lua require('skippi.picker').tselect{}<CR>
 nnoremap <C-w>S <Cmd>sp +Scratch<CR>
 nnoremap <Tab> :buffer *
 nnoremap S <Cmd>Scratch<CR>
