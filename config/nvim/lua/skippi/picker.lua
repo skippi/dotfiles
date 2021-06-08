@@ -164,7 +164,6 @@ function M.tselect(opts)
         post = function()
           vim.cmd('keepjumps norm! gg')
           vim.fn.search(action_state.get_selected_entry().scode)
-          vim.cmd("tag " .. action_state.get_selected_entry().name)
         end,
       }
       return true
