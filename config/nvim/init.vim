@@ -157,7 +157,7 @@ vnoremap gy <Esc><Cmd>call util#yankpastfunc(visualmode(), 1)<CR>
 tnoremap <M-c> <M-c>
 tnoremap <M-h> <M-h>
 
-nnoremap z/ <Cmd>Telescope current_buffer_fuzzy_find<CR>
+nnoremap z/ <Cmd>lua require('telescope.builtin').current_buffer_fuzzy_find{previewer=false}<CR>
 
 inoremap <C-k> <Cmd>lua vim.lsp.buf.hover()<CR>
 noremap <C-k> <Cmd>lua vim.lsp.buf.hover()<CR>
