@@ -68,6 +68,15 @@ function M.pkill(opts)
       end)
       map('i', '<CR>', actions.select_default)
       map('n', '<CR>', actions.select_default)
+      local kill_all_action = function(prompt_bufnr, _)
+        local picker = action_state.get_current_picker(prompt_bufnr)
+        for entry in picker.manager:iter() do
+          vim.fn.jobstart("taskkill /f /pid " .. entry.pid)
+        end
+        actions.close(prompt_bufnr)
+      end
+      map('i', '<C-d>', kill_all_action)
+      map('n', '<C-d>', kill_all_action)
       return true
     end,
   }):find()
