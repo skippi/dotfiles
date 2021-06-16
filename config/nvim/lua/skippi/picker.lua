@@ -63,9 +63,7 @@ function M.pkill(opts)
         end
         actions.close(prompt_bufnr)
         for _, entry in ipairs(entries) do
-          vim.api.nvim_command("sil exe \"!taskkill /f /pid "
-            .. entry.pid
-            .. "\"")
+          vim.fn.jobstart("taskkill /f /pid " .. entry.pid)
         end
       end)
       map('i', '<CR>', actions.select_default)
