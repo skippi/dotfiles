@@ -54,8 +54,8 @@ function M.pkill(opts)
       end
     },
     sorter = conf.generic_sorter(opts),
-    attach_mappings = function()
-      action_set.select:replace(function(prompt_bufnr, _)
+    attach_mappings = function(_, map)
+      actions.select_default:replace(function(prompt_bufnr, _)
         local picker = action_state.get_current_picker(prompt_bufnr)
         local entries = {action_state.get_selected_entry()}
         for _, entry in ipairs(picker:get_multi_selection()) do
@@ -68,6 +68,8 @@ function M.pkill(opts)
             .. "\"")
         end
       end)
+      map('i', '<CR>', actions.select_default)
+      map('n', '<CR>', actions.select_default)
       return true
     end,
   }):find()
