@@ -92,15 +92,13 @@ if has('win32')
 endif
 
 nnoremap <BS> <C-^>
-nnoremap <C-p> <C-i>
 nnoremap <C-q> <Cmd>Telescope quickfix<CR>
 nnoremap <C-s> <Cmd>lua require('skippi.picker').tselect{}<CR>
 nnoremap <C-w>S <Cmd>sp +Scratch<CR>
-nnoremap <Tab> :buffer *
 nnoremap S <Cmd>Scratch<CR>
 nnoremap U <C-r>
 nnoremap Y y$
-nnoremap y"% <Cmd>call setreg(v:register, @%)<CR>
+nnoremap y@% <Cmd>call setreg(v:register, @%)<CR>
 nnoremap yp <Cmd>call setreg(v:register, expand("%:p"))<CR>
 noremap # m'<Cmd>keepjumps norm! #N<CR><Cmd>let @/.='\C'<bar>let v:searchforward=0<bar>keepjumps norm! n<CR>
 noremap ' `
@@ -136,10 +134,10 @@ nmap gw <C-w>
 nnoremap g! <Cmd>lua require("skippi.picker").pkill{}<CR>
 nnoremap g. <Cmd>Gvdiffsplit<CR>
 nnoremap g/ mS:sil!gr ""<Left>
+nnoremap g<BS> :buffer *
 nnoremap g<CR> <Cmd>G<CR>
 nnoremap g<Space> :G<Space>
 nnoremap g> <Cmd>Gvdiffsplit HEAD<CR>
-nnoremap gC :cdo<Space>
 nnoremap gL <Cmd>Gclog<CR>
 nnoremap gW :windo<Space>
 nnoremap gb <Cmd>G blame<CR>
@@ -158,6 +156,7 @@ tnoremap <M-c> <M-c>
 tnoremap <M-h> <M-h>
 
 nnoremap z/ <Cmd>lua require('telescope.builtin').current_buffer_fuzzy_find{previewer=false}<CR>
+nnoremap zl <Cmd>call util#toggleqf()<CR>
 
 inoremap <C-k> <Cmd>lua vim.lsp.buf.hover()<CR>
 noremap <C-k> <Cmd>lua vim.lsp.buf.hover()<CR>
@@ -177,13 +176,6 @@ nnoremap <expr> ]<M-q> '<Cmd>sil!uns' . v:count1 . 'cnewer<CR>'
 
 nnoremap <expr> <t '<Cmd>tabmove -' . v:count1 . '<CR>'
 nnoremap <expr> >t '<Cmd>tabmove +' . v:count1 . '<CR>'
-
-nmap qq <Cmd>call util#toggleqf()<CR>
-nnoremap Q q
-nnoremap q <Nop>
-nnoremap q/ q/
-nnoremap q: q:
-nnoremap q? q?
 
 nnoremap '# <Cmd>sil exe "e" "$RTP/after/syntax/" . &filetype . ".vim"<CR>
 nnoremap '$ <Cmd>sil exe "e" stdpath('config') . '/init.vim'<CR>
