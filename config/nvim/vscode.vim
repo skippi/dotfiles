@@ -17,19 +17,14 @@ set updatetime=100
 
 nnoremap - <Cmd>call VSCodeCall('workbench.view.explorer')<CR>
 nnoremap <BS> <Cmd>call VSCodeCall('workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup') <bar> call VSCodeCall('list.select')<CR>
-nnoremap <C-p> <C-i>
-nnoremap <Tab> <Cmd>Find<CR>
 nnoremap U <C-r>
 nnoremap Y y$
-nnoremap _ <Cmd>call VSCodeCall('workbench.view.explorer')<CR>
 noremap ' `
 
 nnoremap <Space> <Nop>
 nnoremap <Space>d <Cmd>Quit<CR>
-nnoremap <Space>e <Cmd>call VSCodeCall('workbench.action.quickOpen')<CR>
 nnoremap <Space>f <Cmd>Find<CR>
 nnoremap <Space>q <Cmd>Quit<CR>
-nnoremap <Space>w <Cmd>Write<CR>
 
 nnoremap m, #``cgN
 nnoremap m; *``cgn
@@ -42,14 +37,6 @@ nnoremap gs <Cmd>call VSCodeCall('workbench.action.findInFiles', {"query": expan
 noremap gh ^
 noremap gl g_
 vnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>
-
-nnoremap Q q
-nnoremap q <Nop>
-nnoremap q/ q/
-nnoremap q: q:
-nnoremap q? q?
-nnoremap q] m'<Cmd>call VSCodeCall('editor.action.revealDefinition')<CR>
-nnoremap qc m'<Cmd>call VSCodeCall('editor.action.rename')<CR>
 
 nnoremap <expr> <C-L> (v:count ? '<Cmd>Edit<CR>' : '')
       \ . '<Cmd>noh<CR>'
