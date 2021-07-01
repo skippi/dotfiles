@@ -358,3 +358,9 @@ require('telescope').setup{
 require('telescope').load_extension('fzf')
 require('jdtls.ui').pick_one_async = require('skippi.picker').jdtls_ui_picker
 EOF
+
+for tabnr in range(1, 9)
+  exe 'noremap <M-' . tabnr . '> <Esc>' . tabnr . 'gt'
+  exe 'noremap! <M-' . tabnr . '> <Esc>' . tabnr . 'gt'
+  exe 'tnoremap <M-' . tabnr . '> <C-\><C-n>' . tabnr . 'gt'
+endfor
