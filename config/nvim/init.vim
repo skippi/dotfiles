@@ -106,10 +106,6 @@ noremap * m'<Cmd>keepjumps norm! *N<CR><Cmd>let @/.='\C'<bar>keepjumps norm! n<C
 noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
 noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
 
-nmap <Space>P "+P
-nmap <Space>Y "+yg_
-nmap <Space>p "+p
-nmap <Space>y "+y
 nnoremap <Space> <Nop>
 nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>f <Cmd>Telescope find_files<CR>
@@ -118,10 +114,6 @@ nnoremap <Space>h <Cmd>Telescope oldfiles<CR>
 nnoremap <Space>j :tag<Space>/
 nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>t <Cmd>tab sb<CR>
-vmap <Space>P "+P
-vmap <Space>Y "+yg_
-vmap <Space>p "+p
-vmap <Space>y "+y
 
 nmap m, #NcgN
 nmap m; *Ncgn
@@ -155,8 +147,6 @@ tnoremap <M-h> <M-h>
 nnoremap z/ <Cmd>lua require('telescope.builtin').current_buffer_fuzzy_find{previewer=false}<CR>
 nnoremap zl <Cmd>call util#toggleqf()<CR>
 
-inoremap <C-k> <Cmd>lua vim.lsp.buf.hover()<CR>
-noremap <C-k> <Cmd>lua vim.lsp.buf.hover()<CR>
 noremap s <Nop>
 noremap sL <Cmd>Telescope lsp_workspace_diagnostics<CR>
 noremap s] <Cmd>Telescope lsp_definitions<CR>
@@ -171,17 +161,12 @@ noremap ss <Cmd>Telescope lsp_workspace_symbols<CR>
 nnoremap <expr> [<M-q> '<Cmd>sil!uns' . v:count1 . 'colder<CR>'
 nnoremap <expr> ]<M-q> '<Cmd>sil!uns' . v:count1 . 'cnewer<CR>'
 
-nnoremap <expr> <t '<Cmd>tabmove -' . v:count1 . '<CR>'
-nnoremap <expr> >t '<Cmd>tabmove +' . v:count1 . '<CR>'
+nnoremap <expr> <M-[> '<Cmd>tabmove -' . v:count1 . '<CR>'
+nnoremap <expr> <M-]> '<Cmd>tabmove +' . v:count1 . '<CR>'
 
 nnoremap '# <Cmd>sil exe "e" "$RTP/after/syntax/" . &filetype . ".vim"<CR>
 nnoremap '$ <Cmd>sil exe "e" stdpath('config') . '/init.vim'<CR>
 nnoremap '@ <Cmd>sil exe "e" stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'<CR>
-
-inoremap (<CR> (<CR>)<Esc>O
-inoremap [<CR> [<CR>]<Esc>O
-inoremap {<CR> {<CR>}<Esc>O
-inoremap {; {<CR>};<Esc>O
 
 imap <expr> <S-Tab> <SID>imapstab()
 imap <expr> <Tab> <SID>imaptab()
@@ -191,14 +176,10 @@ smap <expr> <Tab> <SID>imaptab()
 inoremap <expr> <C-e> compe#close('<C-e>')
 inoremap <expr> <CR> compe#confirm('<CR>')
 
-imap <expr> <C-]> pumvisible() ? "\<C-e>\<C-]>" : "\<C-x><C-]>"
 imap <expr> <C-_> pumvisible() ? "\<C-e>\<C-f>" : "\<C-x><C-f>"
 imap <expr> <C-l> pumvisible() ? "\<C-e>\<C-l>" : "\<C-x><C-l>"
-imap <expr> <C-o> pumvisible() ? "\<C-e>\<C-n>" : "\<C-x><C-o>"
-smap <expr> <C-]> pumvisible() ? "\<C-e>\<C-]>" : "\<C-x><C-]>"
 smap <expr> <C-_> pumvisible() ? "\<C-e>\<C-f>" : "\<C-x><C-f>"
 smap <expr> <C-l> pumvisible() ? "\<C-e>\<C-l>" : "\<C-x><C-l>"
-smap <expr> <C-o> pumvisible() ? "\<C-e>\<C-n>" : "\<C-x><C-o>"
 
 noremap <expr> <C-L>
       \ (v:count ? '<Cmd>edit<CR>' : '')
@@ -359,4 +340,14 @@ for tabnr in range(1, 9)
   exe 'noremap <M-' . tabnr . '> <Esc>' . tabnr . 'gt'
   exe 'noremap! <M-' . tabnr . '> <Esc>' . tabnr . 'gt'
   exe 'tnoremap <M-' . tabnr . '> <C-\><C-n>' . tabnr . 'gt'
+endfor
+
+for cmd in ['P', 'Y', 'p', 'y']
+  exe 'nmap <Space>' . cmd . ' "+' . cmd
+  exe 'vmap <Space>' . cmd . ' "+' . cmd
+endfor
+
+for surround in ['()', '[]', '{}']
+  exe 'inoremap ' . surround[0] . '<CR> ' surround[0] . '<CR>' . surround[1] . '<Esc>O'
+  exe 'inoremap ' . surround[0] . '; ' surround[0] . '<CR>' . surround[1] . ';<Esc>O'
 endfor
