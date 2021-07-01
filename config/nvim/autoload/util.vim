@@ -26,17 +26,6 @@ func! util#grepfunc(type, ...) abort
   let @@ = reg_save
 endfunc
 
-function! util#yankpastfunc(type, ...) abort
-  if a:0
-    silent exe "normal! gvy"
-  elseif a:type == 'line'
-    silent exe "normal! '[V']y"
-  else
-    silent exe "normal! `[v`]y"
-  endif
-  silent exe "normal! `]"
-endfunction
-
 function! util#ismatchtext(regex) abort
   let text = getline('.')[:col('.') - 2]
   return match(text, '\v' . a:regex) != -1

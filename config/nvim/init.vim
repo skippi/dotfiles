@@ -142,14 +142,11 @@ nnoremap gL <Cmd>Gclog<CR>
 nnoremap gW :windo<Space>
 nnoremap gb <Cmd>G blame<CR>
 nnoremap gs mS:sil!gr "\b<C-r>=escape(expand("<cword>"), "#")<CR>\b"<CR>
-nnoremap gy <Cmd>set opfunc=util#yankpastfunc<CR>g@
-nnoremap gyy <Cmd>set opfunc=util#yankpastfunc<CR>g@_
 noremap g# m'<Cmd>keepjumps norm! g#N<CR><Cmd>let @/.='\C'<bar>let v:searchforward=0<bar>keepjumps norm! n<CR>
 noremap g* m'<Cmd>keepjumps norm! g*N<CR><Cmd>let @/.='\C'<bar>keepjumps norm! n<CR>
 noremap gh ^
 noremap gl g_
 vnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>
-vnoremap gy <Esc><Cmd>call util#yankpastfunc(visualmode(), 1)<CR>
 
 " PSReadLine bug
 tnoremap <M-c> <M-c>
