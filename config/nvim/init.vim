@@ -123,7 +123,7 @@ nmap gm; g*Ncgn
 nmap gw <C-w>
 nnoremap g! <Cmd>lua require("skippi.picker").pkill{}<CR>
 nnoremap g. <Cmd>Gvdiffsplit<CR>
-nnoremap g/ mS:sil!gr ""<Left>
+nnoremap g/ :call util#grep_with_tagstack('""')<Left><Left><Left>
 nnoremap g<BS> :buffer *
 nnoremap g<CR> <Cmd>G<CR>
 nnoremap g<Space> :G<Space>
@@ -131,7 +131,7 @@ nnoremap g> <Cmd>Gvdiffsplit HEAD<CR>
 nnoremap gL <Cmd>Gclog<CR>
 nnoremap gW :windo<Space>
 nnoremap gb <Cmd>G blame<CR>
-nnoremap gs mS:sil!gr "\b<C-r>=escape(expand("<cword>"), "#")<CR>\b"<CR>
+nnoremap gs <Cmd>call util#grep_with_tagstack('\b' . escape(expand('<cword>'), '%#"') . '\b')<CR>
 noremap gh ^
 noremap gl g_
 vnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>

@@ -18,13 +18,19 @@ func! util#grepfunc(type, ...) abort
   if exists('g:vscode')
     call VSCodeCall('workbench.action.findInFiles', {"query": @/})
   else
-    let pattern = '"' . escape(@@, '%#"') . '"'
-    let command = "sil!gr! -F " . pattern
-    exe command
+    call util#grep_with_tagstack('-F "' . escape(@@, '%#"') . '"')
   endif
   let &selection = sel_save
   let @@ = reg_save
 endfunc
+
+function! util#grep_with_tagstack(query) abort
+  let pos = [bufnr()] + getcurpos()[1:]
+  exe 'silent grep' a:query
+  call settagstack(winnr(), 
+        \ {'items': [{'bufnr': pos[0], 'tagname': a:query, 'from': pos}]},
+        \ 'a')
+endfunction
 
 function! util#ismatchtext(regex) abort
   let text = getline('.')[:col('.') - 2]
