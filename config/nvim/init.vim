@@ -95,6 +95,7 @@ nnoremap <BS> <C-^>
 nnoremap <C-q> <Cmd>Telescope quickfix<CR>
 nnoremap <C-s> <Cmd>lua require('skippi.picker').tselect{}<CR>
 nnoremap <C-w>S <Cmd>sp +Scratch<CR>
+nnoremap Q <Cmd>call util#toggleqf()<CR>
 nnoremap S <Cmd>Scratch<CR>
 nnoremap U <C-r>
 nnoremap Y y$
@@ -141,7 +142,6 @@ tnoremap <M-c> <M-c>
 tnoremap <M-h> <M-h>
 
 nnoremap z/ <Cmd>lua require('telescope.builtin').current_buffer_fuzzy_find{previewer=false}<CR>
-nnoremap zl <Cmd>call util#toggleqf()<CR>
 
 noremap s <Nop>
 noremap sL <Cmd>Telescope lsp_workspace_diagnostics<CR>
