@@ -100,9 +100,7 @@ nnoremap U <C-r>
 nnoremap Y y$
 nnoremap y@% <Cmd>call setreg(v:register, @%)<CR>
 nnoremap yp <Cmd>call setreg(v:register, expand("%:p"))<CR>
-noremap # m'<Cmd>keepjumps norm! #N<CR><Cmd>let @/.='\C'<bar>let v:searchforward=0<bar>keepjumps norm! n<CR>
 noremap ' `
-noremap * m'<Cmd>keepjumps norm! *N<CR><Cmd>let @/.='\C'<bar>keepjumps norm! n<CR>
 noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
 noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
 
@@ -134,8 +132,6 @@ nnoremap gL <Cmd>Gclog<CR>
 nnoremap gW :windo<Space>
 nnoremap gb <Cmd>G blame<CR>
 nnoremap gs mS:sil!gr "\b<C-r>=escape(expand("<cword>"), "#")<CR>\b"<CR>
-noremap g# m'<Cmd>keepjumps norm! g#N<CR><Cmd>let @/.='\C'<bar>let v:searchforward=0<bar>keepjumps norm! n<CR>
-noremap g* m'<Cmd>keepjumps norm! g*N<CR><Cmd>let @/.='\C'<bar>keepjumps norm! n<CR>
 noremap gh ^
 noremap gl g_
 vnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>
