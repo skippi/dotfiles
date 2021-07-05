@@ -1,4 +1,3 @@
-let $RTP = stdpath('config')
 let g:textobj_sandwich_no_default_key_mappings = 1
 let g:user_emmet_leader_key = '<M-a>'
 let g:vsnip_snippet_dir = stdpath('config') . '/vsnip'
@@ -160,7 +159,7 @@ nnoremap <expr> ]<M-q> '<Cmd>sil!uns' . v:count1 . 'cnewer<CR>'
 nnoremap <expr> <M-[> '<Cmd>tabmove -' . v:count1 . '<CR>'
 nnoremap <expr> <M-]> '<Cmd>tabmove +' . v:count1 . '<CR>'
 
-nnoremap '# <Cmd>sil exe "e" "$RTP/after/syntax/" . &filetype . ".vim"<CR>
+nnoremap '# <Cmd>sil exe "e" stdpath('config') . '/after/syntax/' . &filetype . '.vim'<CR>
 nnoremap '$ <Cmd>sil exe "e" stdpath('config') . '/init.vim'<CR>
 nnoremap '@ <Cmd>sil exe "e" stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'<CR>
 

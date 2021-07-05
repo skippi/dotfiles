@@ -32,11 +32,6 @@ function! util#grep_with_tagstack(query) abort
         \ 'a')
 endfunction
 
-function! util#ismatchtext(regex) abort
-  let text = getline('.')[:col('.') - 2]
-  return match(text, '\v' . a:regex) != -1
-endfunction
-
 function! util#toggleqf() abort
   let tabnr = tabpagenr()
   let windows = filter(getwininfo(), 'v:val.quickfix && v:val.tabnr == tabnr')
