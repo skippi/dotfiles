@@ -1,4 +1,4 @@
-let g:textobj_sandwich_no_default_key_mappings = 1
+let g:surround_indent = 1
 let g:user_emmet_leader_key = '<M-a>'
 let g:vsnip_snippet_dir = stdpath('config') . '/vsnip'
 
@@ -10,7 +10,6 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'hrsh7th/nvim-compe'
 Plug 'hrsh7th/vim-vsnip'
-Plug 'machakann/vim-sandwich'
 Plug 'mattn/emmet-vim'
 Plug 'mfussenegger/nvim-dap'
 Plug 'mfussenegger/nvim-jdtls'
@@ -23,6 +22,7 @@ Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 Plug 'wellle/targets.vim'
@@ -30,9 +30,6 @@ Plug 'wellle/targets.vim'
 Plug 'MTDL9/vim-log-highlighting'
 Plug 'pprovost/vim-ps1'
 call plug#end()
-
-silent! call operator#sandwich#set('all', 'all', 'highlight', 0)
-runtime macros/sandwich/keymap/surround.vim
 
 silent! colorscheme codedark
 

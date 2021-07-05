@@ -1,13 +1,8 @@
-let g:textobj_sandwich_no_default_key_mappings = 1
-
 call plug#begin(stdpath('data') . '/plugged')
-Plug 'machakann/vim-sandwich'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
 Plug 'wellle/targets.vim'
 call plug#end()
-
-sil! call operator#sandwich#set('all', 'all', 'highlight', 0)
-runtime macros/sandwich/keymap/surround.vim
 
 set ignorecase
 set nojoinspaces
