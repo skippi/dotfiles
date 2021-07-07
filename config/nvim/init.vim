@@ -333,7 +333,7 @@ for cmd in ['P', 'Y', 'p', 'y']
   exe 'vmap <Space>' . cmd . ' "+' . cmd
 endfor
 
-for surround in ['()', '[]', '{}']
-  exe 'inoremap ' . surround[0] . '<CR> ' surround[0] . '<CR>' . surround[1] . '<Esc>O'
-  exe 'inoremap ' . surround[0] . '; ' surround[0] . '<CR>' . surround[1] . ';<Esc>O'
-endfor
+inoremap {; {<CR>};<Esc>O
+inoremap (<CR> (<CR>)<Esc>O
+inoremap [<CR> [<CR>]<Esc>O
+inoremap {<CR> {<CR>}<Esc>O
