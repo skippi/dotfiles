@@ -229,12 +229,6 @@ func! s:iscomment(line, col) abort
   return synIDattr(synIDtrans(synID(line(a:line), col(a:col), 1)), "name") == "Comment"
 endfunc
 
-aug qf_open
-  au!
-  au QuickFixCmdPost grep cwindow
-  au QuickFixCmdPost lgrep lwindow
-aug END
-
 aug general
   au!
   au TextChanged,InsertLeave * nested
