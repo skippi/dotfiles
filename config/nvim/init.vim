@@ -224,10 +224,6 @@ command! -bang Kwbd call kwbd#run(<bang>0)
 command! Scratch enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 command! TrimWS %s/\s\+$//e
 
-func! s:iscomment(line, col) abort
-  return synIDattr(synIDtrans(synID(line(a:line), col(a:col), 1)), "name") == "Comment"
-endfunc
-
 aug general
   au!
   au TextChanged,InsertLeave * nested
@@ -237,6 +233,8 @@ aug general
         \ if line("'\"") > 0 && line("'\"") <= line("$") && &ft !~# 'commit'|
         \   exe "normal! g`\""|
         \ endif
+  autocmd TextYankPost * silent! lua require("vim.highlight").on_yank()
+  autocmd BufLeave * call util#mark_file_context()
 aug END
 
 aug terminal
@@ -244,16 +242,6 @@ aug terminal
   au TermOpen term://* tnoremap <buffer> <ESC> <C-\><C-n>
   au TermClose term://* exe "Kwbd"
 aug END
-
-aug file
-  au!
-  au TextYankPost * silent! lua require("vim.highlight").on_yank()
-aug END
-
-augroup filemarks
-  autocmd!
-  autocmd BufLeave * call util#mark_file_context()
-augroup END
 
 augroup lsp
   autocmd!
