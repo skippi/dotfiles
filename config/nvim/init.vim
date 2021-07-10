@@ -1,4 +1,3 @@
-let g:surround_indent = 1
 let g:user_emmet_leader_key = '<M-a>'
 let g:vsnip_snippet_dir = stdpath('config') . '/vsnip'
 
