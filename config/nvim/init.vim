@@ -337,3 +337,5 @@ inoremap {; {<CR>};<Esc>O
 inoremap (<CR> (<CR>)<Esc>O
 inoremap [<CR> [<CR>]<Esc>O
 inoremap {<CR> {<CR>}<Esc>O
+
+call targets#mappings#extend({'r': {'pair': [{'o':'[', 'c':']'}]}})
