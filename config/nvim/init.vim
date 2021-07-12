@@ -180,8 +180,8 @@ noremap <expr> <C-L>
 
 cnoremap <C-r><C-d> <C-r>=expand("%:p:h")<CR>/
 cnoremap <C-r><C-t> <C-r>=expand("%:t")<CR>
-cnoremap <expr> <S-Tab> <SID>stabsearch(getcmdtype())
-cnoremap <expr> <Tab> <SID>tabsearch(getcmdtype())
+cnoremap <expr> <S-Tab> <SID>jump_to_next_match(0)
+cnoremap <expr> <Tab> <SID>jump_to_next_match(1)
 
 function! s:choose_ins_complete_key(rev) abort
   let info = complete_info(['mode'])
@@ -203,16 +203,14 @@ function! s:imapstab() abort
   return "\<S-Tab>"
 endfunction
 
-func! s:tabsearch(cmd) abort
-  if a:cmd == '/' | return "\<C-g>" | endif
-  if a:cmd == '?' | return "\<C-t>" | endif
-  return "\<C-z>"
-endfunc
-
-func! s:stabsearch(cmd) abort
-  if a:cmd == '/' | return "\<C-t>" | endif
-  if a:cmd == '?' | return "\<C-g>" | endif
-  return "\<S-Tab>"
+func! s:jump_to_next_match(forward) abort
+  if getcmdtype() == '/'
+    return a:forward ? "\<C-g>" : "\<C-t>"
+  elseif getcmdtype() == '?'
+    return a:forward ? "\<C-t>" : "\<C-g>"
+  else
+    return a:forward ? "\<C-z>" : "\<S-Tab>"
+  endif
 endfunc
 
 command! Ecode sil exe "!code -nwg" expand("%:p") . ":" . line('.') . ":" . col('.') "."
