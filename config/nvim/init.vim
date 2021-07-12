@@ -219,6 +219,7 @@ command! Emacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') bufn
 command! -nargs=1 -complete=dir Files lua require('telescope.builtin').find_files{search_dirs={<q-args>}}
 command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! JdtCompile lua require'jdtls'.compile()
+command! JdtUpdateConfig lua require'jdtls'.update_project_config()
 command! -bang Kwbd call kwbd#run(<bang>0)
 command! Scratch enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 command! TrimWS %s/\s\+$//e
