@@ -7,7 +7,6 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
-Plug 'hrsh7th/nvim-compe'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'mattn/emmet-vim'
 Plug 'mfussenegger/nvim-dap'
@@ -32,7 +31,8 @@ call plug#end()
 silent! colorscheme codedark
 
 set cmdwinheight=7
-set completeopt=menuone,noselect
+set complete=.,w,b,t
+set completeopt=menuone
 set completeslash=slash
 set fileformat=unix
 set fileformats=unix,dos
@@ -178,13 +178,10 @@ nnoremap '# <Cmd>sil exe "sp " stdpath('config') . '/after/syntax/' . &filetype 
 nnoremap '$ <Cmd>sil exe "sp " stdpath('config') . '/init.vim'<CR>
 nnoremap '@ <Cmd>sil exe "sp " stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'<CR>
 
-imap <expr> <S-Tab> <SID>imapstab()
-imap <expr> <Tab> <SID>imaptab()
-smap <expr> <S-Tab> <SID>imapstab()
-smap <expr> <Tab> <SID>imaptab()
-
-inoremap <expr> <C-e> compe#close('<C-e>')
-inoremap <expr> <CR> compe#confirm('<CR>')
+imap <expr> <S-Tab> <SID>smart_tab(0)
+imap <expr> <Tab> <SID>smart_tab(1)
+smap <expr> <S-Tab> <SID>smart_tab(0)
+smap <expr> <Tab> <SID>smart_tab(1)
 
 imap <expr> <C-_> pumvisible() ? "\<C-e>\<C-f>" : "\<C-x><C-f>"
 imap <expr> <C-l> pumvisible() ? "\<C-e>\<C-l>" : "\<C-x><C-l>"
@@ -202,24 +199,22 @@ noremap! <C-r><C-t> <C-r>=expand("%:t")<CR>
 cnoremap <expr> <S-Tab> <SID>jump_to_next_match(0)
 cnoremap <expr> <Tab> <SID>jump_to_next_match(1)
 
-function! s:choose_ins_complete_key(rev) abort
+function! s:complete_next_match(forward) abort
   let info = complete_info(['mode'])
   if info.mode == 'keyword' || info.mode == ''
-    return a:rev ? "\<C-n>" : "\<C-p>"
+    return a:forward ? "\<C-p>" : "\<C-n>"
   else
-    return a:rev ? "\<C-p>" : "\<C-n>"
+    return a:forward ? "\<C-n>" : "\<C-p>"
   endif
 endfunction
 
-function! s:imaptab() abort
-  if pumvisible() | return <SID>choose_ins_complete_key(0) | endif
+function! s:smart_tab(forward) abort
+  if pumvisible() | return <SID>complete_next_match(a:forward) | endif
   if vsnip#available(1) | return "\<Plug>(vsnip-expand-or-jump)" | endif
-  return "\<Tab>"
-endfunction
-
-function! s:imapstab() abort
-  if pumvisible() | return <SID>choose_ins_complete_key(1) | endif
-  return "\<S-Tab>"
+  if strpart(getline('.'), 0, col('.') - 1) =~ '[a-z\k\.]\+$'
+    return <SID>complete_next_match(a:forward)
+  endif
+  return a:forward ? "\<Tab>" : "\<S-Tab>"
 endfunction
 
 func! s:jump_to_next_match(forward) abort
@@ -299,21 +294,6 @@ dap.configurations.python = {
     request = 'launch';
     name = 'launch';
   }
-}
-EOF
-
-lua << EOF
-require('compe').setup{
-  source_timeout = 100,
-  throttle_time = 20,
-  source = {
-    buffer = true,
-    calc = true,
-    nvim_lsp = true,
-    nvim_lua = true,
-    path = true,
-    vsnip = true,
-  },
 }
 EOF
 
