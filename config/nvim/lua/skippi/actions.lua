@@ -28,13 +28,21 @@ function M.toggle_selection_all(prompt_bufnr)
 end
 
 function M.send_to_qflist(prompt_bufnr)
+  local picker = action_state.get_current_picker(prompt_bufnr)
   local qf_entries = {}
-  for entry in action_state.get_current_picker(prompt_bufnr).manager:iter() do
+  for entry in picker.manager:iter() do
     table.insert(qf_entries, entry_to_qf(entry))
   end
   actions.close(prompt_bufnr)
   vim.fn.setqflist(qf_entries)
-  vim.cmd("cc")
+  local post_cmd = "cc"
+  local syntax = vim.api.nvim_win_call(picker.original_win_id, function()
+    return vim.fn.getwinvar(vim.fn.winnr(), "&syntax")
+  end)
+  if syntax == "qf" then
+    post_cmd = post_cmd .. "|" .. vim.fn.winnr() .. "wincmd w"
+  end
+  vim.cmd(post_cmd)
 end
 
 function M.insert_cword(prompt_bufnr)
