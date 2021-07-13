@@ -38,14 +38,16 @@ function M.send_to_qflist(prompt_bufnr)
 end
 
 function M.insert_cword(prompt_bufnr)
-  local word = vim.api.nvim_buf_call(vim.fn.bufnr('#'), function()
+  local picker = action_state.get_current_picker(prompt_bufnr)
+  local word = vim.api.nvim_win_call(picker.original_win_id, function()
     return vim.fn.expand("<cword>")
   end)
   vim.fn.feedkeys(word)
 end
 
 function M.insert_cWORD(prompt_bufnr)
-  local word = vim.api.nvim_buf_call(vim.fn.bufnr('#'), function()
+  local picker = action_state.get_current_picker(prompt_bufnr)
+  local word = vim.api.nvim_win_call(picker.original_win_id, function()
     return vim.fn.expand("<cWORD>")
   end)
   vim.fn.feedkeys(word)
