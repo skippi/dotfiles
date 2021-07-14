@@ -50,8 +50,6 @@ set noswapfile
 set pumheight=15
 set shortmess+=c
 set smartcase
-set splitbelow
-set splitright
 set termguicolors
 set timeoutlen=500
 set undofile
