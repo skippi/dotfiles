@@ -123,6 +123,7 @@ nnoremap g<CR> <Cmd>G<CR>
 nnoremap g<Space> :G<Space>
 nnoremap g> <Cmd>Gvdiffsplit HEAD<CR>
 nnoremap gL <Cmd>G log --first-parent<CR>
+nnoremap g<C-l> <Cmd>G log<CR>
 nnoremap gW :windo<Space>
 nnoremap gb <Cmd>G blame<CR>
 nnoremap gs <Cmd>call util#grep_with_tagstack('\b' . escape(expand('<cword>'), '%#"') . '\b')<CR>
