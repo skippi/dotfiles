@@ -22,6 +22,7 @@
 [pull]
 	rebase = false
 [alias]
+	co = checkout
 	ctags = !$(git rev-parse --git-common-dir)/hooks/ctags
 	hide = "!git ls-files -z \"$1\" \
 		| xargs -0 git update-index --assume-unchanged #"
