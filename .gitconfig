@@ -23,3 +23,8 @@
 	rebase = false
 [alias]
 	ctags = !$(git rev-parse --git-common-dir)/hooks/ctags
+	hide = "!git ls-files -z \"$1\" \
+		| xargs -0 git update-index --assume-unchanged #"
+	unhide = "!git ls-files -z \"$1\" \
+		| xargs -0 git update-index --no-assume-unchanged #"
+	ls-hidden = !git ls-files -v | grep '^h' | cut -c3-
