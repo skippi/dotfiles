@@ -1,4 +1,3 @@
-*.out
-*.tags
+.projections.json
 Session.vim
 tags
