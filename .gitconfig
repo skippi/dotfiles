@@ -19,6 +19,7 @@
 	cmd = "code --wait "
 [init]
 	templatedir = ~/.config/git/template
+	defaultBranch = main
 [pull]
 	rebase = false
 [alias]
