@@ -154,9 +154,10 @@ nnoremap <expr> ]<M-q> '<Cmd>sil!uns' . v:count1 . 'cnewer<CR>'
 nnoremap <expr> <M-[> '<Cmd>tabmove -' . v:count1 . '<CR>'
 nnoremap <expr> <M-]> '<Cmd>tabmove +' . v:count1 . '<CR>'
 
-nnoremap '# <Cmd>sil exe "e" stdpath('config') . '/after/syntax/' . &filetype . '.vim'<CR>
-nnoremap '$ <Cmd>sil exe "e" stdpath('config') . '/init.vim'<CR>
-nnoremap '@ <Cmd>sil exe "e" stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'<CR>
+nnoremap '<Tab> <Cmd>sil exe "sp " stdpath('config') . '/after/indent/' . &filetype . '.vim'<CR>
+nnoremap '# <Cmd>sil exe "sp " stdpath('config') . '/after/syntax/' . &filetype . '.vim'<CR>
+nnoremap '$ <Cmd>sil exe "sp " stdpath('config') . '/init.vim'<CR>
+nnoremap '@ <Cmd>sil exe "sp " stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'<CR>
 
 imap <expr> <S-Tab> <SID>smart_tab(0)
 imap <expr> <Tab> <SID>smart_tab(1)
@@ -244,6 +245,7 @@ augroup lsp
 augroup END
 
 lua << EOF
+require'lspconfig'.dartls.setup{capabilities=require("skippi.lsp").capabilities}
 require'lspconfig'.pyright.setup{capabilities=require("skippi.lsp").capabilities}
 require'lspconfig'.vimls.setup{capabilities=require("skippi.lsp").capabilities}
 EOF
