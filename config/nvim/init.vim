@@ -154,6 +154,7 @@ nnoremap <expr> ]<M-q> '<Cmd>sil!uns' . v:count1 . 'cnewer<CR>'
 nnoremap <expr> <M-[> '<Cmd>tabmove -' . v:count1 . '<CR>'
 nnoremap <expr> <M-]> '<Cmd>tabmove +' . v:count1 . '<CR>'
 
+nnoremap '<Tab> <Cmd>sil exe "sp " stdpath('config') . '/after/indent/' . &filetype . '.vim'<CR>
 nnoremap '# <Cmd>sil exe "sp " stdpath('config') . '/after/syntax/' . &filetype . '.vim'<CR>
 nnoremap '$ <Cmd>sil exe "sp " stdpath('config') . '/init.vim'<CR>
 nnoremap '@ <Cmd>sil exe "sp " stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'<CR>
