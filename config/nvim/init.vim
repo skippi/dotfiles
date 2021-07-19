@@ -249,6 +249,7 @@ augroup lsp
 augroup END
 
 lua << EOF
+require'lspconfig'.dartls.setup{capabilities=require("skippi.lsp").capabilities}
 require'lspconfig'.pyright.setup{capabilities=require("skippi.lsp").capabilities}
 require'lspconfig'.vimls.setup{capabilities=require("skippi.lsp").capabilities}
 EOF
