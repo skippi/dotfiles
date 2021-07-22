@@ -34,6 +34,7 @@ set cmdwinheight=7
 set complete=.,w,b,t
 set completeopt=menuone
 set completeslash=slash
+set diffopt+=internal,algorithm:histogram,indent-heuristic
 set fileformat=unix
 set fileformats=unix,dos
 set foldlevelstart=99
