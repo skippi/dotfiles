@@ -99,6 +99,7 @@ noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
 noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
 
 nnoremap <Space> <Nop>
+nnoremap <Space><Space> :'{,'}s;<C-r><C-w>;;g<Left><Left>
 nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>f <Cmd>Telescope find_files<CR>
 nnoremap <Space>g <Cmd>Telescope git_files<CR>
