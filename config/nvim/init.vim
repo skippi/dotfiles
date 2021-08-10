@@ -22,7 +22,6 @@ Plug 'tpope/vim-projectionist'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 Plug 'wellle/targets.vim'
 " Language
@@ -88,13 +87,29 @@ nnoremap <BS> <C-^>
 nnoremap <C-p> <Cmd>Telescope commands<CR>
 nnoremap <C-q> <Cmd>Telescope quickfix<CR>
 nnoremap <C-s> <Cmd>lua require('skippi.picker').tselect{}<CR>
+nnoremap <expr> [<M-q> '<Cmd>sil!uns' . v:count1 . 'colder<CR>'
+nnoremap <expr> ]<M-q> '<Cmd>sil!uns' . v:count1 . 'cnewer<CR>'
 nnoremap Q <Cmd>call util#toggleqf()<CR>
 nnoremap Y y$
+nnoremap [<C-q> <Cmd>cpfile<CR>
+nnoremap [n <Cmd>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "bs")<CR>
+nnoremap [q <Cmd>cprev<CR>
+nnoremap [t <Cmd>tnext<CR>
+nnoremap ]<C-q> <Cmd>cnfile<CR>
+nnoremap ]n <Cmd>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "s")<CR>
+nnoremap ]q <Cmd>cnext<CR>
+nnoremap ]t <Cmd>tprev<CR>
 nnoremap yp <Cmd>call setreg(v:register, expand("%:p"))<CR>
 noremap ' `
 noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
 noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
+noremap =P P=']
+noremap =p p=']
 
+map <Space>P "+P
+map <Space>Y "+Y
+map <Space>p "+p
+map <Space>y "+y
 nnoremap <Space> <Nop>
 nnoremap <Space><Space> :'{,'}s;<C-r><C-w>;;g<Left><Left>
 nnoremap <Space>d <Cmd>Kwbd<CR>
@@ -138,9 +153,6 @@ noremap si <Cmd>Telescope lsp_implementations<CR>
 noremap sl <Cmd>exe "e" v:lua.vim.lsp.get_log_path()<CR>
 noremap sr <Cmd>Telescope lsp_references<CR>
 noremap ss <Cmd>Telescope lsp_workspace_symbols<CR>
-
-nnoremap <expr> [<M-q> '<Cmd>sil!uns' . v:count1 . 'colder<CR>'
-nnoremap <expr> ]<M-q> '<Cmd>sil!uns' . v:count1 . 'cnewer<CR>'
 
 nnoremap <expr> <M-[> '<Cmd>tabmove -' . v:count1 . '<CR>'
 nnoremap <expr> <M-]> '<Cmd>tabmove +' . v:count1 . '<CR>'
@@ -305,11 +317,6 @@ for tabnr in range(1, 9)
   exe 'noremap <M-' . tabnr . '> <Esc>' . tabnr . 'gt'
   exe 'noremap! <M-' . tabnr . '> <Esc>' . tabnr . 'gt'
   exe 'tnoremap <M-' . tabnr . '> <C-\><C-n>' . tabnr . 'gt'
-endfor
-
-for cmd in ['P', 'Y', 'p', 'y']
-  exe 'nmap <Space>' . cmd . ' "+' . cmd
-  exe 'vmap <Space>' . cmd . ' "+' . cmd
 endfor
 
 inoremap {; {<CR>};<Esc>O
