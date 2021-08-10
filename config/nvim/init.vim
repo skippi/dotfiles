@@ -85,6 +85,7 @@ if has('win32')
 endif
 
 nnoremap <BS> <C-^>
+nnoremap <C-p> <Cmd>Telescope commands<CR>
 nnoremap <C-q> <Cmd>Telescope quickfix<CR>
 nnoremap <C-s> <Cmd>lua require('skippi.picker').tselect{}<CR>
 nnoremap Q <Cmd>call util#toggleqf()<CR>
