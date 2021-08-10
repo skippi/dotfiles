@@ -87,12 +87,8 @@ endif
 nnoremap <BS> <C-^>
 nnoremap <C-q> <Cmd>Telescope quickfix<CR>
 nnoremap <C-s> <Cmd>lua require('skippi.picker').tselect{}<CR>
-nnoremap <C-w>S <Cmd>sp +Scratch<CR>
 nnoremap Q <Cmd>call util#toggleqf()<CR>
-nnoremap S <Cmd>Scratch<CR>
-nnoremap U <C-r>
 nnoremap Y y$
-nnoremap y@% <Cmd>call setreg(v:register, @%)<CR>
 nnoremap yp <Cmd>call setreg(v:register, expand("%:p"))<CR>
 noremap ' `
 noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
@@ -106,26 +102,19 @@ nnoremap <Space>g <Cmd>Telescope git_files<CR>
 nnoremap <Space>h <Cmd>Telescope oldfiles<CR>
 nnoremap <Space>j :tag<Space>/
 nnoremap <Space>q <Cmd>q<CR>
-nnoremap <Space>t <Cmd>tab sb<CR>
 
-nmap m, #NcgN
-nmap m; *Ncgn
+nnoremap m, #NcgN
+nnoremap m; *Ncgn
 vnoremap m, y?\V<C-R>=escape(@@,'/\')<CR><CR>NcgN
 vnoremap m; y/\V<C-R>=escape(@@,'/\')<CR><CR>Ncgn
 
-nmap gm, g#NcgN
-nmap gm; g*Ncgn
 nmap gw <C-w>
 nnoremap g! <Cmd>lua require("skippi.picker").pkill{}<CR>
 nnoremap g. <Cmd>Gvdiffsplit<CR>
 nnoremap g/ :call util#grep_with_tagstack('""')<Left><Left><Left>
-nnoremap g<BS> :buffer *
 nnoremap g<CR> <Cmd>G<CR>
 nnoremap g<Space> :G<Space>
-nnoremap g> <Cmd>Gvdiffsplit HEAD<CR>
 nnoremap gL <Cmd>G log --first-parent<CR>
-nnoremap g<C-l> <Cmd>G log<CR>
-nnoremap gW :windo<Space>
 nnoremap gb <Cmd>G blame<CR>
 nnoremap gs <Cmd>call util#grep_with_tagstack('\b' . escape(expand('<cword>'), '%#"') . '\b')<CR>
 noremap gh ^
@@ -179,8 +168,8 @@ noremap <expr> <C-L>
       \ . (has('diff') ? '<Cmd>diffupdate<CR>' : '')
       \ . '<Cmd>redraw<CR>'
 
-cnoremap <C-r><C-d> <C-r>=expand("%:p:h")<CR>/
-cnoremap <C-r><C-t> <C-r>=expand("%:t")<CR>
+noremap! <C-r><C-d> <C-r>=expand("%:p:h")<CR>/
+noremap! <C-r><C-t> <C-r>=expand("%:t")<CR>
 cnoremap <expr> <S-Tab> <SID>jump_to_next_match(0)
 cnoremap <expr> <Tab> <SID>jump_to_next_match(1)
 
@@ -222,7 +211,7 @@ command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! JdtCompile lua require'jdtls'.compile()
 command! JdtUpdateConfig lua require'jdtls'.update_project_config()
 command! -bang Kwbd call kwbd#run(<bang>0)
-command! Scratch enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
+command! Scratch sp +enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 command! TrimWS %s/\s\+$//e
 
 aug general
