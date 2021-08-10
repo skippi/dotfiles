@@ -104,6 +104,8 @@ noremap ' `
 noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
 noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
 noremap =P P=']
+noremap =gP gPmz'[=']`z
+noremap =gp gpmz'[=']`z
 noremap =p p=']
 
 map <Space>P "+P
