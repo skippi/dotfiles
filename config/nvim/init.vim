@@ -232,7 +232,7 @@ command! TrimWS %s/\s\+$//e
 aug general
   au!
   au TextChanged,InsertLeave * nested
-        \ if &readonly == 0 && filereadable(bufname('%')) | silent update | endif
+        \ if &readonly == 0 && filereadable(bufname('%')) | call <SID>buf_update_lockmarks() | endif
   au FocusGained,BufEnter * silent! checktime
   au BufReadPost *
         \ if line("'\"") > 0 && line("'\"") <= line("$") && &ft !~# 'commit'|
@@ -241,6 +241,18 @@ aug general
   autocmd TextYankPost * silent! lua require("vim.highlight").on_yank()
   autocmd BufLeave * call util#mark_file_context()
 aug END
+
+func s:buf_update_lockmarks() abort
+  let marks = [getpos("'["), getpos("']")]
+  try
+    sil update
+  catch
+    exe 'echoerr' string(v:exception)
+  finally
+    call setpos("'[", marks[0])
+    call setpos("']", marks[1])
+  endtry
+endfunc
 
 aug terminal
   au!
