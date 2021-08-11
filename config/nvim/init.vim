@@ -83,6 +83,18 @@ if has('win32')
   nnoremap <C-z> <Nop>
 endif
 
+func s:edit_file_by_offset(offset) abort
+  let dir = expand("%:h")
+  if !isdirectory(dir) | return | endif
+  let files = readdir(dir, { f -> !isdirectory(dir . '/' . f) })
+  let idx = index(files, expand("%:t")) + a:offset
+  if !(0 <= idx && idx < len(files))
+    echohl ErrorMsg | echo "No more items" | echohl None
+    return
+  endif
+  exe "edit" dir . '/' . get(files, idx)
+endfunc
+
 nnoremap <BS> <C-^>
 nnoremap <C-p> <Cmd>Telescope commands<CR>
 nnoremap <C-q> <Cmd>Telescope quickfix<CR>
@@ -92,10 +104,12 @@ nnoremap <expr> ]<M-q> '<Cmd>sil!uns' . v:count1 . 'cnewer<CR>'
 nnoremap Q <Cmd>call util#toggleqf()<CR>
 nnoremap Y y$
 nnoremap [<C-q> <Cmd>cpfile<CR>
+nnoremap [f <Cmd>call <SID>edit_file_by_offset(-v:count1)<CR>
 nnoremap [n <Cmd>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "bs")<CR>
 nnoremap [q <Cmd>cprev<CR>
 nnoremap [t <Cmd>tnext<CR>
 nnoremap ]<C-q> <Cmd>cnfile<CR>
+nnoremap ]f <Cmd>call <SID>edit_file_by_offset(v:count1)<CR>
 nnoremap ]n <Cmd>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "s")<CR>
 nnoremap ]q <Cmd>cnext<CR>
 nnoremap ]t <Cmd>tprev<CR>
