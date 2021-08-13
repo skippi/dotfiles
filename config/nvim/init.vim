@@ -105,12 +105,12 @@ nnoremap Q <Cmd>call util#toggleqf()<CR>
 nnoremap Y y$
 nnoremap [<C-q> <Cmd>cpfile<CR>
 nnoremap [f <Cmd>call <SID>edit_file_by_offset(-v:count1)<CR>
-nnoremap [n <Cmd>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "bs")<CR>
+nnoremap [n <Cmd>for _ in range(v:count1)<CR>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "bsW")<CR>endfor<CR>
 nnoremap [q <Cmd>cprev<CR>
 nnoremap [t <Cmd>tnext<CR>
 nnoremap ]<C-q> <Cmd>cnfile<CR>
 nnoremap ]f <Cmd>call <SID>edit_file_by_offset(v:count1)<CR>
-nnoremap ]n <Cmd>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "s")<CR>
+nnoremap ]n <Cmd>for _ in range(v:count1)<CR>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "sW")<CR>endfor<CR>
 nnoremap ]q <Cmd>cnext<CR>
 nnoremap ]t <Cmd>tprev<CR>
 nnoremap yp <Cmd>call setreg(v:register, expand("%:p"))<CR>
