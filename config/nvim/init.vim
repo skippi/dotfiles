@@ -99,16 +99,16 @@ nnoremap <BS> <C-^>
 nnoremap <C-p> <Cmd>Telescope commands<CR>
 nnoremap <C-q> <Cmd>Telescope quickfix<CR>
 nnoremap <C-s> <Cmd>lua require('skippi.picker').tselect{}<CR>
-nnoremap <expr> [<M-q> '<Cmd>sil!uns' . v:count1 . 'colder<CR>'
-nnoremap <expr> ]<M-q> '<Cmd>sil!uns' . v:count1 . 'cnewer<CR>'
 nnoremap Q <Cmd>call util#toggleqf()<CR>
 nnoremap Y y$
 nnoremap [<C-q> <Cmd>cpfile<CR>
+nnoremap [<M-q> <Cmd>exe "sil!uns colder" v:count1<CR>
 nnoremap [f <Cmd>call <SID>edit_file_by_offset(-v:count1)<CR>
 nnoremap [n <Cmd>for _ in range(v:count1)<CR>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "bsW")<CR>endfor<CR>
 nnoremap [q <Cmd>cprev<CR>
 nnoremap [t <Cmd>tprev<CR>
 nnoremap ]<C-q> <Cmd>cnfile<CR>
+nnoremap ]<M-q> <Cmd>exe "sil!uns cnewer" v:count1<CR>
 nnoremap ]f <Cmd>call <SID>edit_file_by_offset(v:count1)<CR>
 nnoremap ]n <Cmd>for _ in range(v:count1)<CR>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "sW")<CR>endfor<CR>
 nnoremap ]q <Cmd>cnext<CR>
