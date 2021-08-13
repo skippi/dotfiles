@@ -137,8 +137,8 @@ nnoremap <Space>q <Cmd>q<CR>
 
 nnoremap m, #NcgN
 nnoremap m; *Ncgn
-vnoremap m, y?\V<C-R>=escape(@@,'/\')<CR><CR>NcgN
-vnoremap m; y/\V<C-R>=escape(@@,'/\')<CR><CR>Ncgn
+vnoremap m, "zy?\V<C-R>=escape(@z,'/\')<CR><CR>NcgN
+vnoremap m; "zy/\V<C-R>=escape(@z,'/\')<CR><CR>Ncgn
 
 nmap gw <C-w>
 nnoremap g! <Cmd>lua require("skippi.picker").pkill{}<CR>
