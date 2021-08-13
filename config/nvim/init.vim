@@ -107,12 +107,12 @@ nnoremap [<C-q> <Cmd>cpfile<CR>
 nnoremap [f <Cmd>call <SID>edit_file_by_offset(-v:count1)<CR>
 nnoremap [n <Cmd>for _ in range(v:count1)<CR>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "bsW")<CR>endfor<CR>
 nnoremap [q <Cmd>cprev<CR>
-nnoremap [t <Cmd>tnext<CR>
+nnoremap [t <Cmd>tprev<CR>
 nnoremap ]<C-q> <Cmd>cnfile<CR>
 nnoremap ]f <Cmd>call <SID>edit_file_by_offset(v:count1)<CR>
 nnoremap ]n <Cmd>for _ in range(v:count1)<CR>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "sW")<CR>endfor<CR>
 nnoremap ]q <Cmd>cnext<CR>
-nnoremap ]t <Cmd>tprev<CR>
+nnoremap ]t <Cmd>tnext<CR>
 nnoremap yp <Cmd>call setreg(v:register, expand("%:p"))<CR>
 noremap ' `
 noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
