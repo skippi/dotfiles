@@ -1,4 +1,4 @@
-let g:user_emmet_leader_key = '<M-a>'
+let g:user_emmet_leader_key = '<C-j>'
 let g:vsnip_snippet_dir = stdpath('config') . '/vsnip'
 
 call plug#begin(stdpath('data') . '/plugged')
