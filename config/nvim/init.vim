@@ -1,3 +1,4 @@
+let g:surround_13 = "\n\r\n"
 let g:user_emmet_leader_key = '<C-j>'
 let g:vsnip_snippet_dir = stdpath('config') . '/vsnip'
 
