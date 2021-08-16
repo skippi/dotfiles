@@ -99,6 +99,10 @@ nnoremap <BS> <C-^>
 nnoremap <C-p> <Cmd>Telescope commands<CR>
 nnoremap <C-q> <Cmd>Telescope quickfix<CR>
 nnoremap <C-s> <Cmd>lua require('skippi.picker').tselect{}<CR>
+nnoremap =P P=']
+nnoremap =gP gPmz'[=']`z
+nnoremap =gp gpmz'[=']`z
+nnoremap =p p=']
 nnoremap Q <Cmd>call util#toggleqf()<CR>
 nnoremap Y y$
 nnoremap [<C-q> <Cmd>cpfile<CR>
@@ -117,10 +121,10 @@ nnoremap yp <Cmd>call setreg(v:register, expand("%:p"))<CR>
 noremap ' `
 noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
 noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
-noremap =P P=']
-noremap =gP gPmz'[=']`z
-noremap =gp gpmz'[=']`z
-noremap =p p=']
+vnoremap =P P=']
+vnoremap =gP gPmz'[=']`z
+vnoremap =gp gpmz'[=']`z
+vnoremap =p p=']
 
 map <Space>P "+P
 map <Space>Y "+Y
