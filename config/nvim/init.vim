@@ -136,18 +136,30 @@ vnoremap =gP gPmz'[=']`z
 vnoremap =gp gpmz'[=']`z
 vnoremap =p p=']
 
+nnoremap s :'{,'}s\<<C-r><C-w>\>g<Left><Left>
+vnoremap & <Esc><Cmd>'<,'>&<CR>
+vnoremap g& <Esc><Cmd>'<,'>&&<CR>
+vnoremap s "zy:'{,'}s<C-r>zg<Left><Left>
+
 map <Space>P "+P
 map <Space>Y "+Y
 map <Space>p "+p
 map <Space>y "+y
 nnoremap <Space> <Nop>
-nnoremap <Space><Space> :'{,'}s;<C-r><C-w>;;g<Left><Left>
+nnoremap <Space>; <Cmd>Telescope lsp_workspace_diagnostics<CR>
+nnoremap <Space>? <Cmd>exe "e" v:lua.vim.lsp.get_log_path()<CR>
+nnoremap <Space>S <Cmd>Telescope lsp_workspace_symbols<CR>
+nnoremap <Space>] <Cmd>Telescope lsp_definitions<CR>
+nnoremap <Space>a <Cmd>lua require'jdtls'.code_action()<CR>
 nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>f <Cmd>Telescope find_files<CR>
 nnoremap <Space>g <Cmd>Telescope git_files<CR>
 nnoremap <Space>h <Cmd>Telescope oldfiles<CR>
+nnoremap <Space>i <Cmd>Telescope lsp_implementations<CR>
 nnoremap <Space>j :tag<Space>/
 nnoremap <Space>q <Cmd>q<CR>
+nnoremap <Space>r <Cmd>Telescope lsp_references<CR>
+nnoremap <Space>s <Cmd>lua vim.lsp.buf.rename()<CR>
 
 nnoremap m, #NcgN
 nnoremap m; *Ncgn
@@ -174,17 +186,6 @@ tnoremap <M-c> <M-c>
 tnoremap <M-h> <M-h>
 
 nnoremap z/ <Cmd>lua require('telescope.builtin').current_buffer_fuzzy_find{previewer=false}<CR>
-
-noremap s <Nop>
-noremap sL <Cmd>Telescope lsp_workspace_diagnostics<CR>
-noremap s] <Cmd>Telescope lsp_definitions<CR>
-noremap sa <Cmd>lua require'jdtls'.code_action()<CR>
-noremap sc <Cmd>lua vim.lsp.buf.rename()<CR>
-noremap sd <Cmd>lua vim.lsp.buf.declaration()<CR>
-noremap si <Cmd>Telescope lsp_implementations<CR>
-noremap sl <Cmd>exe "e" v:lua.vim.lsp.get_log_path()<CR>
-noremap sr <Cmd>Telescope lsp_references<CR>
-noremap ss <Cmd>Telescope lsp_workspace_symbols<CR>
 
 nnoremap <expr> <M-[> '<Cmd>tabmove -' . v:count1 . '<CR>'
 nnoremap <expr> <M-]> '<Cmd>tabmove +' . v:count1 . '<CR>'
