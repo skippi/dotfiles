@@ -2,6 +2,7 @@ let g:surround_13 = "\n\r\n"
 let g:surround_indent = 1
 let g:user_emmet_leader_key = '<C-j>'
 let g:vsnip_snippet_dir = stdpath('config') . '/vsnip'
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'AndrewRadev/splitjoin.vim'
@@ -26,10 +27,17 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-vinegar'
 Plug 'wellle/targets.vim'
+Plug 'unblevable/quick-scope'
 " Language
 Plug 'MTDL9/vim-log-highlighting'
 Plug 'pprovost/vim-ps1'
 call plug#end()
+
+aug qs_colors
+  au!
+  au ColorScheme * hi! link QuickScopePrimary ErrorMsg
+  au ColorScheme * hi! link QuickScopeSecondary SignColumn
+aug END
 
 silent! colorscheme codedark
 
