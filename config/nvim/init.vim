@@ -136,10 +136,10 @@ vnoremap =gP gPmz'[=']`z
 vnoremap =gp gpmz'[=']`z
 vnoremap =p p=']
 
-nnoremap s :'{,'}s\<<C-r><C-w>\>g<Left><Left>
+nnoremap s :'{,'}s\M\<<C-r><C-w>\>g<C-f>2hi
 vnoremap & <Esc><Cmd>'<,'>&<CR>
 vnoremap g& <Esc><Cmd>'<,'>&&<CR>
-vnoremap s "zy:'{,'}s<C-r>zg<Left><Left>
+vnoremap s "zy:'{,'}s\M<C-r>zg<C-f>2hi
 
 map <Space>P "+P
 map <Space>Y "+Y
@@ -199,6 +199,11 @@ imap <expr> <S-Tab> <SID>imapstab()
 imap <expr> <Tab> <SID>imaptab()
 smap <expr> <S-Tab> <SID>imapstab()
 smap <expr> <Tab> <SID>imaptab()
+aug tabcmdwin
+  au!
+  au CmdwinEnter * inoremap <buffer><expr> <Tab> <SID>imaptab()
+        \ | inoremap <buffer><expr> <S-Tab> <SID>imapstab()
+aug END
 
 inoremap <expr> <C-e> compe#close('<C-e>')
 inoremap <expr> <CR> compe#confirm('<CR>')
@@ -207,6 +212,7 @@ imap <expr> <C-_> pumvisible() ? "\<C-e>\<C-f>" : "\<C-x><C-f>"
 imap <expr> <C-l> pumvisible() ? "\<C-e>\<C-l>" : "\<C-x><C-l>"
 smap <expr> <C-_> pumvisible() ? "\<C-e>\<C-f>" : "\<C-x><C-f>"
 smap <expr> <C-l> pumvisible() ? "\<C-e>\<C-l>" : "\<C-x><C-l>"
+imap <expr> <C-v> pumvisible() ? "\<C-e>\<C-v>" : "\<C-x><C-v>"
 
 noremap <expr> <C-L>
       \ (v:count ? '<Cmd>edit<CR>' : '')
