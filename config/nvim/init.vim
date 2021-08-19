@@ -195,6 +195,9 @@ nnoremap '# <Cmd>sil exe "sp " stdpath('config') . '/after/syntax/' . &filetype 
 nnoremap '$ <Cmd>sil exe "sp " stdpath('config') . '/init.vim'<CR>
 nnoremap '@ <Cmd>sil exe "sp " stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'<CR>
 
+for key in ["<Left>", "<Right>", "<C-Left>", "<C-Right>"]
+  exe "inoremap" key "<C-g>U" . key
+endfor
 imap <expr> <S-Tab> <SID>imapstab()
 imap <expr> <Tab> <SID>imaptab()
 smap <expr> <S-Tab> <SID>imapstab()
