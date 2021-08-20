@@ -136,10 +136,10 @@ vnoremap =gP gPmz'[=']`z
 vnoremap =gp gpmz'[=']`z
 vnoremap =p p=']
 
-nnoremap s :'{,'}s\M\<<C-r><C-w>\>g<C-f>2hi
+nnoremap s :'{,'}s\M\<<C-r><C-w>\>g<Left><Left>
 vnoremap & <Esc><Cmd>'<,'>&<CR>
 vnoremap g& <Esc><Cmd>'<,'>&&<CR>
-vnoremap s "zy:'{,'}s\M<C-r>zg<C-f>2hi
+vnoremap s "zy:'{,'}s\M<C-r>zg<Left><Left>
 
 map <Space>P "+P
 map <Space>Y "+Y
