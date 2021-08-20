@@ -215,7 +215,6 @@ imap <expr> <C-_> pumvisible() ? "\<C-e>\<C-f>" : "\<C-x><C-f>"
 imap <expr> <C-l> pumvisible() ? "\<C-e>\<C-l>" : "\<C-x><C-l>"
 smap <expr> <C-_> pumvisible() ? "\<C-e>\<C-f>" : "\<C-x><C-f>"
 smap <expr> <C-l> pumvisible() ? "\<C-e>\<C-l>" : "\<C-x><C-l>"
-imap <expr> <C-v> pumvisible() ? "\<C-e>\<C-v>" : "\<C-x><C-v>"
 
 noremap <expr> <C-L>
       \ (v:count ? '<Cmd>edit<CR>' : '')
