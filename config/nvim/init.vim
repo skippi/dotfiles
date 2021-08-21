@@ -202,11 +202,6 @@ imap <expr> <S-Tab> <SID>imapstab()
 imap <expr> <Tab> <SID>imaptab()
 smap <expr> <S-Tab> <SID>imapstab()
 smap <expr> <Tab> <SID>imaptab()
-aug tabcmdwin
-  au!
-  au CmdwinEnter * inoremap <buffer><expr> <Tab> <SID>imaptab()
-        \ | inoremap <buffer><expr> <S-Tab> <SID>imapstab()
-aug END
 
 inoremap <expr> <C-e> compe#close('<C-e>')
 inoremap <expr> <CR> compe#confirm('<CR>')
