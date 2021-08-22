@@ -136,11 +136,6 @@ vnoremap =gP gPmz'[=']`z
 vnoremap =gp gpmz'[=']`z
 vnoremap =p p=']
 
-nnoremap s :'{,'}s\M\<<C-r><C-w>\>g<Left><Left>
-vnoremap & <Esc><Cmd>'<,'>&<CR>
-vnoremap g& <Esc><Cmd>'<,'>&&<CR>
-vnoremap s "zy:'{,'}s\M<C-r>zg<Left><Left>
-
 map <Space>P "+P
 map <Space>Y "+Y
 map <Space>p "+p
@@ -161,31 +156,42 @@ nnoremap <Space>q <Cmd>q<CR>
 nnoremap <Space>r <Cmd>Telescope lsp_references<CR>
 nnoremap <Space>s <Cmd>lua vim.lsp.buf.rename()<CR>
 
-nnoremap m, #NcgN
-nnoremap m; *Ncgn
-vnoremap m, "zy?\V<C-R>=escape(@z,'/\')<CR><CR>NcgN
-vnoremap m; "zy/\V<C-R>=escape(@z,'/\')<CR><CR>Ncgn
+noremap gh ^
+noremap gl g_
 
+" windows
 nmap gw <C-w>
-nnoremap g! <Cmd>lua require("skippi.picker").pkill{}<CR>
-nnoremap g. <Cmd>Gvdiffsplit<CR>
+
+" search and replace
+nnoremap <Space><Space> :'{,'}s\M\<<C-r><C-w>\>g<Left><Left>
+xnoremap <Space><Space> "zy:'{,'}s\M<C-r>zg<Left><Left>
+xnoremap & <Esc><Cmd>'<,'>&<CR>
+xnoremap g& <Esc><Cmd>'<,'>&&<CR>
+nnoremap m, #NcgN
+xnoremap m, "zy?\V<C-R>=escape(@z,'/\')<CR><CR>NcgN
+nnoremap m; *Ncgn
+xnoremap m; "zy/\V<C-R>=escape(@z,'/\')<CR><CR>Ncgn
+nnoremap z/ <Cmd>lua require('telescope.builtin').current_buffer_fuzzy_find{previewer=false}<CR>
 nnoremap g/ :call util#grep_with_tagstack('""')<Left><Left><Left>
 nnoremap g<C-_> :call util#grep_with_tagstack('"" --iglob *.<C-r>=expand('%:e')<CR>')<C-b><C-Right><C-Right><Left>
 nnoremap g<C-s> <Cmd>call util#grep_with_tagstack('\b' . escape(expand('<cword>'), '%#"') . '\b --iglob *.' . expand('%:e'))<CR>
+nnoremap gs <Cmd>call util#grep_with_tagstack('\b' . escape(expand('<cword>'), '%#"') . '\b')<CR>
+xnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>
+
+" git
+nnoremap g. <Cmd>Gvdiffsplit<CR>
 nnoremap g<CR> <Cmd>G<CR>
 nnoremap g<Space> :G<Space>
 nnoremap gL <Cmd>G log --first-parent<CR>
 nnoremap gb <Cmd>G blame<CR>
-nnoremap gs <Cmd>call util#grep_with_tagstack('\b' . escape(expand('<cword>'), '%#"') . '\b')<CR>
-noremap gh ^
-noremap gl g_
-vnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>
+
+" operating system
+nnoremap _ <Cmd>sil !explorer "%:p:h"<CR>
+nnoremap g! <Cmd>lua require("skippi.picker").pkill{}<CR>
 
 " PSReadLine bug
 tnoremap <M-c> <M-c>
 tnoremap <M-h> <M-h>
-
-nnoremap z/ <Cmd>lua require('telescope.builtin').current_buffer_fuzzy_find{previewer=false}<CR>
 
 nnoremap <expr> <M-[> '<Cmd>tabmove -' . v:count1 . '<CR>'
 nnoremap <expr> <M-]> '<Cmd>tabmove +' . v:count1 . '<CR>'
