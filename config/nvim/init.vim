@@ -131,10 +131,6 @@ noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
 noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
 noremap [n <Cmd>for _ in range(v:count1)<CR>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "bsW")<CR>endfor<CR>
 noremap ]n <Cmd>for _ in range(v:count1)<CR>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "sW")<CR>endfor<CR>
-vnoremap =P P=']
-vnoremap =gP gPmz'[=']`z
-vnoremap =gp gpmz'[=']`z
-vnoremap =p p=']
 
 map <Space>P "+P
 map <Space>Y "+Y
