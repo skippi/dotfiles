@@ -93,6 +93,15 @@ if has('win32')
   nnoremap <C-z> <Nop>
 endif
 
+func s:edit_file_by_index(index) abort
+  let dir = expand("%:h")
+  if !isdirectory(dir) | return | endif
+  let files = readdir(dir, { f -> !isdirectory(dir . '/' . f) })
+  let idx = a:index >= 0 ? a:index - 1 : len(files) - a:index
+  let idx = min([max([idx, 0]), len(files) - 1])
+  exe "edit" dir . '/' . get(files, idx)
+endfunc
+
 func s:edit_file_by_offset(offset) abort
   let dir = expand("%:h")
   if !isdirectory(dir) | return | endif
@@ -117,12 +126,10 @@ nnoremap Q <Cmd>call util#toggleqf()<CR>
 nnoremap Y y$
 nnoremap [<C-q> <Cmd>cpfile<CR>
 nnoremap [<M-q> <Cmd>exe "sil!uns colder" v:count1<CR>
-nnoremap [f <Cmd>call <SID>edit_file_by_offset(-v:count1)<CR>
 nnoremap [q <Cmd>cprev<CR>
 nnoremap [t <Cmd>tprev<CR>
 nnoremap ]<C-q> <Cmd>cnfile<CR>
 nnoremap ]<M-q> <Cmd>exe "sil!uns cnewer" v:count1<CR>
-nnoremap ]f <Cmd>call <SID>edit_file_by_offset(v:count1)<CR>
 nnoremap ]q <Cmd>cnext<CR>
 nnoremap ]t <Cmd>tnext<CR>
 nnoremap yp <Cmd>call setreg(v:register, expand("%:p"))<CR>
@@ -184,6 +191,10 @@ nnoremap gb <Cmd>G blame<CR>
 " operating system
 nnoremap _ <Cmd>sil !explorer "%:p:h"<CR>
 nnoremap g! <Cmd>lua require("skippi.picker").pkill{}<CR>
+nnoremap [F <Cmd>call <SID>edit_file_by_index(v:count1)<CR>
+nnoremap ]F <Cmd>call <SID>edit_file_by_index(-v:count1)<CR>
+nnoremap [f <Cmd>call <SID>edit_file_by_offset(-v:count1)<CR>
+nnoremap ]f <Cmd>call <SID>edit_file_by_offset(v:count1)<CR>
 
 " PSReadLine bug
 tnoremap <M-c> <M-c>
