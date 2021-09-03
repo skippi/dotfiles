@@ -1,6 +1,7 @@
 let g:surround_13 = "\n\r\n"
 let g:surround_indent = 1
-let g:user_emmet_leader_key = '<C-j>'
+let g:user_emmet_mode = 'nv'
+let g:user_emmet_leader_key = 'm.'
 let g:vsnip_snippet_dir = stdpath('config') . '/vsnip'
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
