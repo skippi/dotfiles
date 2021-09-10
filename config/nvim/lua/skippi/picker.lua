@@ -9,6 +9,16 @@ local previewers = require('telescope.previewers')
 
 local M = {}
 
+local function echoerr(msg)
+  vim.cmd('echohl ErrorMsg')
+  vim.cmd('echomsg "' .. msg .. '"')
+  vim.cmd('echohl None')
+end
+
+local function trim(s)
+  return s:gsub('^%s*(.-)%s*$', '%1')
+end
+
 local function getprocitems()
   local output = vim.fn.system("tasklist /fo csv /nh")
   local results = {}
@@ -109,64 +119,53 @@ function M.jdtls_ui_picker(items, prompt, label_fn, cb)
 end
 
 function M.tselect(opts)
-  local displayer = entry_display.create{
-    separator = " │ ",
-    items = {
-      { width = 22 },
-      { remaining = true },
-    },
-  }
-  local make_display = function(entry)
-    return displayer{
-      vim.fn.pathshorten(entry.filename),
-      entry.ordinal,
-    }
-  end
-  local entry_maker = function(item)
-    if item.cmd == '' or item.cmd:sub(1, 1) == '!' then
-      return nil
-    end
-    scode = item.cmd:sub(2, item.cmd:len() - 1)
-    ordinal = scode:sub(2, scode:len() - 1)
-    ordinal = ordinal:gsub('^%s*(.-)%s*$', '%1')
-    return {
-      valid = true,
-      ordinal = ordinal,
-      display = make_display,
-      name = item.name,
-      filename = item.filename,
-      scode = scode,
-      lnum = 1,
-    }
-  end
-  local tagstack = vim.fn.gettagstack()
-  if #tagstack.items == 0 then
-    vim.cmd('echohl ErrorMsg')
-    vim.cmd('echomsg "E73: tag stack empty"')
-    vim.cmd('echohl None')
+  local stack = vim.fn.gettagstack()
+  local item = stack.items[stack.curidx - 1]
+  if not item then
+    echoerr("E73: tag stack empty")
     return
   end
-  local tagname = opts.tagname or tagstack.items[tagstack.curidx - 1].tagname
-  local tagexpr 
-  if tagname:find('^/') ~= nil then
-    tagexpr = tagname:sub(2)
-  else
-    tagexpr = '\\c^' .. tagname .. '$'
+  local tagexpr = '\\c^' .. item.tagname .. '$'
+  if item.tagname:find('^/') ~= nil then
+    tagexpr = item.tagname:sub(2)
   end
-  local results = assert(vim.fn.taglist(tagexpr), vim.fn.bufname())
+  local results = vim.fn.taglist(tagexpr)
   if #results == 0 then
-    vim.cmd("echohl ErrorMsg")
-    vim.cmd('echomsg "E492: tag not found: ' .. tagname .. '"')
-    vim.cmd("echohl None")
+    echoerr('E492: tag not found: ' .. item.tagname)
     return
   end
   pickers.new(opts, {
     prompt = 'Tags',
     finder = finders.new_table {
       results = results,
-      entry_maker = entry_maker,
+      entry_maker = function(item)
+        if item.cmd == '' or item.cmd:sub(1, 1) == '!' then
+          return nil
+        end
+        local scode = item.cmd:sub(2, item.cmd:len() - 1)
+        return {
+          valid = true,
+          ordinal = trim(scode:sub(2, scode:len() - 1)),
+          display = function(entry)
+            local displayer = entry_display.create{
+              separator = " | ",
+              items = {
+                { width = 22 },
+                { remaining = true },
+              },
+            }
+            return displayer{
+              vim.fn.pathshorten(entry.filename),
+              entry.ordinal,
+            }
+          end,
+          name = item.name,
+          filename = item.filename,
+          scode = scode,
+          lnum = 1,
+        }
+      end,
     },
-    previewer = previewers.ctags.new(opts),
     sorter = conf.generic_sorter(opts),
     attach_mappings = function()
       action_set.select:enhance {
