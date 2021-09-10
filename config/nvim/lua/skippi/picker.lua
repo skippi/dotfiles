@@ -143,9 +143,11 @@ function M.tselect(opts)
           return nil
         end
         local scode = item.cmd:sub(2, item.cmd:len() - 1)
+        local value = trim(scode:sub(2, scode:len() - 1))
         return {
           valid = true,
-          ordinal = trim(scode:sub(2, scode:len() - 1)),
+          ordinal = value .. ' ' .. item.filename,
+          value = value,
           display = function(entry)
             local displayer = entry_display.create{
               separator = " | ",
