@@ -11,8 +11,11 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
-Plug 'hrsh7th/nvim-compe'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/nvim-cmp'
 Plug 'mattn/emmet-vim'
 Plug 'mfussenegger/nvim-dap'
 Plug 'mfussenegger/nvim-jdtls'
@@ -212,13 +215,6 @@ nnoremap '@ <Cmd>sil exe "sp " stdpath('config') . '/after/ftplugin/' . &filetyp
 for key in ["<Left>", "<Right>", "<C-Left>", "<C-Right>"]
   exe "inoremap" key "<C-g>U" . key
 endfor
-imap <expr> <S-Tab> <SID>imapstab()
-imap <expr> <Tab> <SID>imaptab()
-smap <expr> <S-Tab> <SID>imapstab()
-smap <expr> <Tab> <SID>imaptab()
-
-inoremap <expr> <C-e> compe#close('<C-e>')
-inoremap <expr> <CR> compe#confirm('<CR>')
 
 imap <expr> <C-_> pumvisible() ? "\<C-e>\<C-f>" : "\<C-x><C-f>"
 imap <expr> <C-l> pumvisible() ? "\<C-e>\<C-l>" : "\<C-x><C-l>"
@@ -243,17 +239,6 @@ function! s:choose_ins_complete_key(rev) abort
   else
     return a:rev ? "\<C-p>" : "\<C-n>"
   endif
-endfunction
-
-function! s:imaptab() abort
-  if pumvisible() | return <SID>choose_ins_complete_key(0) | endif
-  if vsnip#available(1) | return "\<Plug>(vsnip-expand-or-jump)" | endif
-  return "\<Tab>"
-endfunction
-
-function! s:imapstab() abort
-  if pumvisible() | return <SID>choose_ins_complete_key(1) | endif
-  return "\<S-Tab>"
 endfunction
 
 func! s:jump_to_next_match(forward) abort
@@ -337,16 +322,28 @@ dap.configurations.python = {
 EOF
 
 lua << EOF
-require('compe').setup{
-  source_timeout = 100,
-  throttle_time = 20,
-  source = {
-    buffer = true,
-    calc = true,
-    nvim_lsp = true,
-    nvim_lua = true,
-    path = true,
-    vsnip = true,
+local cmp = require('cmp')
+cmp.setup{
+  snippet = {
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = {
+    ['<CR>'] = cmp.mapping.confirm{ select = true },
+    ['<Tab>'] = cmp.mapping.confirm{ select = true },
+    ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+    ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+    ['<C-y>'] = cmp.config.disable,
+    ['<C-e>'] = cmp.mapping({
+      i = cmp.mapping.abort(),
+      c = cmp.mapping.close(),
+    }),
+  },
+  sources = cmp.config.sources{
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
+    { name = 'buffer' },
   },
 }
 EOF
