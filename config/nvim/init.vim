@@ -332,8 +332,9 @@ cmp.setup{
     end,
   },
   mapping = {
-    ['<CR>'] = cmp.mapping.confirm{ select = true },
-    ['<Tab>'] = cmp.mapping.confirm{ select = true },
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i' }),
+    ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i' }),
     ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
     ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
     ['<C-y>'] = cmp.config.disable,
