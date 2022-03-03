@@ -14,6 +14,7 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/cmp-path'
+Plug 'quangnguyen30192/cmp-nvim-tags'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
@@ -338,6 +339,7 @@ cmp.setup{
   },
   sources = cmp.config.sources{
     { name = 'nvim_lsp' },
+    { name = 'tags' },
     { name = 'vsnip' },
     { name = 'buffer' },
   },
