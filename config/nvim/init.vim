@@ -33,17 +33,10 @@ Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-vinegar'
 Plug 'wellle/targets.vim'
-Plug 'unblevable/quick-scope'
 " Language
 Plug 'MTDL9/vim-log-highlighting'
 Plug 'pprovost/vim-ps1'
 call plug#end()
-
-aug qs_colors
-  au!
-  au ColorScheme * hi! link QuickScopePrimary ErrorMsg
-  au ColorScheme * hi! link QuickScopeSecondary SignColumn
-aug END
 
 silent! colorscheme codedark
 
