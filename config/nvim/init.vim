@@ -12,7 +12,7 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/cmp-cmdline', { 'commit': '0ca73c3a50b72c2ca168d8904b39aba34d0c4227' }
+Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-vsnip'
@@ -353,10 +353,11 @@ cmp.setup.cmdline('?', {
   }
 })
 cmp.setup.cmdline(':', {
-  sources = cmp.config.sources{
-    { name = 'cmdline' },
-    { name = 'path' },
-  }
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline', keyword_pattern=[=[[^[:blank:]\!]*]=]}
+  })
 })
 EOF
 
