@@ -92,15 +92,6 @@ if has('win32')
   nnoremap <C-z> <Nop>
 endif
 
-func s:edit_file_by_index(index) abort
-  let dir = expand("%:h")
-  if !isdirectory(dir) | return | endif
-  let files = readdir(dir, { f -> !isdirectory(dir . '/' . f) })
-  let idx = a:index >= 0 ? a:index - 1 : len(files) - a:index
-  let idx = min([max([idx, 0]), len(files) - 1])
-  exe "edit" dir . '/' . get(files, idx)
-endfunc
-
 func s:edit_file_by_offset(offset) abort
   let dir = expand("%:h")
   if !isdirectory(dir) | return | endif
@@ -189,8 +180,6 @@ nnoremap gb <Cmd>G blame<CR>
 " operating system
 nnoremap _ <Cmd>sil !explorer "%:p:h"<CR>
 nnoremap g! <Cmd>lua require("skippi.picker").pkill{}<CR>
-nnoremap [F <Cmd>call <SID>edit_file_by_index(v:count1)<CR>
-nnoremap ]F <Cmd>call <SID>edit_file_by_index(-v:count1)<CR>
 nnoremap [f <Cmd>call <SID>edit_file_by_offset(-v:count1)<CR>
 nnoremap ]f <Cmd>call <SID>edit_file_by_offset(v:count1)<CR>
 
