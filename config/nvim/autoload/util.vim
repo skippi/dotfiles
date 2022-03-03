@@ -31,14 +31,3 @@ function! util#grep_with_tagstack(query) abort
         \ {'items': [{'bufnr': pos[0], 'tagname': a:query, 'from': pos}]},
         \ 'a')
 endfunction
-
-function! util#toggleqf() abort
-  let tabnr = tabpagenr()
-  let windows = filter(getwininfo(), 'v:val.quickfix && v:val.tabnr == tabnr')
-  if empty(windows) && !empty(getqflist())
-    cwindow
-    wincmd p
-  else
-    cclose
-  endif
-endfunction

@@ -122,7 +122,6 @@ nnoremap =P P=']
 nnoremap =gP gPmz'[=']`z
 nnoremap =gp gpmz'[=']`z
 nnoremap =p p=']
-nnoremap Q <Cmd>call util#toggleqf()<CR>
 nnoremap Y y$
 nnoremap [<C-q> <Cmd>cpfile<CR>
 nnoremap [<M-q> <Cmd>exe "sil!uns colder" v:count1<CR>
