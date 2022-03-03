@@ -20,7 +20,6 @@ Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'mattn/emmet-vim'
-Plug 'mfussenegger/nvim-dap'
 Plug 'mfussenegger/nvim-jdtls'
 Plug 'neovim/nvim-lspconfig'
 Plug 'tomasiser/vim-code-dark'
@@ -298,22 +297,6 @@ lua << EOF
 require'lspconfig'.dartls.setup{capabilities=require("skippi.lsp").capabilities}
 require'lspconfig'.pyright.setup{capabilities=require("skippi.lsp").capabilities}
 require'lspconfig'.vimls.setup{capabilities=require("skippi.lsp").capabilities}
-EOF
-
-lua << EOF
-local dap = require'dap'
-dap.adapters.python = {
-  type = 'executable';
-  command = 'python';
-  args = { '-m', 'debugpy.adapter' };
-}
-dap.configurations.python = {
-  {
-    type = 'python';
-    request = 'launch';
-    name = 'launch';
-  }
-}
 EOF
 
 lua << EOF
