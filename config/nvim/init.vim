@@ -248,7 +248,7 @@ command! TrimWS %s/\s\+$//e
 aug general
   au!
   au TextChanged,InsertLeave * nested
-        \ if &readonly == 0 && filereadable(bufname('%')) | call <SID>buf_update_lockmarks() | endif
+        \ if &readonly == 0 && filereadable(bufname('%')) && &ft !~ "gitcommit" | call <SID>buf_update_lockmarks() | endif
   au FocusGained,BufEnter * silent! checktime
   au BufReadPost *
         \ if line("'\"") > 0 && line("'\"") <= line("$") && &ft !~# 'commit'|
