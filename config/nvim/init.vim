@@ -297,7 +297,14 @@ cmp.setup{
     end,
   },
   mapping = {
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<CR>'] = function(fallback)
+      if cmp.visible() and cmp.get_selected_entry() ~= nil then
+        cmp.confirm({ select = true })
+      else
+        cmp.close()
+        fallback()
+      end
+    end,
     ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i' }),
     ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i' }),
     ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
