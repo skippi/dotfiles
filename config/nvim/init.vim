@@ -322,6 +322,8 @@ require('gitsigns').setup{
       end
       gs.reset_hunk()
     end)
+    map('v', 'dO', gs.reset_buffer)
+    map('v', 'dP', gs.stage_buffer)
     map('v', '<C-p>', ':Gitsigns stage_hunk<CR>')
     map('v', '<C-o>', ':Gitsigns reset_hunk<CR>')
     map('n', 'du', gs.undo_stage_hunk)
