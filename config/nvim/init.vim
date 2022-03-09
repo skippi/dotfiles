@@ -11,6 +11,7 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-cmdline'
@@ -136,7 +137,7 @@ nnoremap <Space>; <Cmd>Telescope lsp_workspace_diagnostics<CR>
 nnoremap <Space>? <Cmd>exe "e" v:lua.vim.lsp.get_log_path()<CR>
 nnoremap <Space>S <Cmd>Telescope lsp_workspace_symbols<CR>
 nnoremap <Space>] <Cmd>Telescope lsp_definitions<CR>
-nnoremap <Space>a <Cmd>lua require'jdtls'.code_action()<CR>
+nnoremap <Space>a <Cmd>Telescope lsp_code_actions<CR>
 nnoremap <Space>d <Cmd>Kwbd<CR>
 nnoremap <Space>f <Cmd>Telescope find_files<CR>
 nnoremap <Space>g <Cmd>Telescope git_files<CR>
@@ -334,6 +335,15 @@ lua << EOF
 require'lspconfig'.dartls.setup{capabilities=require("skippi.lsp").capabilities}
 require'lspconfig'.pyright.setup{capabilities=require("skippi.lsp").capabilities}
 require'lspconfig'.vimls.setup{capabilities=require("skippi.lsp").capabilities}
+require('null-ls').setup{
+  sources = {
+    require('null-ls').builtins.code_actions.gitsigns,
+    require('null-ls').builtins.diagnostics.cppcheck,
+    require('null-ls').builtins.diagnostics.gitlint,
+    require('null-ls').builtins.diagnostics.mypy,
+    require('null-ls').builtins.formatting.stylua,
+  }
+}
 EOF
 
 lua << EOF
