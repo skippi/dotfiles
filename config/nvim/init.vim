@@ -47,6 +47,7 @@ set fileformats=unix,dos
 set foldlevelstart=99
 set foldmethod=indent
 set grepprg=rg\ --smart-case\ --follow\ --hidden\ --vimgrep\ --glob\ !.git
+set grepformat=%f:%l:%c:%m,%f:%l:%m
 set hidden
 set ignorecase
 set inccommand=nosplit
