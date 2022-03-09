@@ -11,6 +11,7 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'lewis6991/gitsigns.nvim'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/cmp-path'
@@ -37,8 +38,6 @@ Plug 'wellle/targets.vim'
 Plug 'MTDL9/vim-log-highlighting'
 Plug 'pprovost/vim-ps1'
 call plug#end()
-
-silent! colorscheme codedark
 
 set cmdwinheight=7
 set completeopt=menuone,noselect
@@ -258,7 +257,7 @@ aug general
   autocmd BufLeave * call util#mark_file_context()
 aug END
 
-func s:buf_update_lockmarks() abort
+func! s:buf_update_lockmarks() abort
   let marks = [getpos("'["), getpos("']")]
   try
     sil update
@@ -281,6 +280,55 @@ augroup lsp
   autocmd FileType java lua require'jdtls'.start_or_attach{cmd={'jdtls.bat'},
         \ capabilities=require("skippi.lsp").capabilities}
 augroup END
+
+augroup colors
+  autocmd!
+  autocmd ColorScheme * hi GitSignsAdd guifg=#5D7D20
+        \ | hi GitSignsChange guifg=#37718C
+        \ | hi GitSignsDelete guifg=#95161B
+augroup END
+
+lua << EOF
+require('gitsigns').setup{
+  signs = {
+    add = { hl='GitSignsAdd', text="┃" },
+    change = { hl='GitSignsChange', text='┃' },
+    delete = { hl='GitSignsDelete', text='┃' },
+    topdelete = { hl='GitSignsDelete', text='┃' },
+    changedelete = { hl='GitSignsChange', text = '┃' },
+  },
+  on_attach = function(bufnr)
+    local gs = package.loaded.gitsigns
+    local map = function(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
+    map('n', ']c', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", {expr=true})
+    map('n', '[c', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", {expr=true})
+    map('n', 'dp', function()
+      local diff = vim.api.nvim_win_get_option(0, 'diff')
+      if diff then
+        vim.fn.feedkeys('dp')
+        return
+      end
+      gs.stage_hunk()
+    end)
+    map('n', 'do', function()
+      local diff = vim.api.nvim_win_get_option(0, 'diff')
+      if diff then
+        vim.fn.feedkeys('do')
+        return
+      end
+      gs.reset_hunk()
+    end)
+    map('v', '<C-p>', ':Gitsigns stage_hunk<CR>')
+    map('v', '<C-o>', ':Gitsigns reset_hunk<CR>')
+    map('n', 'du', gs.undo_stage_hunk)
+    map('n', 'dy', gs.preview_hunk)
+  end
+}
+EOF
 
 lua << EOF
 require'lspconfig'.dartls.setup{capabilities=require("skippi.lsp").capabilities}
@@ -377,3 +425,5 @@ inoremap [<CR> [<CR>]<Esc>O
 inoremap {<CR> {<CR>}<Esc>O
 
 call targets#mappings#extend({'r': {'pair': [{'o':'[', 'c':']'}]}})
+
+silent! colorscheme codedark
