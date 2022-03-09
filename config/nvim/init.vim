@@ -234,11 +234,11 @@ func! s:jump_to_next_match(forward) abort
   endif
 endfunc
 
-command! Ecode sil exe "!code -nwg" expand("%:p") . ":" . line('.') . ":" . col('.') "."
-command! Eidea sil exe "!idea64" expand("%:p") . ":" . line('.')
-command! Emacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') bufname("%")
+command! EditCode sil exe "!code -nwg" expand("%:p") . ":" . line('.') . ":" . col('.') "."
+command! EditIdea sil exe "!idea64" expand("%:p") . ":" . line('.')
+command! EditEmacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') bufname("%")
 command! -nargs=1 -complete=dir Files lua require('telescope.builtin').find_files{search_dirs={<q-args>}}
-command! Hitest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
+command! HighlightTest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! JdtCompile lua require'jdtls'.compile()
 command! JdtUpdateConfig lua require'jdtls'.update_project_config()
 command! -bang Kwbd call kwbd#run(<bang>0)
