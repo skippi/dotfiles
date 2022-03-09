@@ -188,6 +188,7 @@ return require('packer').startup(function(use)
   })
   use({
     'mfussenegger/nvim-jdtls',
+    ft='java',
     config=function()
       require('jdtls.ui').pick_one_async = require('skippi.picker').jdtls_ui_picker
     end
@@ -203,6 +204,7 @@ return require('packer').startup(function(use)
   use('AndrewRadev/splitjoin.vim')
   use({
     'mattn/emmet-vim',
+    ft = {'html', 'xml'},
     setup=function()
       vim.g.user_emmet_leader_key = 'm.'
       vim.g.user_emmet_mode = 'nv'
