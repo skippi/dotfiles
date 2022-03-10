@@ -41,6 +41,7 @@ return require('packer').startup(function(use)
     config=function()
       local nls = require('null-ls')
       nls.setup({
+        on_attach = require('skippi.lsp').on_attach,
         sources = {
           nls.builtins.code_actions.gitsigns,
           nls.builtins.diagnostics.cppcheck.with({
@@ -189,9 +190,11 @@ return require('packer').startup(function(use)
           'documentation',
         }
       }
-      lsc.dartls.setup({capabilities=cap})
-      lsc.pyright.setup({capabilities=cap})
-      lsc.vimls.setup({capabilities=cap})
+      local opts = {capabilities=cap, on_attach=require('skippi.lsp').on_attach}
+      lsc.dartls.setup(opts)
+      lsc.pyright.setup(opts)
+      lsc.tsserver.setup(opts)
+      lsc.vimls.setup(opts)
     end
   })
   use({
