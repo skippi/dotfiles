@@ -26,6 +26,9 @@ set updatetime=100
 set wildcharm=<C-z>
 set wildmode=list:full
 
+set shiftwidth=2
+set tabstop=2
+
 if has('win32')
   set shellcmdflag=/s\ /v\ /c
 endif
