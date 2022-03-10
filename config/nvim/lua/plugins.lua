@@ -113,7 +113,7 @@ return require('packer').startup(function(use)
           vim.g.vsnip_snippet_dir = vim.fn.stdpath('config') .. '/vsnip'
         end
       },
-      {'quangnguyen30192/cmp-nvim-tags', opt=true}
+      {'quangnguyen30192/cmp-nvim-tags'}
     },
     config=function()
       local cmp = require('cmp')
