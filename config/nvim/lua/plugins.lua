@@ -46,8 +46,14 @@ return require('packer').startup(function(use)
           nls.builtins.diagnostics.cppcheck.with({
             extra_args = {"--language=c++"}
           }),
+          nls.builtins.diagnostics.eslint_d.with({
+            prefer_local = "node_modules/.bin",
+          }),
           nls.builtins.diagnostics.gitlint,
           nls.builtins.diagnostics.mypy,
+          nls.builtins.formatting.prettier.with({
+            prefer_local = "node_modules/.bin",
+          }),
           nls.builtins.formatting.stylua,
         }
       })
@@ -206,7 +212,6 @@ return require('packer').startup(function(use)
   use('AndrewRadev/splitjoin.vim')
   use({
     'mattn/emmet-vim',
-    ft = {'html', 'xml'},
     setup=function()
       vim.g.user_emmet_leader_key = 'm.'
       vim.g.user_emmet_mode = 'nv'
@@ -230,6 +235,15 @@ return require('packer').startup(function(use)
 
   -- UI
   use('tomasiser/vim-code-dark')
+  use({
+    'MaxMEllon/vim-jsx-pretty',
+    ft={
+      'javascript',
+      'javascriptreact',
+      'typescript',
+      'typescriptreact',
+    },
+  })
   use({'MTDL9/vim-log-highlighting', ft='log'})
   use({'pprovost/vim-ps1', ft='ps1'})
 
