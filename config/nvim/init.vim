@@ -151,10 +151,10 @@ tnoremap <M-h> <M-h>
 nnoremap <expr> <M-[> '<Cmd>tabmove -' . v:count1 . '<CR>'
 nnoremap <expr> <M-]> '<Cmd>tabmove +' . v:count1 . '<CR>'
 
-nnoremap '<Tab> <Cmd>sil exe "sp " stdpath('config') . '/after/indent/' . &filetype . '.vim'<CR>
-nnoremap '# <Cmd>sil exe "sp " stdpath('config') . '/after/syntax/' . &filetype . '.vim'<CR>
-nnoremap '$ <Cmd>sil exe "sp " stdpath('config') . '/init.vim'<CR>
-nnoremap '@ <Cmd>sil exe "sp " stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'<CR>
+nnoremap '<Tab> <Cmd>sil exe "e " stdpath('config') . '/after/indent/' . &filetype . '.vim'<CR>
+nnoremap '# <Cmd>sil exe "e " stdpath('config') . '/after/syntax/' . &filetype . '.vim'<CR>
+nnoremap '$ <Cmd>sil exe "e " stdpath('config') . '/init.vim'<CR>
+nnoremap '@ <Cmd>sil exe "e " stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'<CR>
 
 for key in ["<Left>", "<Right>", "<C-Left>", "<C-Right>"]
   exe "inoremap" key "<C-g>U" . key
