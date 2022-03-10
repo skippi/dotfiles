@@ -43,7 +43,9 @@ return require('packer').startup(function(use)
       nls.setup({
         sources = {
           nls.builtins.code_actions.gitsigns,
-          nls.builtins.diagnostics.cppcheck,
+          nls.builtins.diagnostics.cppcheck.with({
+            extra_args = {"--language=c++"}
+          }),
           nls.builtins.diagnostics.gitlint,
           nls.builtins.diagnostics.mypy,
           nls.builtins.formatting.stylua,
