@@ -233,6 +233,12 @@ return require("packer").startup(function(use)
 			vim.g.user_emmet_mode = "nv"
 		end,
 	})
+	use({
+		"lewis6991/impatient.nvim",
+		config = function()
+			require('impatient')
+		end
+	})
 	use("tpope/vim-commentary")
 	use("tpope/vim-eunuch")
 	use("tpope/vim-fugitive")

@@ -1,3 +1,5 @@
+let g:do_filetype_lua = 1
+
 lua require('plugins')
 
 set cmdwinheight=7
