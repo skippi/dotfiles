@@ -199,7 +199,14 @@ return require("packer").startup(function(use)
 			local opts = { capabilities = cap, on_attach = require("skippi.lsp").on_attach }
 			lsc.dartls.setup(opts)
 			lsc.pyright.setup(opts)
-			lsc.tsserver.setup(opts)
+			lsc.tsserver.setup({
+				capabilities = cap,
+				on_attach = function(client, bufnr)
+					client.resolved_capabilities.document_formatting = false
+					client.resolved_capabilities.document_range_formatting = false
+					require("skippi.lsp").on_attach(client, bufnr)
+				end,
+			})
 			lsc.vimls.setup(opts)
 		end,
 	})
