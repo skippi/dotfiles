@@ -234,12 +234,7 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use("lukas-reineke/indent-blankline.nvim")
-	use({
-		"lewis6991/impatient.nvim",
-		config = function()
-			require('impatient')
-		end
-	})
+	use("lewis6991/impatient.nvim")
 	use("tpope/vim-commentary")
 	use("tpope/vim-eunuch")
 	use("tpope/vim-fugitive")
