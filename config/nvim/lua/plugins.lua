@@ -233,6 +233,7 @@ return require("packer").startup(function(use)
 			vim.g.user_emmet_mode = "nv"
 		end,
 	})
+	use("lukas-reineke/indent-blankline.nvim")
 	use({
 		"lewis6991/impatient.nvim",
 		config = function()
