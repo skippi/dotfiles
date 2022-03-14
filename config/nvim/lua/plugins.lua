@@ -183,7 +183,10 @@ return require("packer").startup(function(use)
 	})
 	use({
 		"neovim/nvim-lspconfig",
-		requires = { { "hrsh7th/cmp-nvim-lsp" } },
+		requires = {
+			"hrsh7th/cmp-nvim-lsp",
+			{ "jose-elias-alvarez/nvim-lsp-ts-utils", requires = "nvim-lua/plenary.nvim" },
+		},
 		config = function()
 			local lsc = require("lspconfig")
 			local cap = vim.lsp.protocol.make_client_capabilities()
@@ -199,9 +202,13 @@ return require("packer").startup(function(use)
 			local opts = { capabilities = cap, on_attach = require("skippi.lsp").on_attach }
 			lsc.dartls.setup(opts)
 			lsc.pyright.setup(opts)
+			local ts_utils = require("nvim-lsp-ts-utils")
 			lsc.tsserver.setup({
+				init_options = ts_utils.init_options,
 				capabilities = cap,
 				on_attach = function(client, bufnr)
+					ts_utils.setup({ auto_inlay_hints = false })
+					ts_utils.setup_client(client)
 					client.resolved_capabilities.document_formatting = false
 					client.resolved_capabilities.document_range_formatting = false
 					require("skippi.lsp").on_attach(client, bufnr)
@@ -301,6 +308,21 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use("tpope/vim-vinegar")
+	use({
+		"windwp/nvim-ts-autotag",
+		requires = { "nvim-treesitter/nvim-treesitter" },
+		ft = {
+			"html",
+			"xml",
+			"javascript",
+			"javascriptreact",
+			"typescript",
+			"typescriptreact",
+		},
+		config = function()
+			require("nvim-ts-autotag").setup()
+		end,
+	})
 
 	-- UI
 	use("tomasiser/vim-code-dark")
