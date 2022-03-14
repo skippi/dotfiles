@@ -235,6 +235,24 @@ return require("packer").startup(function(use)
 	})
 	use("lukas-reineke/indent-blankline.nvim")
 	use("lewis6991/impatient.nvim")
+	use({
+		"nvim-treesitter/nvim-treesitter",
+		config = function()
+			require("nvim-treesitter.configs").setup({
+				ensure_installed = "maintained",
+				highlight = { enable = true },
+				incremental_selection = {
+					enable = true,
+					keymaps = {
+						init_selection = "<M-l>",
+						node_incremental = "<M-l>",
+						scope_incremental = "<M-;>",
+						node_decremental = "<M-h>",
+					},
+				},
+			})
+		end,
+	})
 	use("tpope/vim-abolish")
 	use("tpope/vim-commentary")
 	use("tpope/vim-eunuch")

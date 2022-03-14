@@ -9,7 +9,8 @@ set completeslash=slash
 set fileformat=unix
 set fileformats=unix,dos
 set foldlevelstart=99
-set foldmethod=indent
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
 set grepprg=rg\ --smart-case\ --follow\ --hidden\ --vimgrep\ --glob\ !.git
 set grepformat=%f:%l:%c:%m,%f:%l:%m
 set hidden
