@@ -263,9 +263,4 @@ for tabnr in range(1, 9)
   exe 'tnoremap <M-' . tabnr . '> <C-\><C-n>' . tabnr . 'gt'
 endfor
 
-inoremap {; {<CR>};<Esc>O
-inoremap (<CR> (<CR>)<Esc>O
-inoremap [<CR> [<CR>]<Esc>O
-inoremap {<CR> {<CR>}<Esc>O
-
 silent! colorscheme codedark
