@@ -47,7 +47,14 @@ return require("packer").startup(function(use)
 		config = function()
 			local nls = require("null-ls")
 			nls.setup({
-				on_attach = require("skippi.lsp").on_attach,
+				on_attach = function(client, bufnr)
+					local map = function(mode, key, cmd, opts)
+						opts = opts or {}
+						opts.buffer = bufnr
+						vim.keymap.set(mode, key, cmd, opts)
+					end
+					map("n", "=d", vim.lsp.buf.formatting)
+				end,
 				sources = {
 					nls.builtins.code_actions.gitsigns,
 					nls.builtins.diagnostics.cppcheck.with({
@@ -199,7 +206,19 @@ return require("packer").startup(function(use)
 					"documentation",
 				},
 			}
-			local opts = { capabilities = cap, on_attach = require("skippi.lsp").on_attach }
+			local function on_attach(client, bufnr)
+				local map = function(mode, key, cmd, opts)
+					opts = opts or {}
+					opts.buffer = bufnr
+					vim.keymap.set(mode, key, cmd, opts)
+				end
+				map("n", "gd", function()
+					vim.fn.setreg("/", vim.fn.expand("<cword>"))
+					vim.lsp.buf.definition()
+				end)
+				map({ "n", "v", "i" }, "<C-k>", vim.lsp.buf.signature_help)
+			end
+			local opts = { capabilities = cap, on_attach = on_attach }
 			lsc.dartls.setup(opts)
 			lsc.pyright.setup(opts)
 			local ts_utils = require("nvim-lsp-ts-utils")
@@ -211,7 +230,7 @@ return require("packer").startup(function(use)
 					ts_utils.setup_client(client)
 					client.resolved_capabilities.document_formatting = false
 					client.resolved_capabilities.document_range_formatting = false
-					require("skippi.lsp").on_attach(client, bufnr)
+					on_attach(client, bufnr)
 				end,
 			})
 			lsc.vimls.setup(opts)
