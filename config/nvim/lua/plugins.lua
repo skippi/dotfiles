@@ -296,10 +296,7 @@ return require("packer").startup(function(use)
 	use("tpope/vim-obsession")
 	use("tpope/vim-projectionist")
 	use("tpope/vim-repeat")
-	use({
-		"tpope/vim-sleuth",
-		commit = "e726df55a669f02699b7ac396011315370752f4e",
-	})
+	use("tpope/vim-sleuth")
 	use({
 		"tpope/vim-surround",
 		config = function()
