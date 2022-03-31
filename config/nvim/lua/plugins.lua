@@ -308,7 +308,7 @@ return require("packer").startup(function(use)
 			require("nvim-autopairs").setup({})
 		end,
 	})
-	use("tpope/vim-abolish")
+	use("skippi/vim-abolish")
 	use("tpope/vim-commentary")
 	use("tpope/vim-eunuch")
 	use("tpope/vim-fugitive")
