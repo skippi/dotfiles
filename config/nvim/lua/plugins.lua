@@ -125,6 +125,7 @@ return require("packer").startup(function(use)
 			{ "hrsh7th/cmp-buffer" },
 			{ "hrsh7th/cmp-cmdline" },
 			{ "hrsh7th/cmp-nvim-lsp" },
+			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
 			{ "hrsh7th/cmp-path" },
 			{ "hrsh7th/cmp-vsnip" },
 			{
@@ -163,6 +164,7 @@ return require("packer").startup(function(use)
 					}),
 				},
 				sources = cmp.config.sources({
+					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lsp" },
 					{ name = "tags" },
 					{ name = "vsnip" },
