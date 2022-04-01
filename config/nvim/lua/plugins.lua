@@ -224,11 +224,20 @@ return require("packer").startup(function(use)
 					opts.buffer = bufnr
 					vim.keymap.set(mode, key, cmd, opts)
 				end
-				map("n", "gd", function()
+				local builtin = require("telescope.builtin")
+				map("n", "<C-j>", builtin.lsp_dynamic_workspace_symbols)
+				map("n", "<C-k>", builtin.lsp_code_actions)
+				map("n", "K", vim.lsp.buf.hover)
+				map("n", "cm", vim.lsp.buf.rename)
+				map({ "n", "v" }, "gd", function()
 					vim.fn.setreg("/", vim.fn.expand("<cword>"))
-					vim.lsp.buf.definition()
+					builtin.lsp_definitions()
 				end)
-				map({ "n", "v", "i" }, "<C-k>", vim.lsp.buf.signature_help)
+				map("n", "gr", function()
+					vim.fn.setreg("/", vim.fn.expand("<cword>"))
+					builtin.lsp_references()
+				end)
+				map("n", "m?", builtin.diagnostics)
 			end
 			local opts = { capabilities = cap, on_attach = on_attach }
 			lsc.dartls.setup(opts)

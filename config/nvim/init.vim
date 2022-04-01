@@ -98,17 +98,10 @@ map <Space>Y "+Y
 map <Space>p "+p
 map <Space>y "+y
 nnoremap <Space> <Nop>
-nnoremap <Space>; <Cmd>Telescope lsp_workspace_diagnostics<CR>
 nnoremap <Space>? <Cmd>exe "e" v:lua.vim.lsp.get_log_path()<CR>
-nnoremap <Space>S <Cmd>Telescope lsp_workspace_symbols<CR>
-nnoremap <Space>] <Cmd>Telescope lsp_definitions<CR>
-nnoremap <Space>a <Cmd>Telescope lsp_code_actions<CR>
 nnoremap <Space>d <Cmd>Kwbd<CR>
-nnoremap <Space>i <Cmd>Telescope lsp_implementations<CR>
 nnoremap <Space>j :tag<Space>/
 nnoremap <Space>q <Cmd>q<CR>
-nnoremap <Space>r <Cmd>Telescope lsp_references<CR>
-nnoremap <Space>s <Cmd>lua vim.lsp.buf.rename()<CR>
 
 noremap gh ^
 noremap gl g_
