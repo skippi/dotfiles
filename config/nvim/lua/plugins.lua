@@ -16,7 +16,7 @@ return require("packer").startup(function(use)
 	use({
 		"nvim-telescope/telescope.nvim",
 		requires = {
-			{ "nvim-lua/plenary.nvim" },
+			{ "nvim-lua/plenary.nvim", commit = "0d660152000a40d52158c155625865da2aa7aa1b" },
 			{ "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
 		},
 		config = function()
