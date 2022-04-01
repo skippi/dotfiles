@@ -73,9 +73,6 @@ func s:edit_file_by_offset(offset) abort
 endfunc
 
 nnoremap <BS> <C-^>
-nnoremap <C-p> <Cmd>Telescope commands<CR>
-nnoremap <C-q> <Cmd>Telescope quickfix<CR>
-nnoremap <C-s> <Cmd>lua require('skippi.picker').tselect{}<CR>
 nnoremap =P P=']
 nnoremap =gP gPmz'[=']`z
 nnoremap =gp gpmz'[=']`z
@@ -107,9 +104,6 @@ nnoremap <Space>S <Cmd>Telescope lsp_workspace_symbols<CR>
 nnoremap <Space>] <Cmd>Telescope lsp_definitions<CR>
 nnoremap <Space>a <Cmd>Telescope lsp_code_actions<CR>
 nnoremap <Space>d <Cmd>Kwbd<CR>
-nnoremap <Space>f <Cmd>Telescope find_files<CR>
-nnoremap <Space>g <Cmd>Telescope git_files<CR>
-nnoremap <Space>h <Cmd>Telescope oldfiles<CR>
 nnoremap <Space>i <Cmd>Telescope lsp_implementations<CR>
 nnoremap <Space>j :tag<Space>/
 nnoremap <Space>q <Cmd>q<CR>
@@ -131,7 +125,6 @@ nnoremap m, #NcgN
 xnoremap m, "zy?\V<C-R>=escape(@z,'/\')<CR><CR>NcgN
 nnoremap m; *Ncgn
 xnoremap m; "zy/\V<C-R>=escape(@z,'/\')<CR><CR>Ncgn
-nnoremap z/ <Cmd>lua require('telescope.builtin').current_buffer_fuzzy_find{previewer=false}<CR>
 nnoremap g/ :call util#grep_with_tagstack('""')<Left><Left><Left>
 nnoremap g<C-_> :call util#grep_with_tagstack('"" --iglob *.<C-r>=expand('%:e')<CR>')<C-b><C-Right><C-Right><Left>
 nnoremap g<C-s> <Cmd>call util#grep_with_tagstack('\b' . escape(expand('<cword>'), '%#"') . '\b --iglob *.' . expand('%:e'))<CR>

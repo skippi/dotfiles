@@ -40,6 +40,15 @@ return require("packer").startup(function(use)
 				},
 			})
 			require("telescope").load_extension("fzf")
+			local builtin = require("telescope.builtin")
+			vim.keymap.set("n", "<C-q>", builtin.quickfix)
+			vim.keymap.set("n", "<C-s>", require("skippi.picker").tselect)
+			vim.keymap.set("n", "<Space>f", builtin.find_files)
+			vim.keymap.set("n", "<Space>g", builtin.git_files)
+			vim.keymap.set("n", "<Space>h", builtin.oldfiles)
+			vim.keymap.set("n", "z/", function()
+				builtin.current_buffer_fuzzy_find({ previewer = false })
+			end)
 		end,
 	})
 	use({
