@@ -124,16 +124,8 @@ nnoremap g<C-s> <Cmd>call util#grep_with_tagstack('\b' . escape(expand('<cword>'
 nnoremap gs <Cmd>call util#grep_with_tagstack('\b' . escape(expand('<cword>'), '%#"') . '\b')<CR>
 xnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>
 
-" git
-nnoremap g. <Cmd>Gvdiffsplit<CR>
-nnoremap g<CR> <Cmd>G<CR>
-nnoremap g<Space> :G<Space>
-nnoremap gL <Cmd>G log --first-parent<CR>
-nnoremap gb <Cmd>G blame<CR>
-
 " operating system
 nnoremap _ <Cmd>sil !explorer "%:p:h"<CR>
-nnoremap g! <Cmd>lua require("skippi.picker").pkill{}<CR>
 nnoremap [f <Cmd>call <SID>edit_file_by_offset(-v:count1)<CR>
 nnoremap ]f <Cmd>call <SID>edit_file_by_offset(v:count1)<CR>
 
@@ -154,9 +146,7 @@ for key in ["<Left>", "<Right>", "<C-Left>", "<C-Right>"]
 endfor
 
 imap <expr> <C-_> pumvisible() ? "\<C-e>\<C-f>" : "\<C-x><C-f>"
-imap <expr> <C-l> pumvisible() ? "\<C-e>\<C-l>" : "\<C-x><C-l>"
 smap <expr> <C-_> pumvisible() ? "\<C-e>\<C-f>" : "\<C-x><C-f>"
-smap <expr> <C-l> pumvisible() ? "\<C-e>\<C-l>" : "\<C-x><C-l>"
 
 noremap <expr> <C-L>
       \ (v:count ? '<Cmd>edit<CR>' : '')
@@ -191,10 +181,7 @@ endfunc
 command! EditCode sil exe "!code -nwg" expand("%:p") . ":" . line('.') . ":" . col('.') "."
 command! EditIdea sil exe "!idea64" expand("%:p") . ":" . line('.')
 command! EditEmacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') bufname("%")
-command! -nargs=1 -complete=dir Files lua require('telescope.builtin').find_files{search_dirs={<q-args>}}
 command! HighlightTest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
-command! JdtCompile lua require'jdtls'.compile()
-command! JdtUpdateConfig lua require'jdtls'.update_project_config()
 command! -bang Kwbd call kwbd#run(<bang>0)
 command! Scratch sp +enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 command! TrimWS %s/\s\+$//e

@@ -30,6 +30,9 @@ return require("packer").startup(function(use)
 							["<C-r><C-a>"] = require("skippi.actions").insert_cWORD,
 						},
 					},
+					cache_picker = {
+						num_pickers = 10,
+					},
 				},
 				extensions = {
 					fzf = {
@@ -41,11 +44,15 @@ return require("packer").startup(function(use)
 			})
 			require("telescope").load_extension("fzf")
 			local builtin = require("telescope.builtin")
+			vim.keymap.set("n", "g!", require("skippi.picker").pkill)
 			vim.keymap.set("n", "<C-q>", builtin.quickfix)
 			vim.keymap.set("n", "<C-s>", require("skippi.picker").tselect)
+			vim.keymap.set("n", "<Space>F", ":lua require('telescope.builtin').fd{cwd=''}<Left><Left>")
 			vim.keymap.set("n", "<Space>f", builtin.find_files)
 			vim.keymap.set("n", "<Space>g", builtin.git_files)
 			vim.keymap.set("n", "<Space>h", builtin.oldfiles)
+			vim.keymap.set("n", "m.", builtin.resume)
+			vim.keymap.set("n", "m>", builtin.pickers)
 			vim.keymap.set("n", "z/", function()
 				builtin.current_buffer_fuzzy_find({ previewer = false })
 			end)
@@ -120,8 +127,8 @@ return require("packer").startup(function(use)
 					end)
 					map("n", "dO", gs.reset_buffer)
 					map("n", "dP", gs.stage_buffer)
-					map("v", "<C-p>", ":Gitsigns stage_hunk<CR>")
-					map("v", "<C-o>", ":Gitsigns reset_hunk<CR>")
+					map("v", "<M-d>p", ":Gitsigns stage_hunk<CR>")
+					map("v", "<M-d>o", ":Gitsigns reset_hunk<CR>")
 					map("n", "du", gs.undo_stage_hunk)
 					map("n", "dy", gs.preview_hunk)
 				end,
@@ -208,16 +215,7 @@ return require("packer").startup(function(use)
 		},
 		config = function()
 			local lsc = require("lspconfig")
-			local cap = vim.lsp.protocol.make_client_capabilities()
-			cap = require("cmp_nvim_lsp").update_capabilities(cap)
-			cap.textDocument.completion.completionItem.snippetSupport = true
-			cap.textDocument.completion.completionItem.resolveSupport = {
-				properties = {
-					"additionalTextEdits",
-					"detail",
-					"documentation",
-				},
-			}
+			local cap = require("skippi.lsp").capabilities
 			local function on_attach(client, bufnr)
 				local map = function(mode, key, cmd, opts)
 					opts = opts or {}
@@ -262,6 +260,17 @@ return require("packer").startup(function(use)
 		ft = "java",
 		config = function()
 			require("jdtls.ui").pick_one_async = require("skippi.picker").jdtls_ui_picker
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = "java",
+				callback = function()
+					require("jdtls").start_or_attach({
+						cmd = { "jdtls.bat" },
+						capabilities = require("skippi.lsp").capabilities,
+					})
+				end,
+			})
+			vim.api.nvim_add_user_command("JdtCompile", require("jdtls").compile, { force = true })
+			vim.api.nvim_add_user_command("JdtUpdateConfig", require("jdtls").update_project_config, { force = true })
 		end,
 	})
 	use({
@@ -276,7 +285,7 @@ return require("packer").startup(function(use)
 	use({
 		"mattn/emmet-vim",
 		setup = function()
-			vim.g.user_emmet_leader_key = "m."
+			vim.g.user_emmet_leader_key = "<Space>e"
 			vim.g.user_emmet_mode = "nv"
 		end,
 	})
@@ -332,7 +341,16 @@ return require("packer").startup(function(use)
 	use("skippi/vim-abolish")
 	use("tpope/vim-commentary")
 	use("tpope/vim-eunuch")
-	use("tpope/vim-fugitive")
+	use({
+		"tpope/vim-fugitive",
+		config = function()
+			vim.keymap.set("n", "g.", "<Cmd>Gvdiffsplit<CR>")
+			vim.keymap.set("n", "g<CR>", "<Cmd>G<CR>")
+			vim.keymap.set("n", "g<Space>", ":G<Space>")
+			vim.keymap.set("n", "gL", "<Cmd>G log --first-parent<CR>")
+			vim.keymap.set("n", "gb", "<Cmd>G blame<CR>")
+		end,
+	})
 	use("tpope/vim-obsession")
 	use("tpope/vim-projectionist")
 	use("tpope/vim-repeat")
