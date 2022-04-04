@@ -208,6 +208,17 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use({
+		"kosayoda/nvim-lightbulb",
+		config = function()
+			require("nvim-lightbulb").setup({})
+			vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+				callback = function()
+					require("nvim-lightbulb").update_lightbulb()
+				end
+			})
+		end,
+	})
+	use({
 		"neovim/nvim-lspconfig",
 		requires = {
 			"hrsh7th/cmp-nvim-lsp",
