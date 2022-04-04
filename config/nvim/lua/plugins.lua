@@ -72,7 +72,6 @@ return require("packer").startup(function(use)
 					map("n", "=d", vim.lsp.buf.formatting)
 				end,
 				sources = {
-					nls.builtins.code_actions.gitsigns,
 					nls.builtins.diagnostics.cppcheck.with({
 						extra_args = { "--language=c++" },
 					}),
