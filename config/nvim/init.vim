@@ -39,7 +39,7 @@ endif
 
 set statusline=
 set statusline+=%(\ %{toupper(mode(0))}%)
-set statusline+=%(\ @%{fugitive#head()}%)
+set statusline+=%(\ @%{FugitiveHead()}%)
 set statusline+=%(\ %<%f%)
 set statusline+=\ %h%m%r%w
 set statusline+=%=
