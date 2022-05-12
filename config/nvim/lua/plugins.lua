@@ -170,8 +170,8 @@ return require("packer").startup(function(use)
 							fallback()
 						end
 					end,
-					["<Tab>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i" }),
-					["<S-Tab>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i" }),
+					["<Tab>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
+					["<S-Tab>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
 					["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
 					["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
 					["<C-y>"] = cmp.config.disable,
