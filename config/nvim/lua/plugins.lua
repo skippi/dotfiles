@@ -18,6 +18,7 @@ return require("packer").startup(function(use)
 		requires = {
 			{ "nvim-lua/plenary.nvim" },
 			{ "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
+			{ "nvim-telescope/telescope-ui-select.nvim" },
 		},
 		config = function()
 			require("telescope").setup({
@@ -43,6 +44,7 @@ return require("packer").startup(function(use)
 				},
 			})
 			require("telescope").load_extension("fzf")
+			require("telescope").load_extension("ui-select")
 			local builtin = require("telescope.builtin")
 			vim.keymap.set("n", "g!", require("skippi.picker").pkill)
 			vim.keymap.set("n", "<C-q>", builtin.quickfix)
