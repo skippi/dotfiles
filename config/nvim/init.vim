@@ -2,6 +2,7 @@ let g:do_filetype_lua = 1
 
 lua require('impatient')
 lua require('plugins')
+lua require('init')
 
 set cmdwinheight=7
 set completeopt=menuone,noselect
@@ -52,14 +53,6 @@ set wildignore+=*/.elixir_ls/*
 set wildignore+=*/node_modules/*
 set wildignore+=Session.vim
 
-" windows <BS> fix
-nmap <C-h> <BS>
-
-" disable <C-z> win32 memory leak
-if has('win32')
-  nnoremap <C-z> <Nop>
-endif
-
 func s:edit_file_by_offset(offset) abort
   let dir = expand("%:h")
   if !isdirectory(dir) | return | endif
@@ -72,12 +65,10 @@ func s:edit_file_by_offset(offset) abort
   exe "edit" dir . '/' . get(files, idx)
 endfunc
 
-nnoremap <BS> <C-^>
 nnoremap =P P=']
 nnoremap =gP gPmz'[=']`z
 nnoremap =gp gpmz'[=']`z
 nnoremap =p p=']
-nnoremap Y y$
 nnoremap [<C-q> <Cmd>cpfile<CR>
 nnoremap [<M-q> <Cmd>exe "sil!uns colder" v:count1<CR>
 nnoremap [q <Cmd>cprev<CR>
@@ -86,46 +77,18 @@ nnoremap ]<C-q> <Cmd>cnfile<CR>
 nnoremap ]<M-q> <Cmd>exe "sil!uns cnewer" v:count1<CR>
 nnoremap ]q <Cmd>cnext<CR>
 nnoremap ]t <Cmd>tnext<CR>
-nnoremap yp <Cmd>call setreg(v:register, expand("%:p"))<CR>
-noremap ' `
 noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
 noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
 noremap [n <Cmd>for _ in range(v:count1)<CR>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "bsW")<CR>endfor<CR>
 noremap ]n <Cmd>for _ in range(v:count1)<CR>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "sW")<CR>endfor<CR>
-
-map <Space>P "+P
-map <Space>Y "+Y
-map <Space>p "+p
-map <Space>y "+y
-nnoremap <Space> <Nop>
-nnoremap <Space>? <Cmd>exe "e" v:lua.vim.lsp.get_log_path()<CR>
-nnoremap <Space>d <Cmd>Kwbd<CR>
-nnoremap <Space>j :tag<Space>/
-nnoremap <Space>q <Cmd>q<CR>
-
-noremap gh ^
-noremap gl g_
-
-" windows
-nmap gw <C-w>
 
 " search and replace
 nnoremap <Space><Space> :'{,'}s\M\<<C-r><C-w>\>g<Left><Left>
 xnoremap <Space><Space> "zy:'{,'}s\M<C-r>zg<Left><Left>
 xnoremap & <Esc><Cmd>'<,'>&<CR>
 xnoremap g& <Esc><Cmd>'<,'>&&<CR>
-nnoremap m, #NcgN
-xnoremap m, "zy?\V<C-R>=escape(@z,'/\')<CR><CR>NcgN
-nnoremap m; *Ncgn
-xnoremap m; "zy/\V<C-R>=escape(@z,'/\')<CR><CR>Ncgn
-nnoremap g/ :call util#grep_with_tagstack('""')<Left><Left><Left>
-nnoremap g<C-_> :call util#grep_with_tagstack('"" --iglob *.<C-r>=expand('%:e')<CR>')<C-b><C-Right><C-Right><Left>
-nnoremap g<C-s> <Cmd>call util#grep_with_tagstack('\b' . escape(expand('<cword>'), '%#"') . '\b --iglob *.' . expand('%:e'))<CR>
-nnoremap gs <Cmd>call util#grep_with_tagstack('\b' . escape(expand('<cword>'), '%#"') . '\b')<CR>
-xnoremap gs <Esc><Cmd>call util#grepfunc(visualmode(), 1)<CR>
 
 " operating system
-nnoremap _ <Cmd>sil !explorer "%:p:h"<CR>
 nnoremap [f <Cmd>call <SID>edit_file_by_offset(-v:count1)<CR>
 nnoremap ]f <Cmd>call <SID>edit_file_by_offset(v:count1)<CR>
 
