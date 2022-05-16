@@ -234,7 +234,7 @@ return require("packer").startup(function(use)
 				end
 				local builtin = require("telescope.builtin")
 				map("n", "<C-j>", builtin.lsp_dynamic_workspace_symbols)
-				map("n", "<C-k>", builtin.lsp_code_actions)
+				map("n", "<C-k>", vim.lsp.buf.code_action)
 				map("n", "K", vim.lsp.buf.hover)
 				map("n", "cm", vim.lsp.buf.rename)
 				map({ "n", "v" }, "gd", function()
@@ -245,7 +245,12 @@ return require("packer").startup(function(use)
 					vim.fn.setreg("/", vim.fn.expand("<cword>"))
 					builtin.lsp_references()
 				end)
-				map("n", "m?", builtin.diagnostics)
+				map("n", "m?", function()
+					builtin.diagnostics({
+						previewer = false,
+						wrap_results = true,
+					})
+				end)
 			end
 			local opts = { capabilities = cap, on_attach = on_attach }
 			lsc.dartls.setup(opts)
