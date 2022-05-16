@@ -223,6 +223,7 @@ return require("packer").startup(function(use)
 			{ "jose-elias-alvarez/nvim-lsp-ts-utils", requires = "nvim-lua/plenary.nvim" },
 		},
 		config = function()
+			vim.api.nvim_create_user_command("EditLspLog", "edit " .. vim.lsp.get_log_path(), { force = true })
 			local lsc = require("lspconfig")
 			local cap = require("skippi.lsp").capabilities
 			local function on_attach(client, bufnr)
