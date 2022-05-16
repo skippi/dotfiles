@@ -353,6 +353,19 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use({
+		"andymass/vim-matchup",
+		requires = { "nvim-treesitter/nvim-treesitter" },
+		config = function()
+			vim.g.matchup_matchparen_enabled = 0
+			vim.g.matchup_matchparen_offscreen = {}
+			vim.g.matchup_surround_enabled = 1
+			vim.g.matchup_transmute_enabled = 0
+			require("nvim-treesitter.configs").setup({
+				matchup = { enable = true },
+			})
+		end,
+	})
+	use({
 		"windwp/nvim-autopairs",
 		config = function()
 			require("nvim-autopairs").setup({})
