@@ -325,6 +325,15 @@ return require("packer").startup(function(use)
 	})
 	use("lewis6991/impatient.nvim")
 	use({
+		"folke/trouble.nvim",
+		config = function()
+			require("trouble").setup({
+				icons = false,
+			})
+			vim.keymap.set("n", "<Space>t", ":Trouble<CR>")
+		end,
+	})
+	use({
 		"nvim-treesitter/nvim-treesitter",
 		config = function()
 			require("nvim-treesitter.configs").setup({
