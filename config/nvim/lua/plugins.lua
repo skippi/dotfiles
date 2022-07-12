@@ -132,6 +132,7 @@ return require("packer").startup(function(use)
 					map("v", "<M-d>o", ":Gitsigns reset_hunk<CR>")
 					map("n", "du", gs.undo_stage_hunk)
 					map("n", "dy", gs.preview_hunk)
+					map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
 				end,
 			})
 		end,
