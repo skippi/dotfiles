@@ -217,6 +217,21 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use({
+		'kevinhwang91/nvim-ufo',
+		requires = 'kevinhwang91/promise-async',
+		config = function()
+			vim.o.foldcolumn = '1'
+			vim.o.foldlevel = 99
+			vim.o.foldlevelstart = -1
+			vim.o.foldenable = true
+			vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
+			vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+			require("ufo").setup({
+				open_fold_hl_timeout = 0,
+			})
+		end,
+	})
+	use({
 		"neovim/nvim-lspconfig",
 		requires = {
 			"hrsh7th/cmp-nvim-lsp",
@@ -340,7 +355,7 @@ return require("packer").startup(function(use)
 			require("trouble").setup({
 				icons = false,
 			})
-			vim.keymap.set("n", "<Space>t", ":Trouble<CR>")
+			vim.keymap.set("n", "<Space>t", ":TroubleToggle<CR>")
 		end,
 	})
 	use({
