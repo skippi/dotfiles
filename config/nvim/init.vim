@@ -4,37 +4,6 @@ lua require('impatient')
 lua require('plugins')
 lua require('init')
 
-set cmdwinheight=7
-set completeopt=menuone,noselect
-set completeslash=slash
-set fileformat=unix
-set fileformats=unix,dos
-set grepprg=rg\ --smart-case\ --follow\ --hidden\ --vimgrep\ --glob\ !.git
-set grepformat=%f:%l:%c:%m,%f:%l:%m
-set hidden
-set ignorecase
-set inccommand=nosplit
-set mouse=a
-set nojoinspaces
-set noruler
-set noswapfile
-set pumheight=10
-set shortmess+=c
-set smartcase
-set termguicolors
-set timeoutlen=500
-set undofile
-set updatetime=100
-set wildcharm=<C-z>
-set wildmode=list:full
-
-set shiftwidth=2
-set tabstop=2
-
-if has('win32')
-  set shellcmdflag=/s\ /v\ /c
-endif
-
 set statusline=
 set statusline+=%(\ %{toupper(mode(0))}%)
 set statusline+=%(\ @%{FugitiveHead()}%)
@@ -43,8 +12,6 @@ set statusline+=\ %h%m%r%w
 set statusline+=%=
 set statusline+=%([%n]%)
 set statusline+=%(%<\ [%{&ff}]\ %y\ %l:%c\ %p%%\ %)
-
-set path=,,**
 
 set wildignore+=*/.elixir_ls/*
 set wildignore+=*/node_modules/*

@@ -40,6 +40,38 @@ local function star_grep(pattern, args)
 	vim.cmd(grep_cmd)
 end
 
+vim.o.cmdwinheight = 7
+vim.o.completeopt = "menuone,noselect"
+vim.o.completeslash = "slash"
+vim.o.fileformat = "unix"
+vim.o.fileformats = "unix,dos"
+vim.o.grepformat = "%f:%l:%c:%m,%f:%l:%m"
+vim.o.grepprg = "rg --smart-case --follow --hidden --vimgrep --glob !.git"
+vim.o.hidden = true
+vim.o.ignorecase = true
+vim.o.inccommand = "nosplit"
+vim.o.joinspaces = false
+vim.o.mouse = "a"
+vim.o.path = ",,**"
+vim.o.pumheight = 10
+vim.o.ruler = false
+vim.o.shortmess = vim.o.shortmess .. "c"
+vim.o.smartcase = true
+vim.o.swapfile = false
+vim.o.termguicolors = true
+vim.o.timeoutlen = 500
+vim.o.undofile = true
+vim.o.updatetime = 100
+vim.o.wildcharm = vim.fn.char2nr(vim.api.nvim_replace_termcodes("<C-z>", true, true, true))
+vim.o.wildmode = "list:full"
+
+vim.o.shiftwidth = 2
+vim.o.tabstop = 2
+
+if vim.loop.os_uname().sysname == "win32" then
+	vim.o.shellcmdflag = "/s /v /c"
+end
+
 local map = vim.keymap.set
 
 map("", "'", "`")
@@ -82,5 +114,5 @@ map("v", "m,", [["zy?\V<C-R>=escape(@z,'/\')<CR><CR>NcgN]])
 map("v", "m;", [["zy/\V<C-R>=escape(@z,'/\')<CR><CR>Ncgn]])
 
 if vim.loop.os_uname().sysname == "win32" then
-	map("n", "C-z>", "<Nop>") -- disable <C-z> win32 memory leak
+	map("n", "<C-z>", "<Nop>") -- disable <C-z> win32 memory leak
 end
