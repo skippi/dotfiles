@@ -132,7 +132,7 @@ return require("packer").startup(function(use)
 					map("v", "<M-d>o", ":Gitsigns reset_hunk<CR>")
 					map("n", "du", gs.undo_stage_hunk)
 					map("n", "dy", gs.preview_hunk)
-					map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+					map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
 				end,
 			})
 		end,
@@ -218,17 +218,20 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use({
-		'kevinhwang91/nvim-ufo',
-		requires = 'kevinhwang91/promise-async',
+		"kevinhwang91/nvim-ufo",
+		requires = { "kevinhwang91/promise-async", "nvim-treesitter/nvim-treesitter" },
 		config = function()
 			-- vim.o.foldcolumn = '1'
 			vim.o.foldlevel = 99
 			vim.o.foldlevelstart = -1
 			vim.o.foldenable = true
-			vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
-			vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+			vim.keymap.set("n", "zR", require("ufo").openAllFolds)
+			vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
 			require("ufo").setup({
 				open_fold_hl_timeout = 0,
+				provider_selector = function(bufnr, filetype)
+					return { "treesitter", "indent" }
+				end,
 			})
 		end,
 	})
@@ -274,7 +277,7 @@ return require("packer").startup(function(use)
 			lsc.emmet_ls.setup({
 				on_attach = opts.on_attach,
 				capabilities = opts.capabilities,
-				filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'css', 'sass', 'scss', 'less' },
+				filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less" },
 			})
 			local ts_utils = require("nvim-lsp-ts-utils")
 			lsc.tsserver.setup({
