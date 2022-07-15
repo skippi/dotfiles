@@ -274,6 +274,7 @@ return require("packer").startup(function(use)
 			local opts = { capabilities = cap, on_attach = on_attach }
 			lsc.dartls.setup(opts)
 			lsc.pyright.setup(opts)
+			lsc.gopls.setup(opts)
 			lsc.emmet_ls.setup({
 				on_attach = opts.on_attach,
 				capabilities = opts.capabilities,
