@@ -162,23 +162,12 @@ return require("packer").startup(function(use)
 						vim.fn["vsnip#anonymous"](args.body)
 					end,
 				},
-				mapping = {
-					["<Tab>"] = cmp.mapping(cmp.mapping.confirm({ select = true }), { "i", "c" }),
-					["<Down>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
-					["<Up>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
-					["<C-j>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
-					["<C-k>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
-					["<C-n>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i" }),
-					["<C-p>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i" }),
-					["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-					["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
-					["<C-y>"] = cmp.config.disable,
-					["<C-l>"] = cmp.mapping(cmp.mapping.complete(), { "i" }),
-					["<C-e>"] = cmp.mapping({
-						i = cmp.mapping.abort(),
-						c = cmp.mapping.close(),
-					}),
-				},
+				mapping = cmp.mapping.preset.insert({
+					["<Tab>"] = cmp.mapping.confirm({ select = true }),
+					["<C-b>"] = cmp.mapping.scroll_docs(-4),
+					["<C-f>"] = cmp.mapping.scroll_docs(4),
+					["<C-l>"] = cmp.mapping.complete(),
+				}),
 				sources = cmp.config.sources({
 					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lsp" },
@@ -199,16 +188,19 @@ return require("packer").startup(function(use)
 				}),
 			})
 			cmp.setup.cmdline("/", {
+				mapping = cmp.mapping.preset.cmdline(),
 				sources = cmp.config.sources({
 					{ name = "buffer" },
 				}),
 			})
 			cmp.setup.cmdline("?", {
+				mapping = cmp.mapping.preset.cmdline(),
 				sources = cmp.config.sources({
 					{ name = "buffer" },
 				}),
 			})
 			cmp.setup.cmdline(":", {
+				mapping = cmp.mapping.preset.cmdline(),
 				sources = cmp.config.sources({
 					{ name = "path" },
 				}, {
