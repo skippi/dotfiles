@@ -77,28 +77,6 @@ noremap <expr> <C-L>
       \ . (has('diff') ? '<Cmd>diffupdate<CR>' : '')
       \ . '<Cmd>redraw<CR>'
 
-cnoremap <expr> <S-Tab> <SID>jump_to_next_match(0)
-cnoremap <expr> <Tab> <SID>jump_to_next_match(1)
-
-function! s:choose_ins_complete_key(rev) abort
-  let info = complete_info(['mode'])
-  if info.mode == 'keyword' || info.mode == ''
-    return a:rev ? "\<C-n>" : "\<C-p>"
-  else
-    return a:rev ? "\<C-p>" : "\<C-n>"
-  endif
-endfunction
-
-func! s:jump_to_next_match(forward) abort
-  if getcmdtype() == '/'
-    return a:forward ? "\<C-g>" : "\<C-t>"
-  elseif getcmdtype() == '?'
-    return a:forward ? "\<C-t>" : "\<C-g>"
-  else
-    return a:forward ? "\<C-z>" : "\<S-Tab>"
-  endif
-endfunc
-
 command! EditCode sil exe "!code -nwg" expand("%:p") . ":" . line('.') . ":" . col('.') "."
 command! EditIdea sil exe "!idea64" expand("%:p") . ":" . line('.')
 command! EditEmacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') bufname("%")
