@@ -61,7 +61,7 @@ vim.o.swapfile = false
 vim.o.termguicolors = true
 vim.o.timeoutlen = 500
 vim.o.undofile = true
-vim.o.updatetime = 100
+vim.o.updatetime = 500
 vim.o.wildcharm = vim.fn.char2nr(vim.api.nvim_replace_termcodes("<C-z>", true, true, true))
 vim.o.wildmode = "list:full"
 
@@ -125,3 +125,12 @@ end)
 if vim.loop.os_uname().sysname == "win32" then
 	map("n", "<C-z>", "<Nop>") -- disable <C-z> win32 memory leak
 end
+
+vim.api.nvim_create_autocmd({"BufEnter", "FocusGained", "CursorHold", "CursorHoldI" }, {
+	pattern = "*",
+	callback = function()
+		if vim.fn.mode() ~= "c" then
+			vim.cmd("silent! checktime")
+		end
+	end,
+})

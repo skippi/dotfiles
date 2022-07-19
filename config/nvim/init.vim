@@ -111,7 +111,6 @@ aug general
   au!
   au TextChanged,InsertLeave *
         \ if &readonly == 0 && filereadable(bufname('%')) && &ft !~ "gitcommit" | call <SID>buf_update_lockmarks() | endif
-  au FocusGained,BufEnter * silent! checktime
   au BufReadPost *
         \ if line("'\"") > 0 && line("'\"") <= line("$") && &ft !~# 'commit'|
         \   exe "normal! g`\""|
