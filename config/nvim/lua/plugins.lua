@@ -162,16 +162,13 @@ return require("packer").startup(function(use)
 					end,
 				},
 				mapping = {
-					["<CR>"] = function(fallback)
-						if cmp.visible() and cmp.get_selected_entry() ~= nil then
-							cmp.confirm({ select = true })
-						else
-							cmp.close()
-							fallback()
-						end
-					end,
-					["<Tab>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
-					["<S-Tab>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
+					["<Tab>"] = cmp.mapping(cmp.mapping.confirm({ select = true }), { "i", "c" }),
+					["<Down>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
+					["<Up>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
+					["<C-j>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
+					["<C-k>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
+					["<C-n>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i" }),
+					["<C-p>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i" }),
 					["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
 					["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
 					["<C-y>"] = cmp.config.disable,
