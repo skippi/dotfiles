@@ -29,10 +29,6 @@ func s:edit_file_by_offset(offset) abort
   exe "edit" dir . '/' . get(files, idx)
 endfunc
 
-nnoremap =P P=']
-nnoremap =gP gPmz'[=']`z
-nnoremap =gp gpmz'[=']`z
-nnoremap =p p=']
 nnoremap [<C-q> <Cmd>cpfile<CR>
 nnoremap [<M-q> <Cmd>exe "sil!uns colder" v:count1<CR>
 nnoremap [q <Cmd>cprev<CR>
@@ -81,8 +77,6 @@ noremap <expr> <C-L>
       \ . (has('diff') ? '<Cmd>diffupdate<CR>' : '')
       \ . '<Cmd>redraw<CR>'
 
-noremap! <C-r><C-d> <C-r>=expand("%:p:h")<CR>/
-noremap! <C-r><C-t> <C-r>=expand("%:t")<CR>
 cnoremap <expr> <S-Tab> <SID>jump_to_next_match(0)
 cnoremap <expr> <Tab> <SID>jump_to_next_match(1)
 

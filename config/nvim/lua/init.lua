@@ -113,6 +113,14 @@ map("v", "gs", function()
 end)
 map("v", "m,", [["zy?\V<C-R>=escape(@z,'/\')<CR><CR>NcgN]])
 map("v", "m;", [["zy/\V<C-R>=escape(@z,'/\')<CR><CR>Ncgn]])
+map({ "i", "c" }, "<C-r><C-d>", '<C-r>=expand("%:p:h")<CR>/')
+map("n", "y<C-d>", function()
+	vim.fn.setreg(vim.v.register, vim.fn.expand("%:p:h") .. "/")
+end)
+map({ "i", "c" }, "<C-r><C-t>", '<C-r>=expand("%:t")<CR>')
+map("n", "y<C-t>", function()
+	vim.fn.setreg(vim.v.register, vim.fn.expand("%:t"))
+end)
 
 if vim.loop.os_uname().sysname == "win32" then
 	map("n", "<C-z>", "<Nop>") -- disable <C-z> win32 memory leak
