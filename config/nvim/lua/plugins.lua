@@ -144,6 +144,7 @@ return require("packer").startup(function(use)
 			{ "hrsh7th/cmp-cmdline" },
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
+			{ "hrsh7th/cmp-path" },
 			{ "hrsh7th/cmp-vsnip" },
 			{
 				"hrsh7th/vim-vsnip",
@@ -209,6 +210,8 @@ return require("packer").startup(function(use)
 			})
 			cmp.setup.cmdline(":", {
 				sources = cmp.config.sources({
+					{ name = "path" },
+				}, {
 					{ name = "cmdline", keyword_pattern = [=[[^[:blank:]\!]*]=] },
 				}),
 			})
