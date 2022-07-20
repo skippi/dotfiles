@@ -121,12 +121,15 @@ map({ "i", "c" }, "<C-r><C-t>", '<C-r>=expand("%:t")<CR>')
 map("n", "y<C-t>", function()
 	vim.fn.setreg(vim.v.register, vim.fn.expand("%:t"))
 end)
+map("n", "m?", vim.diagnostic.open_float)
+map("n", "[d", vim.diagnostic.goto_prev)
+map("n", "]d", vim.diagnostic.goto_next)
 
 if vim.loop.os_uname().sysname == "win32" then
 	map("n", "<C-z>", "<Nop>") -- disable <C-z> win32 memory leak
 end
 
-vim.api.nvim_create_autocmd({"BufEnter", "FocusGained", "CursorHold", "CursorHoldI" }, {
+vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "CursorHold", "CursorHoldI" }, {
 	pattern = "*",
 	callback = function()
 		if vim.fn.mode() ~= "c" then
