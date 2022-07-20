@@ -140,6 +140,7 @@ return require("packer").startup(function(use)
 		"hrsh7th/nvim-cmp",
 		requires = {
 			{ "hrsh7th/cmp-buffer" },
+			{ "hrsh7th/cmp-calc" },
 			{ "hrsh7th/cmp-cmdline" },
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
@@ -171,6 +172,7 @@ return require("packer").startup(function(use)
 					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lsp" },
 					{ name = "tags" },
+					{ name = "calc" },
 					{ name = "vsnip" },
 					{
 						name = "buffer",
@@ -229,7 +231,6 @@ return require("packer").startup(function(use)
 	use({
 		"neovim/nvim-lspconfig",
 		requires = {
-			"hrsh7th/cmp-nvim-lsp",
 			{ "jose-elias-alvarez/nvim-lsp-ts-utils", requires = "nvim-lua/plenary.nvim" },
 		},
 		config = function()
