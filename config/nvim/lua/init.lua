@@ -121,7 +121,7 @@ map({ "i", "c" }, "<C-r><C-t>", '<C-r>=expand("%:t")<CR>')
 map("n", "y<C-t>", function()
 	vim.fn.setreg(vim.v.register, vim.fn.expand("%:t"))
 end)
-map("n", "m?", vim.diagnostic.open_float)
+map("n", "yd", vim.diagnostic.open_float)
 map("n", "[d", vim.diagnostic.goto_prev)
 map("n", "]d", vim.diagnostic.goto_next)
 
