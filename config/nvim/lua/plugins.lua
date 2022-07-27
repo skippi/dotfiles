@@ -1,7 +1,7 @@
 local fn = vim.fn
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if fn.empty(fn.glob(install_path)) > 0 then
-	packer_bootstrap = fn.system({
+	PACKER_BOOTSTRAP = fn.system({
 		"git",
 		"clone",
 		"--depth",
@@ -64,7 +64,7 @@ return require("packer").startup(function(use)
 		config = function()
 			local nls = require("null-ls")
 			nls.setup({
-				on_attach = function(client, bufnr)
+				on_attach = function(_, bufnr)
 					local map = function(mode, key, cmd, opts)
 						opts = opts or {}
 						opts.buffer = bufnr
@@ -236,7 +236,7 @@ return require("packer").startup(function(use)
 		config = function()
 			local lsc = require("lspconfig")
 			local cap = require("skippi.lsp").capabilities
-			local function on_attach(client, bufnr)
+			local on_attach = function(_, bufnr)
 				local map = function(mode, key, cmd, opts)
 					opts = opts or {}
 					opts.buffer = bufnr
@@ -463,7 +463,7 @@ return require("packer").startup(function(use)
 
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins
-	if packer_bootstrap then
+	if PACKER_BOOTSTRAP then
 		require("packer").sync()
 	end
 end)
