@@ -266,6 +266,21 @@ return require("packer").startup(function(use)
 			lsc.dartls.setup(opts)
 			lsc.pyright.setup(opts)
 			lsc.gopls.setup(opts)
+			lsc.sumneko_lua.setup({
+				on_attach = function(client, bufnr)
+					opts.on_attach(client, bufnr)
+					client.resolved_capabilities.document_formatting = false
+					client.resolved_capabilities.document_range_formatting = false
+				end,
+				capabilities = opts.capabilities,
+				settings = {
+					Lua = {
+						diagnostics = {
+							globals = { "vim" },
+						},
+					},
+				},
+			})
 			lsc.emmet_ls.setup({
 				on_attach = opts.on_attach,
 				capabilities = opts.capabilities,
