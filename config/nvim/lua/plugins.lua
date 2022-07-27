@@ -308,6 +308,16 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use({
+		"ray-x/go.nvim",
+		requires = { "neovim/nvim-lspconfig" },
+		cond = function()
+			return vim.loop.os_uname().sysname == "Linux"
+		end,
+		config = function()
+			require("go").setup({})
+		end,
+	})
+	use({
 		"mfussenegger/nvim-jdtls",
 		ft = "java",
 		config = function()
