@@ -302,6 +302,12 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use({
+		"williamboman/mason.nvim",
+		config = function()
+			require("mason").setup()
+		end,
+	})
+	use({
 		"mfussenegger/nvim-jdtls",
 		ft = "java",
 		config = function()
