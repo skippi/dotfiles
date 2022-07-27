@@ -112,7 +112,7 @@ return require("packer").startup(function(use)
 					map("n", "dp", function()
 						local diff = vim.api.nvim_win_get_option(0, "diff")
 						if diff then
-							vim.fn.feedkeys("dp")
+							vim.fn.feedkeys("dp", "n")
 							return
 						end
 						gs.stage_hunk()
@@ -120,7 +120,7 @@ return require("packer").startup(function(use)
 					map("n", "do", function()
 						local diff = vim.api.nvim_win_get_option(0, "diff")
 						if diff then
-							vim.fn.feedkeys("do")
+							vim.fn.feedkeys("do", "n")
 							return
 						end
 						gs.reset_hunk()
