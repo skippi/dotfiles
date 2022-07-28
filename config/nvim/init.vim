@@ -85,16 +85,6 @@ command! -bang Kwbd call kwbd#run(<bang>0)
 command! Scratch sp +enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 command! TrimWS %s/\s\+$//e
 
-aug general
-  au!
-  au BufReadPost *
-        \ if line("'\"") > 0 && line("'\"") <= line("$") && &ft !~# 'commit'|
-        \   exe "normal! g`\""|
-        \ endif
-  autocmd TextYankPost * silent! lua require("vim.highlight").on_yank()
-  autocmd BufLeave * call util#mark_file_context()
-aug END
-
 aug terminal
   au!
   au TermOpen term://* tnoremap <buffer> <ESC> <C-\><C-n>

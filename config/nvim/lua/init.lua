@@ -155,3 +155,33 @@ vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
 		vim.fn.setpos("']", change_marks[2])
 	end,
 })
+vim.api.nvim_create_autocmd("TextYankPost", {
+	desc = "yank highlighting",
+	group = group,
+	pattern = "*",
+	callback = function()
+		vim.highlight.on_yank({ on_visual = false })
+	end,
+})
+vim.api.nvim_create_autocmd("BufLeave", {
+	desc = "file context marks",
+	group = group,
+	pattern = "*",
+	callback = function()
+		local ext = vim.fn.expand("%:e")
+		if ext ~= "" then
+			vim.cmd("mark " .. ext:sub(1, 1):upper())
+		end
+	end,
+})
+vim.api.nvim_create_autocmd("BufReadPost", {
+	desc = "jump to last known position",
+	group = group,
+	pattern = "*",
+	callback = function()
+		local line = vim.fn.line
+		if line("'\"") > 0 and line("'\"") <= line("$") and not vim.bo.filetype:find("commit") then
+			vim.cmd('normal! g`"')
+		end
+	end,
+})
