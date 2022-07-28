@@ -129,7 +129,11 @@ if vim.loop.os_uname().sysname == "win32" then
 	map("n", "<C-z>", "<Nop>") -- disable <C-z> win32 memory leak
 end
 
+local group = vim.api.nvim_create_augroup("skippi", { clear = false })
+vim.api.nvim_clear_autocmds({ group = group })
 vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "CursorHold", "CursorHoldI" }, {
+	desc = "auto reload file",
+	group = group,
 	pattern = "*",
 	callback = function()
 		if vim.fn.mode() ~= "c" then
