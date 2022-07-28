@@ -141,3 +141,17 @@ vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "CursorHold", "CursorHo
 		end
 	end,
 })
+vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
+	desc = "auto save file",
+	group = group,
+	pattern = "*",
+	callback = function()
+		if not vim.bo.modified then
+			return
+		end
+		local change_marks = { vim.fn.getpos("'["), vim.fn.getpos("']") }
+		vim.cmd("sil! update")
+		vim.fn.setpos("'[", change_marks[1])
+		vim.fn.setpos("']", change_marks[2])
+	end,
+})
