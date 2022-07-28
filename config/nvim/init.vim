@@ -115,23 +115,8 @@ aug terminal
   au TermClose term://* exe "Kwbd"
 aug END
 
-augroup lsp
-  autocmd!
-  autocmd FileType java lua require'jdtls'.start_or_attach{cmd={'jdtls.bat'},
-        \ capabilities=require("skippi.lsp").capabilities}
-augroup END
-
-augroup colors
-  autocmd!
-  autocmd ColorScheme * hi GitSignsAdd guifg=#5D7D20
-        \ | hi GitSignsChange guifg=#37718C
-        \ | hi GitSignsDelete guifg=#95161B
-augroup END
-
 for tabnr in range(1, 9)
   exe 'noremap <M-' . tabnr . '> <Esc>' . tabnr . 'gt'
   exe 'noremap! <M-' . tabnr . '> <Esc>' . tabnr . 'gt'
   exe 'tnoremap <M-' . tabnr . '> <C-\><C-n>' . tabnr . 'gt'
 endfor
-
-silent! colorscheme codedark

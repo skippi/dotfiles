@@ -472,7 +472,6 @@ return require("packer").startup(function(use)
 	})
 
 	-- UI
-	use("tomasiser/vim-code-dark")
 	use({
 		"MaxMEllon/vim-jsx-pretty",
 		ft = {
@@ -484,6 +483,21 @@ return require("packer").startup(function(use)
 	})
 	use({ "MTDL9/vim-log-highlighting", ft = "log" })
 	use({ "pprovost/vim-ps1", ft = "ps1" })
+	use({
+		"tomasiser/vim-code-dark",
+		config = function()
+			vim.api.nvim_create_autocmd("ColorScheme", {
+				desc = "skippi: add gitsigns color",
+				pattern = "*",
+				callback = function()
+					vim.cmd("hi GitSignsAdd guifg=#5D7D20")
+					vim.cmd("hi GitSignsChange guifg=#37718C")
+					vim.cmd("hi GitSignsDelete guifg=#95161B")
+				end,
+			})
+			vim.cmd("silent! colorscheme codedark")
+		end,
+	})
 
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins
