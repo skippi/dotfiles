@@ -237,6 +237,7 @@ return require("packer").startup(function(use)
 		"neovim/nvim-lspconfig",
 		requires = {
 			{ "jose-elias-alvarez/nvim-lsp-ts-utils", requires = "nvim-lua/plenary.nvim" },
+			"williamboman/mason.nvim",
 		},
 		config = function()
 			local lsc = require("lspconfig")
@@ -308,8 +309,10 @@ return require("packer").startup(function(use)
 	})
 	use({
 		"williamboman/mason.nvim",
+		requires = { "williamboman/mason-lspconfig.nvim" },
 		config = function()
 			require("mason").setup()
+			require("mason-lspconfig").setup()
 		end,
 	})
 	use({
