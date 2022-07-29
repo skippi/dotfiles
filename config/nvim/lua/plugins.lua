@@ -156,6 +156,11 @@ return require("packer").startup(function(use)
 		},
 		config = function()
 			local cmp = require("cmp")
+			local types = require("cmp.types")
+			local cmdline_mapping = cmp.mapping.preset.cmdline({
+				["<C-j>"] = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
+				["<C-k>"] = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
+			})
 			cmp.setup({
 				snippet = {
 					expand = function(args)
@@ -164,9 +169,9 @@ return require("packer").startup(function(use)
 				},
 				mapping = cmp.mapping.preset.insert({
 					["<Tab>"] = cmp.mapping.confirm({ select = true }),
-					["<C-b>"] = cmp.mapping.scroll_docs(-4),
-					["<C-f>"] = cmp.mapping.scroll_docs(4),
 					["<C-l>"] = cmp.mapping.complete(),
+					["<C-j>"] = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
+					["<C-k>"] = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
 				}),
 				sources = cmp.config.sources({
 					{ name = "nvim_lsp_signature_help" },
@@ -189,19 +194,19 @@ return require("packer").startup(function(use)
 				}),
 			})
 			cmp.setup.cmdline("/", {
-				mapping = cmp.mapping.preset.cmdline(),
+				mapping = cmdline_mapping,
 				sources = cmp.config.sources({
 					{ name = "buffer" },
 				}),
 			})
 			cmp.setup.cmdline("?", {
-				mapping = cmp.mapping.preset.cmdline(),
+				mapping = cmdline_mapping,
 				sources = cmp.config.sources({
 					{ name = "buffer" },
 				}),
 			})
 			cmp.setup.cmdline(":", {
-				mapping = cmp.mapping.preset.cmdline(),
+				mapping = cmdline_mapping,
 				sources = cmp.config.sources({
 					{ name = "path" },
 				}, {
