@@ -68,7 +68,7 @@ vim.o.wildmode = "list:full"
 vim.o.shiftwidth = 2
 vim.o.tabstop = 2
 
-if vim.loop.os_uname().sysname == "win32" then
+if vim.loop.os_uname().sysname:find("Windows") then
 	vim.o.shellcmdflag = "/s /v /c"
 end
 
@@ -90,7 +90,7 @@ map("n", "<Space>j", ":tag /")
 map("n", "<Space>q", "<Cmd>q<CR>")
 map("n", "_", function()
 	local opener = "xdg-open"
-	if vim.loop.os_uname().sysname == "Windows" then
+	if vim.loop.os_uname().sysname:find("Windows") then
 		opener = "explorer"
 	end
 	vim.cmd("silent !" .. opener .. " %:p:h")
@@ -131,8 +131,8 @@ map("n", "yd", vim.diagnostic.open_float)
 map("n", "[d", vim.diagnostic.goto_prev)
 map("n", "]d", vim.diagnostic.goto_next)
 
-if vim.loop.os_uname().sysname == "win32" then
-	map("n", "<C-z>", "<Nop>") -- disable <C-z> win32 memory leak
+if vim.loop.os_uname().sysname:find("Windows") then
+	map("n", "<C-z>", "<Nop>") -- disable <C-z> windows memory leak
 end
 
 local group = vim.api.nvim_create_augroup("skippi", { clear = false })
