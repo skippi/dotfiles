@@ -88,7 +88,13 @@ map("n", "<Space>", "<Nop>")
 map("n", "<Space>d", "<Cmd>Kwbd<CR>")
 map("n", "<Space>j", ":tag /")
 map("n", "<Space>q", "<Cmd>q<CR>")
-map("n", "_", '<Cmd>sil !explorer "%:p:h"<CR>')
+map("n", "_", function()
+	local opener = "xdg-open"
+	if vim.loop.os_uname().sysname == "Windows" then
+		opener = "explorer"
+	end
+	vim.cmd("silent !" .. opener .. " %:p:h")
+end, { desc = "show file in explorer", expr = true })
 map("n", "g/", ':sil gr ""<Left>')
 map("n", "g<C-s>", function()
 	vim.cmd("sil!keepj norm! *N")
