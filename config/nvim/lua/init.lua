@@ -7,7 +7,7 @@ end
 
 local function visual_selection()
 	local mode = vim.fn.mode()
-	if mode ~= "v" or mode ~= "V" or mode ~= "CTRL-V" then
+	if mode ~= "v" and mode ~= "V" and mode ~= "CTRL-V" then
 		return nil
 	end
 	vim.cmd([[visual]])
@@ -33,7 +33,7 @@ end
 local function star_grep(pattern, args)
 	vim.fn.setreg("/", pattern)
 	vim.cmd("sil!keepj norm! nN")
-	local grep_cmd = "sil gr " .. vim_regex_to_pcre(pattern)
+	local grep_cmd = 'sil gr "' .. vim_regex_to_pcre(pattern) .. '"'
 	if args ~= nil then
 		grep_cmd = grep_cmd .. " " .. table.concat(args, " ")
 	end
@@ -97,13 +97,11 @@ map("n", "_", function()
 end, { desc = "show file in explorer", expr = true })
 map("n", "g/", ':sil gr ""<Left>')
 map("n", "g<C-s>", function()
-	vim.cmd("sil!keepj norm! *N")
-	star_grep(vim.fn.getreg("/"), { "--iglob", "*." .. vim.fn.expand("%:e") })
+	star_grep("\\<" .. vim.fn.expand("<cword>") .. "\\>", { "--iglob", "*." .. vim.fn.expand("%:e") })
 end)
 map("n", "g<C-_>", ':sil gr "" --iglob *.<C-r>=expand("%:e")<CR><C-b><C-Right><C-Right><C-Right><Left>')
 map("n", "gs", function()
-	vim.cmd("sil!keepj norm! *N")
-	star_grep(vim.fn.getreg("/"))
+	star_grep("\\<" .. vim.fn.expand("<cword>") .. "\\>")
 end)
 map("n", "gw", "<C-w>", { remap = true })
 map("n", "m,", "#NcgN")
