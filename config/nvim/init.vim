@@ -68,9 +68,6 @@ for key in ["<Left>", "<Right>", "<C-Left>", "<C-Right>"]
   exe "inoremap" key "<C-g>U" . key
 endfor
 
-imap <expr> <C-_> pumvisible() ? "\<C-e>\<C-f>" : "\<C-x><C-f>"
-smap <expr> <C-_> pumvisible() ? "\<C-e>\<C-f>" : "\<C-x><C-f>"
-
 noremap <expr> <C-L>
       \ (v:count ? '<Cmd>edit<CR>' : '')
       \ . '<Cmd>noh<CR>'
