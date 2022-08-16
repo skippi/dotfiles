@@ -6,37 +6,6 @@ local function vim_regex_to_pcre(str)
 	return str
 end
 
-local function async_grep(args)
-	local cmd = nil
-	local nargs = {}
-	for arg in string.gmatch(vim.o.grepprg, "[^%s]+") do
-		if cmd then
-			table.insert(nargs, arg)
-		else
-			cmd = arg
-		end
-	end
-	for _, arg in ipairs(args) do
-		table.insert(nargs, arg)
-	end
-	local created = false
-	job:new({
-		command = cmd,
-		args = nargs,
-		on_stdout = vim.schedule_wrap(function(_, data)
-			if not created then
-				vim.fn.setqflist({}, " ", { title = cmd .. " " .. table.concat(nargs, " ") })
-				created = true
-			end
-			vim.b.temp = data
-			vim.cmd("caddexpr b:temp")
-			if vim.fn.getqflist({ size = 1 }).size == 1 then
-				vim.cmd("copen | wincmd p | cc")
-			end
-		end),
-	}):sync()
-end
-
 local function visual_selection()
 	local mode = vim.fn.mode()
 	if mode ~= "v" and mode ~= "V" and mode ~= "CTRL-V" then
