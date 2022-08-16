@@ -1,8 +1,40 @@
+local job = require("plenary.job")
+
 local function vim_regex_to_pcre(str)
 	str = string.gsub(str, "\\<", "\\b")
 	str = string.gsub(str, "\\>", "\\b")
-	str = vim.fn.escape(str, "%#")
 	return str
+end
+
+local function async_grep(args)
+	local cmd = nil
+	local nargs = {}
+	for arg in string.gmatch(vim.o.grepprg, "[^%s]+") do
+		if cmd then
+			table.insert(nargs, arg)
+		else
+			cmd = arg
+		end
+	end
+	for _, arg in ipairs(args) do
+		table.insert(nargs, arg)
+	end
+	local created = false
+	job:new({
+		command = cmd,
+		args = nargs,
+		on_stdout = vim.schedule_wrap(function(_, data)
+			if not created then
+				vim.fn.setqflist({}, " ", { title = cmd .. " " .. table.concat(nargs, " ") })
+				created = true
+			end
+			vim.b.temp = data
+			vim.cmd("caddexpr b:temp")
+			if vim.fn.getqflist({ size = 1 }).size == 1 then
+				vim.cmd("copen | wincmd p | cc")
+			end
+		end),
+	}):sync()
 end
 
 local function visual_selection()
@@ -30,14 +62,12 @@ local function visual_selection()
 	return table.concat(lines, "\n")
 end
 
-local function star_grep(pattern, args)
-	vim.fn.setreg("/", pattern)
-	vim.cmd("sil!keepj norm! nN")
-	local grep_cmd = 'sil gr "' .. vim_regex_to_pcre(pattern) .. '"'
-	if args ~= nil then
-		grep_cmd = grep_cmd .. " " .. table.concat(args, " ")
+local function grep(args)
+	local params = ""
+	for _, arg in ipairs(args) do
+		params = params .. " " .. vim.fn.escape(vim.fn.shellescape(arg, 1), "|")
 	end
-	vim.cmd(grep_cmd)
+	vim.cmd("sil grep" .. params)
 end
 
 vim.o.cmdwinheight = 7
@@ -97,11 +127,15 @@ map("n", "_", function()
 end, { desc = "show file in explorer", expr = true })
 map("n", "g/", ':sil gr ""<Left>')
 map("n", "g<C-s>", function()
-	star_grep("\\<" .. vim.fn.expand("<cword>") .. "\\>", { "--iglob", "*." .. vim.fn.expand("%:e") })
+	vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
+	vim.o.hlsearch = true
+	grep({ vim_regex_to_pcre(vim.fn.getreg("/")), "--iglob", "\\*." .. vim.fn.expand("%:e") })
 end)
-map("n", "g<C-_>", ':sil gr "" --iglob *.<C-r>=expand("%:e")<CR><C-b><C-Right><C-Right><C-Right><Left>')
+map("n", "g<C-_>", ':sil gr "" --iglob \\*.<C-r>=expand("%:e")<CR><C-b><C-Right><C-Right><C-Right><Left>')
 map("n", "gs", function()
-	star_grep("\\<" .. vim.fn.expand("<cword>") .. "\\>")
+	vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
+	vim.o.hlsearch = true
+	grep({ vim_regex_to_pcre(vim.fn.getreg("/")) })
 end)
 map("n", "gw", "<C-w>", { remap = true })
 map("n", "m,", "#NcgN")
@@ -110,10 +144,16 @@ map("n", "yp", function()
 	vim.fn.setreg(vim.v.register, vim.fn.expand("%:p"))
 end)
 map("v", "g<C-s>", function()
-	star_grep(visual_selection(), { "--iglob", "*." .. vim.fn.expand("%:e") })
+	local pattern = visual_selection()
+	vim.fn.setreg("/", "\\V" .. pattern)
+	vim.o.hlsearch = true
+	grep({ pattern, "-F", "--iglob", "*." .. vim.fn.expand("%:e") })
 end)
 map("v", "gs", function()
-	star_grep(visual_selection())
+	local pattern = visual_selection()
+	vim.fn.setreg("/", "\\V" .. pattern)
+	vim.o.hlsearch = true
+	grep({ pattern, "-F" })
 end)
 map("v", "m,", [["zy?\V<C-R>=escape(@z,'/\')<CR><CR>NcgN]])
 map("v", "m;", [["zy/\V<C-R>=escape(@z,'/\')<CR><CR>Ncgn]])
