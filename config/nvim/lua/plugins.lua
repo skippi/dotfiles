@@ -216,24 +216,6 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use({
-		"kevinhwang91/nvim-ufo",
-		requires = { "kevinhwang91/promise-async", "nvim-treesitter/nvim-treesitter" },
-		config = function()
-			-- vim.o.foldcolumn = '1'
-			vim.o.foldlevel = 99
-			vim.o.foldlevelstart = -1
-			vim.o.foldenable = true
-			vim.keymap.set("n", "zR", require("ufo").openAllFolds)
-			vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
-			require("ufo").setup({
-				open_fold_hl_timeout = 0,
-				provider_selector = function(bufnr, filetype)
-					return { "treesitter", "indent" }
-				end,
-			})
-		end,
-	})
-	use({
 		"neovim/nvim-lspconfig",
 		requires = {
 			{ "jose-elias-alvarez/nvim-lsp-ts-utils", requires = "nvim-lua/plenary.nvim" },
