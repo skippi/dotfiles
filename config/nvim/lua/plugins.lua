@@ -295,6 +295,7 @@ return require("packer").startup(function(use)
 	use({
 		"ray-x/go.nvim",
 		requires = { "neovim/nvim-lspconfig" },
+		ft = "go",
 		cond = function()
 			return vim.loop.os_uname().sysname == "Linux"
 		end,
