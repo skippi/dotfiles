@@ -1,5 +1,3 @@
-let g:do_filetype_lua = 1
-
 lua require('impatient')
 lua require('plugins')
 lua require('init')
