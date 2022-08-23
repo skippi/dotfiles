@@ -152,6 +152,7 @@ return require("packer").startup(function(use)
 		config = function()
 			local cmp = require("cmp")
 			local types = require("cmp.types")
+			local luasnip = require("luasnip")
 			local cmdline_mapping = cmp.mapping.preset.cmdline({
 				["<C-j>"] = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
 				["<C-k>"] = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
@@ -159,7 +160,7 @@ return require("packer").startup(function(use)
 			cmp.setup({
 				snippet = {
 					expand = function(args)
-						vim.fn["vsnip#anonymous"](args.body)
+						luasnip.lsp_expand(args.body)
 					end,
 				},
 				mapping = cmp.mapping.preset.insert({
