@@ -145,13 +145,8 @@ return require("packer").startup(function(use)
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
 			{ "hrsh7th/cmp-path" },
-			{ "hrsh7th/cmp-vsnip" },
-			{
-				"hrsh7th/vim-vsnip",
-				config = function()
-					vim.g.vsnip_snippet_dir = vim.fn.stdpath("config") .. "/vsnip"
-				end,
-			},
+			{ "saadparwaiz1/cmp_luasnip" },
+			{ "L3MON4D3/LuaSnip" },
 			{ "quangnguyen30192/cmp-nvim-tags" },
 		},
 		config = function()
@@ -176,9 +171,9 @@ return require("packer").startup(function(use)
 				sources = cmp.config.sources({
 					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lsp" },
-					{ name = "tags" },
+					{ name = "luasnip" },
 					{ name = "calc" },
-					{ name = "vsnip" },
+					{ name = "tags" },
 					{
 						name = "buffer",
 						option = {
