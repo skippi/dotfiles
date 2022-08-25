@@ -453,7 +453,6 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use("tpope/vim-obsession")
-	use("tpope/vim-projectionist")
 	use("tpope/vim-repeat")
 	use("tpope/vim-sleuth")
 	use({
