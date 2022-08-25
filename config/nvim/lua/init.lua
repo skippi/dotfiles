@@ -98,9 +98,19 @@ map("n", "g/", ':sil gr ""<Left>')
 map("n", "g<C-s>", function()
 	vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
 	vim.o.hlsearch = true
-	grep({ vim_regex_to_pcre(vim.fn.getreg("/")), "--iglob", "\\*." .. vim.fn.expand("%:e") })
+	local fpattern = "*." .. vim.fn.expand("%:e")
+	if not vim.loop.os_uname().sysname:find("Windows") then
+		fpattern = "\\" .. fpattern
+	end
+	grep({ vim_regex_to_pcre(vim.fn.getreg("/")), "--iglob", fpattern })
 end)
-map("n", "g<C-_>", ':sil gr "" --iglob \\*.<C-r>=expand("%:e")<CR><C-b><C-Right><C-Right><C-Right><Left>')
+map("n", "g<C-_>", function()
+	local fpattern = "*." .. vim.fn.expand("%:e")
+	if not vim.loop.os_uname().sysname:find("Windows") then
+		fpattern = "\\" .. fpattern
+	end
+	return ':sil gr "" --iglob ' .. fpattern .. '<C-b><C-Right><C-Right><C-Right><Left>'
+end, { expr = true })
 map("n", "gs", function()
 	vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
 	vim.o.hlsearch = true
