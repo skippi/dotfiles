@@ -122,21 +122,19 @@ return require("packer").startup(function(use)
 						return "<Ignore>"
 					end, { expr = true })
 					map("n", "dp", function()
-						local diff = vim.api.nvim_win_get_option(0, "diff")
-						if diff then
-							vim.fn.feedkeys("dp", "n")
-							return
+						if vim.wo.diff then
+							return "dp"
 						end
-						gs.stage_hunk()
-					end)
+						vim.schedule(gs.stage_hunk)
+						return "<Ignore>"
+					end, { expr = true })
 					map("n", "do", function()
-						local diff = vim.api.nvim_win_get_option(0, "diff")
-						if diff then
-							vim.fn.feedkeys("do", "n")
-							return
+						if vim.wo.diff then
+							return "do"
 						end
-						gs.reset_hunk()
-					end)
+						vim.schedule(gs.reset_hunk)
+						return "<Ignore>"
+					end, { expr = true })
 					map("n", "dO", gs.reset_buffer)
 					map("n", "dP", gs.stage_buffer)
 					map("v", "<M-d>p", ":Gitsigns stage_hunk<CR>")
