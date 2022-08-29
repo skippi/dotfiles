@@ -107,8 +107,20 @@ return require("packer").startup(function(use)
 						opts.buffer = bufnr
 						vim.keymap.set(mode, l, r, opts)
 					end
-					map({ "n", "x" }, "]c", "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", { expr = true })
-					map({ "n", "x" }, "[c", "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", { expr = true })
+					map("n", "]c", function()
+						if vim.wo.diff then
+							return "]c"
+						end
+						vim.schedule(gs.next_hunk)
+						return "<Ignore>"
+					end, { expr = true })
+					map("n", "[c", function()
+						if vim.wo.diff then
+							return "[c"
+						end
+						vim.schedule(gs.prev_hunk)
+						return "<Ignore>"
+					end, { expr = true })
 					map("n", "dp", function()
 						local diff = vim.api.nvim_win_get_option(0, "diff")
 						if diff then
