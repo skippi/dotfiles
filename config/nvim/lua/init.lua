@@ -98,11 +98,7 @@ map("n", "g/", ':sil gr ""<Left>')
 map("n", "g<C-s>", function()
 	vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
 	vim.o.hlsearch = true
-	local fpattern = "*." .. vim.fn.expand("%:e")
-	if not vim.loop.os_uname().sysname:find("Windows") then
-		fpattern = "\\" .. fpattern
-	end
-	grep({ vim_regex_to_pcre(vim.fn.getreg("/")), "--iglob", fpattern })
+	grep({ vim_regex_to_pcre(vim.fn.getreg("/")), "--iglob", "*." .. vim.fn.expand("%:e") })
 end)
 map("n", "g<C-_>", function()
 	local fpattern = "*." .. vim.fn.expand("%:e")
