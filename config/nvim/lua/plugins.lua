@@ -247,11 +247,13 @@ return require("packer").startup(function(use)
 				map("n", "K", vim.lsp.buf.hover)
 				map("n", "cm", vim.lsp.buf.rename)
 				map({ "n", "v" }, "gd", function()
-					vim.fn.setreg("/", vim.fn.expand("<cword>"))
+					vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
+					vim.o.hlsearch = true
 					builtin.lsp_definitions()
 				end)
 				map("n", "gr", function()
-					vim.fn.setreg("/", vim.fn.expand("<cword>"))
+					vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
+					vim.o.hlsearch = true
 					builtin.lsp_references()
 				end)
 				map("n", "m?", function()
@@ -339,7 +341,6 @@ return require("packer").startup(function(use)
 	})
 	use({
 		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-		as = "whynothugo/lsp_lines.nvim",
 		config = function()
 			require("lsp_lines").setup()
 			vim.diagnostic.config({ virtual_text = false, virtual_lines = false })
