@@ -82,6 +82,14 @@ map("", "<Space>y", '"+y', { remap = true })
 map("", "gh", "^")
 map("", "gl", "g_")
 map("n", "<BS>", "<C-^>")
+map("n", "<C-w>'", function()
+	local ESC = 27
+	local rc, keynr = pcall(vim.fn.getchar)
+	if not rc or keynr == ESC then
+		return "<Ignore>"
+	end
+	return "<C-w>s'" .. vim.fn.nr2char(keynr)
+end, { desc = "open new window and jump to mark", expr = true, remap = true })
 map("n", "<C-w>gd", "<C-w>sgd", { remap = true })
 map("n", "<C-h>", "<BS>", { remap = true }) -- windows <BS> fix
 map("n", "<Space>", "<Nop>")
