@@ -59,7 +59,6 @@ nnoremap <expr> <M-]> '<Cmd>tabmove +' . v:count1 . '<CR>'
 
 nnoremap '<Tab> <Cmd>sil exe "e " stdpath('config') . '/after/indent/' . &filetype . '.vim'<CR>
 nnoremap '# <Cmd>sil exe "e " stdpath('config') . '/after/syntax/' . &filetype . '.vim'<CR>
-nnoremap '$ <Cmd>sil exe "e " stdpath('config') . '/init.vim'<CR>
 nnoremap '@ <Cmd>sil exe "e " stdpath('config') . '/after/ftplugin/' . &filetype . '.vim'<CR>
 
 for key in ["<Left>", "<Right>", "<C-Left>", "<C-Right>"]

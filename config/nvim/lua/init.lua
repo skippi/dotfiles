@@ -55,6 +55,7 @@ vim.o.path = ",,**"
 vim.o.pumheight = 10
 vim.o.ruler = false
 vim.o.shortmess = vim.o.shortmess .. "c"
+vim.o.sessionoptions = vim.o.sessionoptions .. ",globals"
 vim.o.smartcase = true
 vim.o.swapfile = false
 vim.o.termguicolors = true
@@ -105,7 +106,7 @@ map("n", "g<C-_>", function()
 	if not vim.loop.os_uname().sysname:find("Windows") then
 		fpattern = "\\" .. fpattern
 	end
-	return ':sil gr "" --iglob ' .. fpattern .. '<C-b><C-Right><C-Right><C-Right><Left>'
+	return ':sil gr "" --iglob ' .. fpattern .. "<C-b><C-Right><C-Right><C-Right><Left>"
 end, { expr = true })
 map("n", "gs", function()
 	vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
@@ -143,6 +144,13 @@ end)
 map("n", "yd", vim.diagnostic.open_float)
 map("n", "[d", vim.diagnostic.goto_prev)
 map("n", "]d", vim.diagnostic.goto_next)
+map("n", "'~", [[<Cmd>sil exe "e " stdpath('config') . '/init.vim'<CR>]])
+map("n", "'$", function()
+	if vim.g.Temp_last_term == nil then
+		return
+	end
+	vim.cmd(vim.g.Temp_last_term .. "b")
+end, { desc = "jump to last terminal buffer" })
 
 if vim.loop.os_uname().sysname:find("Windows") then
 	map("n", "<C-z>", "<Nop>") -- disable <C-z> windows memory leak
@@ -190,6 +198,9 @@ vim.api.nvim_create_autocmd("BufLeave", {
 		local ext = vim.fn.expand("%:e")
 		if ext ~= "" then
 			vim.cmd("mark " .. ext:sub(1, 1):upper())
+		end
+		if vim.bo.buftype == "terminal" then
+			vim.g.Temp_last_term = vim.fn.bufnr()
 		end
 	end,
 })
