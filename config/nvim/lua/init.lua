@@ -121,6 +121,8 @@ map("n", "gs", function()
 	vim.o.hlsearch = true
 	grep({ vim_regex_to_pcre(vim.fn.getreg("/")) })
 end)
+map("n", "gWW", "gww")
+map({ "n", "v" }, "gW", "gw")
 map("n", "gw", "<C-w>", { remap = true })
 map("n", "m,", "#NcgN")
 map("n", "m;", "*Ncgn")
