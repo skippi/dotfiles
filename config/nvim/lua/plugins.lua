@@ -292,11 +292,6 @@ return require("packer").startup(function(use)
 					},
 				},
 			})
-			lsc.emmet_ls.setup({
-				on_attach = opts.on_attach,
-				capabilities = opts.capabilities,
-				filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less" },
-			})
 			local ts_utils = require("nvim-lsp-ts-utils")
 			lsc.tsserver.setup({
 				init_options = ts_utils.init_options,
@@ -409,10 +404,14 @@ return require("packer").startup(function(use)
 	})
 	use({
 		"nvim-treesitter/nvim-treesitter",
-		requires = { "nvim-treesitter/nvim-treesitter-textobjects" },
+		requires = {
+			"nvim-treesitter/nvim-treesitter-textobjects",
+			"windwp/nvim-ts-autotag",
+		},
 		config = function()
 			require("nvim-treesitter.configs").setup({
 				ensure_installed = {},
+				autotag = { enable = true },
 				highlight = { enable = true },
 				textobjects = {
 					select = {
@@ -474,21 +473,6 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use("tpope/vim-vinegar")
-	use({
-		"windwp/nvim-ts-autotag",
-		requires = { "nvim-treesitter/nvim-treesitter" },
-		ft = {
-			"html",
-			"xml",
-			"javascript",
-			"javascriptreact",
-			"typescript",
-			"typescriptreact",
-		},
-		config = function()
-			require("nvim-ts-autotag").setup()
-		end,
-	})
 
 	-- UI
 	use({
