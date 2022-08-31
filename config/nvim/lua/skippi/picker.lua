@@ -19,9 +19,13 @@ local function trim(s)
 end
 
 local function getprocitems()
-	local output = vim.fn.system("tasklist /fo csv /nh")
+	local cmd = "tasklist /fo csv /nh"
+	if vim.loop.os_uname().sysname:find("Linux") then
+		cmd = [[ps --no-header -o "%c,%p" x]]
+	end
+	local output = vim.fn.systemlist(cmd)
 	local results = {}
-	for s in output:gmatch("[^\r\n]+") do
+	for _, s in ipairs(output) do
 		local splited = {}
 		for v in s:gmatch('[^,"]+') do
 			splited[#splited + 1] = v
