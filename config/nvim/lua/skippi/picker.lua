@@ -5,7 +5,6 @@ local conf = require("telescope.config").values
 local entry_display = require("telescope.pickers.entry_display")
 local finders = require("telescope.finders")
 local pickers = require("telescope.pickers")
-local previewers = require("telescope.previewers")
 
 local M = {}
 

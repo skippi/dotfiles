@@ -21,11 +21,12 @@ return require("packer").startup(function(use)
 			{ "nvim-telescope/telescope-ui-select.nvim" },
 		},
 		config = function()
+			local actions = require("telescope.actions")
 			require("telescope").setup({
 				defaults = {
 					mappings = {
 						i = {
-							["<C-a>"] = require("skippi.actions").toggle_selection_all,
+							["<C-a>"] = actions.toggle_all,
 							["<C-q>"] = require("skippi.actions").send_to_qflist,
 							["<C-r><C-w>"] = require("skippi.actions").insert_cword,
 							["<C-r><C-a>"] = require("skippi.actions").insert_cWORD,
