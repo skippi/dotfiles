@@ -84,7 +84,11 @@ function M.pkill(opts)
 			local kill_all_action = function(prompt_bufnr, _)
 				local picker = action_state.get_current_picker(prompt_bufnr)
 				for entry in picker.manager:iter() do
-					vim.fn.jobstart("taskkill /f /pid " .. entry.pid)
+					local cmd = "taskkill /f /pid "
+					if vim.loop.os_uname().sysname:find("Linux") then
+						cmd = "kill -9 "
+					end
+					vim.fn.jobstart(cmd .. entry.pid)
 				end
 				actions.close(prompt_bufnr)
 			end
