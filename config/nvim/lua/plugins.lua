@@ -245,36 +245,8 @@ return require("packer").startup(function(use)
 		},
 		config = function()
 			local lsc = require("lspconfig")
-			local cap = require("skippi.lsp").capabilities
-			local on_attach = function(_, bufnr)
-				local map = function(mode, key, cmd, opts)
-					opts = opts or {}
-					opts.buffer = bufnr
-					vim.keymap.set(mode, key, cmd, opts)
-				end
-				local builtin = require("telescope.builtin")
-				map("n", "<C-j>", builtin.lsp_dynamic_workspace_symbols)
-				map("n", "<C-k>", vim.lsp.buf.code_action)
-				map("n", "K", vim.lsp.buf.hover)
-				map("n", "cm", vim.lsp.buf.rename)
-				map({ "n", "v" }, "gd", function()
-					vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
-					vim.o.hlsearch = true
-					builtin.lsp_definitions()
-				end)
-				map("n", "gr", function()
-					vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
-					vim.o.hlsearch = true
-					builtin.lsp_references()
-				end)
-				map("n", "m?", function()
-					builtin.diagnostics({
-						previewer = false,
-						wrap_results = true,
-					})
-				end)
-			end
-			local opts = { capabilities = cap, on_attach = on_attach }
+			local lsp = require("skippi.lsp")
+			local opts = { capabilities = lsp.make_capabilities(), on_attach = lsp.on_attach }
 			lsc.dartls.setup(opts)
 			lsc.pyright.setup(opts)
 			lsc.gopls.setup(opts)
@@ -296,13 +268,13 @@ return require("packer").startup(function(use)
 			local ts_utils = require("nvim-lsp-ts-utils")
 			lsc.tsserver.setup({
 				init_options = ts_utils.init_options,
-				capabilities = cap,
+				capabilities = opts.capabilities,
 				on_attach = function(client, bufnr)
 					ts_utils.setup({ auto_inlay_hints = false })
 					ts_utils.setup_client(client)
 					client.resolved_capabilities.document_formatting = false
 					client.resolved_capabilities.document_range_formatting = false
-					on_attach(client, bufnr)
+					opts.on_attach(client, bufnr)
 				end,
 			})
 			lsc.vimls.setup(opts)
@@ -329,20 +301,59 @@ return require("packer").startup(function(use)
 	})
 	use({
 		"mfussenegger/nvim-jdtls",
-		ft = "java",
 		config = function()
-			require("jdtls.ui").pick_one_async = require("skippi.picker").jdtls_ui_picker
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = "java",
 				callback = function()
-					require("jdtls").start_or_attach({
-						cmd = { "jdtls.bat" },
-						capabilities = require("skippi.lsp").capabilities,
-					})
+					require("jdtls.setup").add_commands()
+					local project = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+					local on_attach = function(client, bufnr)
+						require("skippi.lsp").on_attach(client, bufnr)
+						vim.api.nvim_buf_create_user_command(bufnr, "JdtSpotless", require("jdtls").organize_imports, { desc = "organize java imports", force = true })
+					end
+					local config = {
+						cmd = {
+							"java",
+							"-Declipse.application=org.eclipse.jdt.ls.core.id1",
+							"-Dosgi.bundles.defaultStartLevel=4",
+							"-Declipse.product=org.eclipse.jdt.ls.core.product",
+							"-Dlog.protocol=true",
+							"-Dlog.level=ALL",
+							"-Xms1g",
+							"--add-modules=ALL-SYSTEM",
+							"--add-opens",
+							"java.base/java.util=ALL-UNNAMED",
+							"--add-opens",
+							"java.base/java.lang=ALL-UNNAMED",
+							"-jar",
+							vim.fn.stdpath("data")
+								.. "/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar",
+							"-configuration",
+							vim.fn.stdpath("data") .. "/mason/packages/jdtls/config_linux",
+							"-data",
+							os.getenv("HOME") .. "/src/workspace/" .. project,
+						},
+						flags = {
+							allow_incremental_sync = true,
+						},
+						settings = {
+							java = {
+								codeGeneration = {
+									toString = {
+										template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"
+									}
+								},
+							},
+						},
+						capabilities = require("skippi.lsp").make_capabilities(),
+						on_attach = on_attach,
+					}
+					config.on_init = function(client, _)
+						client.notify("workspace/didChangeConfiguration", { settings = config.settings })
+					end
+					require("jdtls").start_or_attach(config)
 				end,
 			})
-			vim.api.nvim_add_user_command("JdtCompile", require("jdtls").compile, { force = true })
-			vim.api.nvim_add_user_command("JdtUpdateConfig", require("jdtls").update_project_config, { force = true })
 		end,
 	})
 	use({

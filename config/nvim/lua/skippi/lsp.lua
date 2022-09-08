@@ -18,4 +18,33 @@ function M.make_capabilities()
 	return cap
 end
 
+function M.on_attach(_, bufnr)
+	local map = function(mode, key, cmd, opts)
+		opts = opts or {}
+		opts.buffer = bufnr
+		vim.keymap.set(mode, key, cmd, opts)
+	end
+	local builtin = require("telescope.builtin")
+	map("n", "<C-j>", builtin.lsp_dynamic_workspace_symbols)
+	map("n", "<C-k>", vim.lsp.buf.code_action)
+	map("n", "K", vim.lsp.buf.hover)
+	map("n", "cm", vim.lsp.buf.rename)
+	map({ "n", "v" }, "gd", function()
+		vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
+		vim.o.hlsearch = true
+		builtin.lsp_definitions()
+	end)
+	map("n", "gr", function()
+		vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
+		vim.o.hlsearch = true
+		builtin.lsp_references()
+	end)
+	map("n", "m?", function()
+		builtin.diagnostics({
+			previewer = false,
+			wrap_results = true,
+		})
+	end)
+end
+
 return M
