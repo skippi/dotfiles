@@ -156,14 +156,13 @@ return require("packer").startup(function(use)
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
 			{ "hrsh7th/cmp-path" },
-			{ "saadparwaiz1/cmp_luasnip" },
-			{ "L3MON4D3/LuaSnip" },
+			{ "hrsh7th/cmp-vsnip" },
+			{ "hrsh7th/vim-vsnip" },
 			{ "quangnguyen30192/cmp-nvim-tags" },
 		},
 		config = function()
 			local cmp = require("cmp")
 			local types = require("cmp.types")
-			local luasnip = require("luasnip")
 			local cmdline_mapping = cmp.mapping.preset.cmdline({
 				["<C-j>"] = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
 				["<C-k>"] = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
@@ -171,22 +170,30 @@ return require("packer").startup(function(use)
 			cmp.setup({
 				snippet = {
 					expand = function(args)
-						luasnip.lsp_expand(args.body)
+						vim.fn["vsnip#anonymous"](args.body)
 					end,
 				},
 				mapping = cmp.mapping.preset.insert({
 					["<Tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
 							cmp.confirm({ select = true })
-						elseif luasnip.expand_or_jumpable() then
-							luasnip.expand_or_jump()
+						elseif vim.fn["vsnip#available"](1) then
+							vim.api.nvim_feedkeys(
+								vim.api.nvim_replace_termcodes("<Plug>(vsnip-expand-or-jump)", true, false, true),
+								"n",
+								false
+							)
 						else
 							fallback()
 						end
 					end),
 					["<S-Tab>"] = cmp.mapping(function(fallback)
-						if luasnip.jumpable(-1) then
-							luasnip.jump(-1)
+						if vim.fn["vsnip#jumpable"](-1) then
+							vim.api.nvim_feedkeys(
+								vim.api.nvim_replace_termcodes("<Plug>(vsnip-jump-prev)", true, false, true),
+								"n",
+								false
+							)
 						else
 							fallback()
 						end
@@ -198,7 +205,7 @@ return require("packer").startup(function(use)
 				sources = cmp.config.sources({
 					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lsp" },
-					{ name = "luasnip" },
+					{ name = "vsnip" },
 					{ name = "calc" },
 					{ name = "tags" },
 					{
@@ -309,7 +316,12 @@ return require("packer").startup(function(use)
 					local project = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 					local on_attach = function(client, bufnr)
 						require("skippi.lsp").on_attach(client, bufnr)
-						vim.api.nvim_buf_create_user_command(bufnr, "JdtSpotless", require("jdtls").organize_imports, { desc = "organize java imports", force = true })
+						vim.api.nvim_buf_create_user_command(
+							bufnr,
+							"JdtSpotless",
+							require("jdtls").organize_imports,
+							{ desc = "organize java imports", force = true }
+						)
 					end
 					local config = {
 						cmd = {
@@ -340,8 +352,8 @@ return require("packer").startup(function(use)
 							java = {
 								codeGeneration = {
 									toString = {
-										template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"
-									}
+										template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}",
+									},
 								},
 							},
 						},
