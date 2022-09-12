@@ -186,7 +186,7 @@ return require("packer").startup(function(use)
 						else
 							fallback()
 						end
-					end),
+					end, { "i", "s" }),
 					["<S-Tab>"] = cmp.mapping(function(fallback)
 						if vim.fn["vsnip#jumpable"](-1) ~= 0 then
 							vim.api.nvim_feedkeys(
