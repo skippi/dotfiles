@@ -21,18 +21,18 @@ end
 local function getprocitems()
 	local cmd = "tasklist /fo csv /nh"
 	if vim.loop.os_uname().sysname:find("Linux") then
-		cmd = [[ps --no-header -o "%c,%p" x]]
+		cmd = [[ps --no-header -o %p -o ,%a x]]
 	end
 	local output = vim.fn.systemlist(cmd)
 	local results = {}
 	for _, s in ipairs(output) do
 		local splited = {}
-		for v in s:gmatch('[^,"]+') do
+		for v in s:gmatch('[^,]+') do
 			splited[#splited + 1] = v
 		end
 		results[#results + 1] = {
-			pid = tonumber(splited[2]),
-			filename = splited[1],
+			pid = tonumber(splited[1]),
+			filename = splited[2],
 		}
 	end
 	return results
@@ -68,19 +68,6 @@ function M.pkill(opts)
 		}),
 		sorter = conf.generic_sorter(opts),
 		attach_mappings = function(_, map)
-			actions.select_default:replace(function(prompt_bufnr, _)
-				local picker = action_state.get_current_picker(prompt_bufnr)
-				local entries = { action_state.get_selected_entry() }
-				for _, entry in ipairs(picker:get_multi_selection()) do
-					entries[#entries + 1] = entry
-				end
-				actions.close(prompt_bufnr)
-				for _, entry in ipairs(entries) do
-					vim.fn.jobstart("taskkill /f /pid " .. entry.pid)
-				end
-			end)
-			map("i", "<CR>", actions.select_default)
-			map("n", "<CR>", actions.select_default)
 			local smart_kill_action = function(prompt_bufnr, _)
 				local picker = action_state.get_current_picker(prompt_bufnr)
 				local items = {}
@@ -102,7 +89,9 @@ function M.pkill(opts)
 				end
 				actions.close(prompt_bufnr)
 			end
-			map({ "n", "i" }, "<C-d>", smart_kill_action)
+			actions.select_default:replace(smart_kill_action)
+			map("n", "<C-d>", smart_kill_action)
+			map("i", "<C-d>", smart_kill_action)
 			return true
 		end,
 	}):find()
