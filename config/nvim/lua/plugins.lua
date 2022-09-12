@@ -177,7 +177,7 @@ return require("packer").startup(function(use)
 					["<Tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() then
 							cmp.confirm({ select = true })
-						elseif vim.fn["vsnip#available"](1) then
+						elseif vim.fn["vsnip#available"](1) ~= 0 then
 							vim.api.nvim_feedkeys(
 								vim.api.nvim_replace_termcodes("<Plug>(vsnip-expand-or-jump)", true, false, true),
 								"n",
@@ -188,7 +188,7 @@ return require("packer").startup(function(use)
 						end
 					end),
 					["<S-Tab>"] = cmp.mapping(function(fallback)
-						if vim.fn["vsnip#jumpable"](-1) then
+						if vim.fn["vsnip#jumpable"](-1) ~= 0 then
 							vim.api.nvim_feedkeys(
 								vim.api.nvim_replace_termcodes("<Plug>(vsnip-jump-prev)", true, false, true),
 								"n",
