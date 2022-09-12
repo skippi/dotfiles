@@ -34,6 +34,11 @@ function M.on_attach(_, bufnr)
 		vim.o.hlsearch = true
 		builtin.lsp_definitions()
 	end)
+	map({ "n", "v" }, "gI", function()
+		vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
+		vim.o.hlsearch = true
+		builtin.lsp_implementations()
+	end)
 	map("n", "gr", function()
 		vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
 		vim.o.hlsearch = true
