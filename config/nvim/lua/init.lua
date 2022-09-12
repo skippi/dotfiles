@@ -97,11 +97,11 @@ map("n", "<Space>d", "<Cmd>Kwbd<CR>")
 map("n", "<Space>j", ":tag /")
 map("n", "<Space>q", "<Cmd>q<CR>")
 map("n", "_", function()
-	local opener = os.getenv("BROWSER")
-	if vim.loop.os_uname().sysname:find("Windows") then
-		opener = "explorer"
+	local path = vim.fn.expand("%:p:h")
+	if vim.loop.os_uname().sysname:find("Linux") then
+		path = vim.fn.system("wslpath -w " .. path .. " | tr -d '\n'") -- xdg-open/wslview are CRAZY bugged on wsl/wt/conemu. Do not use.
 	end
-	return "<Cmd>term! " .. opener .. " %:p:h<CR>" -- xdg-open/wslview are CRAZY bugged on wsl/wt/conemu. The term command is necessary.
+	return "<Cmd>sil !explorer '" .. path .. "'<CR>"
 end, { desc = "show file in explorer", expr = true })
 map("n", "g/", ':sil gr ""<Left>')
 map("n", "g<C-s>", function()
