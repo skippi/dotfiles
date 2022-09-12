@@ -172,6 +172,8 @@ map("n", "'$", function()
 	end
 	vim.cmd(vim.g.Temp_last_term .. "b")
 end, { desc = "jump to last terminal buffer" })
+map({ "n", "x", "o" }, "j", [[v:count ? 'm`' . v:count . 'j' : 'gj']], { desc = "smart j", expr = true })
+map({ "n", "x", "o" }, "k", [[v:count ? 'm`' . v:count . 'k' : 'gk']], { desc = "smart k", expr = true })
 
 if vim.loop.os_uname().sysname:find("Windows") then
 	map("n", "<C-z>", "<Nop>") -- disable <C-z> windows memory leak

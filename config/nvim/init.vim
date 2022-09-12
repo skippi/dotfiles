@@ -35,8 +35,6 @@ nnoremap ]<C-q> <Cmd>cnfile<CR>
 nnoremap ]<M-q> <Cmd>exe "sil!uns cnewer" v:count1<CR>
 nnoremap ]q <Cmd>cnext<CR>
 nnoremap ]t <Cmd>tnext<CR>
-noremap <expr> j (v:count ? 'm`' . v:count . 'j' : 'gj')
-noremap <expr> k (v:count ? 'm`' . v:count . 'k' : 'gk')
 noremap [n <Cmd>for _ in range(v:count1)<CR>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "bsW")<CR>endfor<CR>
 noremap ]n <Cmd>for _ in range(v:count1)<CR>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "sW")<CR>endfor<CR>
 
