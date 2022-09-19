@@ -23,7 +23,7 @@ return require("packer").startup(function(use)
 		config = function()
 			local actions = require("telescope.actions")
 			require("telescope").setup({
-				defaults = {
+				defaults = require("telescope.themes").get_ivy({
 					mappings = {
 						i = {
 							["<C-a>"] = actions.toggle_all,
@@ -32,10 +32,13 @@ return require("packer").startup(function(use)
 							["<C-r><C-a>"] = require("skippi.actions").insert_cWORD,
 						},
 					},
+					layout_config = { height = 17 },
+					results_title = "",
+					selection_caret = "  ",
 					cache_picker = {
 						num_pickers = 10,
 					},
-				},
+				}),
 				extensions = {
 					fzf = {
 						override_generic_sorter = true,
@@ -399,7 +402,8 @@ return require("packer").startup(function(use)
 			vim.keymap.set("x", "<C-a>", require("dial.map").inc_visual())
 			vim.keymap.set("x", "<C-x>", require("dial.map").dec_visual())
 			vim.keymap.set("x", "g<C-a>", require("dial.map").inc_gvisual())
-			vim.keymap.set("x", "g<C-x>", require("dial.map").dec_gvisual()) end,
+			vim.keymap.set("x", "g<C-x>", require("dial.map").dec_gvisual())
+		end,
 	})
 	use("lewis6991/impatient.nvim")
 	use({
