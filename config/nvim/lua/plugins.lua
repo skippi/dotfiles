@@ -467,6 +467,9 @@ return require("packer").startup(function(use)
 	use({
 		"tpope/vim-eunuch",
 		config = function()
+			vim.keymap.set("n", "c.", [[:Rename! .<C-r>=expand("%:e")<CR><C-B><C-Right><Right>]], {
+				desc = "rename current file",
+			})
 			vim.keymap.set("n", "d.", "<Cmd>Remove!<CR>", { desc = "delete current file" })
 		end,
 	})
