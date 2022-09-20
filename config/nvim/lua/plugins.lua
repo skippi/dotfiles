@@ -464,7 +464,12 @@ return require("packer").startup(function(use)
 	})
 	use("skippi/vim-abolish")
 	use("tpope/vim-commentary")
-	use("tpope/vim-eunuch")
+	use({
+		"tpope/vim-eunuch",
+		config = function()
+			vim.keymap.set("n", "d.", "<Cmd>Remove!<CR>", { desc = "delete current file" })
+		end,
+	})
 	use({
 		"tpope/vim-fugitive",
 		config = function()
