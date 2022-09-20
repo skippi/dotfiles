@@ -27,7 +27,7 @@ local function getprocitems()
 	local results = {}
 	for _, s in ipairs(output) do
 		local splited = {}
-		for v in s:gmatch('[^,]+') do
+		for v in s:gmatch("[^,]+") do
 			splited[#splited + 1] = v
 		end
 		results[#results + 1] = {
@@ -52,49 +52,51 @@ function M.pkill(opts)
 			{ entry.filename },
 		})
 	end
-	pickers.new(opts, {
-		prompt_title = "Kill Process",
-		finder = finders.new_table({
-			results = getprocitems(),
-			entry_maker = function(entry)
-				return {
-					valid = true,
-					display = make_display,
-					ordinal = entry.filename .. " " .. entry.pid,
-					filename = entry.filename,
-					pid = entry.pid,
-				}
+	pickers
+		.new(opts, {
+			prompt_title = "Kill Process",
+			finder = finders.new_table({
+				results = getprocitems(),
+				entry_maker = function(entry)
+					return {
+						valid = true,
+						display = make_display,
+						ordinal = entry.filename .. " " .. entry.pid,
+						filename = entry.filename,
+						pid = entry.pid,
+					}
+				end,
+			}),
+			sorter = conf.generic_sorter(opts),
+			attach_mappings = function(_, map)
+				local smart_kill_action = function(prompt_bufnr, _)
+					local picker = action_state.get_current_picker(prompt_bufnr)
+					local items = {}
+					if #picker:get_multi_selection() > 0 then
+						for _, entry in ipairs(picker:get_multi_selection()) do
+							table.insert(items, entry)
+						end
+					else
+						for entry in picker.manager:iter() do
+							table.insert(items, entry)
+						end
+					end
+					for _, entry in ipairs(items) do
+						local cmd = "taskkill /f /pid "
+						if vim.loop.os_uname().sysname:find("Linux") then
+							cmd = "kill -9 "
+						end
+						vim.fn.jobstart(cmd .. entry.pid)
+					end
+					actions.close(prompt_bufnr)
+				end
+				actions.select_default:replace(smart_kill_action)
+				map("n", "<C-d>", smart_kill_action)
+				map("i", "<C-d>", smart_kill_action)
+				return true
 			end,
-		}),
-		sorter = conf.generic_sorter(opts),
-		attach_mappings = function(_, map)
-			local smart_kill_action = function(prompt_bufnr, _)
-				local picker = action_state.get_current_picker(prompt_bufnr)
-				local items = {}
-				if #picker:get_multi_selection() > 0 then
-					for _, entry in ipairs(picker:get_multi_selection()) do
-						table.insert(items, entry)
-					end
-				else
-					for entry in picker.manager:iter() do
-						table.insert(items, entry)
-					end
-				end
-				for _, entry in ipairs(items) do
-					local cmd = "taskkill /f /pid "
-					if vim.loop.os_uname().sysname:find("Linux") then
-						cmd = "kill -9 "
-					end
-					vim.fn.jobstart(cmd .. entry.pid)
-				end
-				actions.close(prompt_bufnr)
-			end
-			actions.select_default:replace(smart_kill_action)
-			map("n", "<C-d>", smart_kill_action)
-			map("i", "<C-d>", smart_kill_action)
-			return true
-		end,
-	}):find()
+		})
+		:find()
 end
 
 function M.tselect(opts)
@@ -113,51 +115,53 @@ function M.tselect(opts)
 		echoerr("E492: tag not found: " .. item.tagname)
 		return
 	end
-	pickers.new(opts, {
-		prompt = "Tags",
-		finder = finders.new_table({
-			results = results,
-			entry_maker = function(item)
-				if item.cmd == "" or item.cmd:sub(1, 1) == "!" then
-					return nil
-				end
-				local scode = item.cmd:sub(2, item.cmd:len() - 1)
-				local value = trim(scode:sub(2, scode:len() - 1))
-				return {
-					valid = true,
-					ordinal = value .. " " .. item.filename,
-					value = value,
-					display = function(entry)
-						local displayer = entry_display.create({
-							separator = " | ",
-							items = {
-								{ width = 22 },
-								{ remaining = true },
-							},
-						})
-						return displayer({
-							vim.fn.pathshorten(entry.filename),
-							entry.ordinal,
-						})
-					end,
-					name = item.name,
-					filename = item.filename,
-					scode = scode,
-					lnum = 1,
-				}
-			end,
-		}),
-		sorter = conf.generic_sorter(opts),
-		attach_mappings = function()
-			action_set.select:enhance({
-				post = function()
-					vim.cmd("keepjumps norm! gg")
-					vim.fn.search(action_state.get_selected_entry().scode)
+	pickers
+		.new(opts, {
+			prompt = "Tags",
+			finder = finders.new_table({
+				results = results,
+				entry_maker = function(item)
+					if item.cmd == "" or item.cmd:sub(1, 1) == "!" then
+						return nil
+					end
+					local scode = item.cmd:sub(2, item.cmd:len() - 1)
+					local value = trim(scode:sub(2, scode:len() - 1))
+					return {
+						valid = true,
+						ordinal = value .. " " .. item.filename,
+						value = value,
+						display = function(entry)
+							local displayer = entry_display.create({
+								separator = " | ",
+								items = {
+									{ width = 22 },
+									{ remaining = true },
+								},
+							})
+							return displayer({
+								vim.fn.pathshorten(entry.filename),
+								entry.ordinal,
+							})
+						end,
+						name = item.name,
+						filename = item.filename,
+						scode = scode,
+						lnum = 1,
+					}
 				end,
-			})
-			return true
-		end,
-	}):find()
+			}),
+			sorter = conf.generic_sorter(opts),
+			attach_mappings = function()
+				action_set.select:enhance({
+					post = function()
+						vim.cmd("keepjumps norm! gg")
+						vim.fn.search(action_state.get_selected_entry().scode)
+					end,
+				})
+				return true
+			end,
+		})
+		:find()
 end
 
 return M
