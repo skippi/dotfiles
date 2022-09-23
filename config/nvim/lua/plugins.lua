@@ -68,14 +68,7 @@ return require("packer").startup(function(use)
 		config = function()
 			local nls = require("null-ls")
 			nls.setup({
-				on_attach = function(_, bufnr)
-					local map = function(mode, key, cmd, opts)
-						opts = opts or {}
-						opts.buffer = bufnr
-						vim.keymap.set(mode, key, cmd, opts)
-					end
-					map("n", "=d", vim.lsp.buf.formatting)
-				end,
+				on_attach = require("skippi.lsp").on_attach,
 				sources = {
 					nls.builtins.diagnostics.cppcheck.with({
 						extra_args = { "--language=c++" },
@@ -261,11 +254,7 @@ return require("packer").startup(function(use)
 			lsc.pyright.setup(opts)
 			lsc.gopls.setup(opts)
 			lsc.sumneko_lua.setup({
-				on_attach = function(client, bufnr)
-					opts.on_attach(client, bufnr)
-					client.resolved_capabilities.document_formatting = false
-					client.resolved_capabilities.document_range_formatting = false
-				end,
+				on_attach = opts.on_attach,
 				capabilities = opts.capabilities,
 				settings = {
 					Lua = {
@@ -280,11 +269,9 @@ return require("packer").startup(function(use)
 				init_options = ts_utils.init_options,
 				capabilities = opts.capabilities,
 				on_attach = function(client, bufnr)
+					opts.on_attach(client, bufnr)
 					ts_utils.setup({ auto_inlay_hints = false })
 					ts_utils.setup_client(client)
-					client.resolved_capabilities.document_formatting = false
-					client.resolved_capabilities.document_range_formatting = false
-					opts.on_attach(client, bufnr)
 				end,
 			})
 			lsc.vimls.setup(opts)

@@ -50,6 +50,15 @@ function M.on_attach(_, bufnr)
 			wrap_results = true,
 		})
 	end)
+	map("n", "=d", function()
+		vim.lsp.buf.format({
+			filter = function(client)
+				return client.name ~= "tsserver" or client.name ~= "sumneko_lua"
+			end,
+			bufnr = bufnr,
+			timeout_ms = 2000,
+		})
+	end)
 end
 
 return M
