@@ -308,7 +308,7 @@ return require("packer").startup(function(use)
 						require("skippi.lsp").on_attach(client, bufnr)
 						vim.api.nvim_buf_create_user_command(
 							bufnr,
-							"JdtSpotless",
+							"JdtOrganizeImports",
 							require("jdtls").organize_imports,
 							{ desc = "organize java imports", force = true }
 						)
