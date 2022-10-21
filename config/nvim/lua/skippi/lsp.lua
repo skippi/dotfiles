@@ -1,8 +1,7 @@
 local M = {}
 
 function M.make_capabilities()
-	local cap = vim.lsp.protocol.make_client_capabilities()
-	cap = require("cmp_nvim_lsp").update_capabilities(cap)
+	local cap = require("cmp_nvim_lsp").default_capabilities()
 	cap.textDocument.foldingRange = {
 		dynamicRegistration = false,
 		lineFoldingOnly = true,
