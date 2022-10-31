@@ -121,8 +121,6 @@ map("n", "gs", function()
 	vim.o.hlsearch = true
 	grep({ vim_regex_to_pcre(vim.fn.getreg("/")) })
 end)
-map("n", "gWW", "gww")
-map({ "n", "x" }, "gW", "gw")
 map("n", "gw", "<C-w>", { remap = true })
 map("n", "m,", "#NcgN")
 map("n", "m;", "*Ncgn")
@@ -243,5 +241,13 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 		if line("'\"") > 0 and line("'\"") <= line("$") and not vim.bo.filetype:find("commit") then
 			vim.cmd('normal! g`"')
 		end
+	end,
+})
+
+vim.api.nvim_create_autocmd("LspAttach", {
+	desc = "lsp attach init",
+	group = group,
+	callback = function(args)
+		vim.bo[args.buf].formatexpr = "v:lua.require('skippi.lsp').formatexpr()"
 	end,
 })

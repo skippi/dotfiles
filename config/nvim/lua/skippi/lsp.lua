@@ -49,15 +49,30 @@ function M.on_attach(_, bufnr)
 			wrap_results = true,
 		})
 	end)
-	map("n", "=d", function()
+end
+
+function M.formatexpr(opts)
+	if vim.bo.filetype:find("commit") then
+		return 1
+	end
+	if vim.tbl_contains({ "i", "R", "ic", "ix" }, vim.fn.mode()) then
+		-- `formatexpr` is also called when exceeding `textwidth` in insert mode
+		-- fall back to internal formatting
+		return 1
+	end
+	local start_lnum = vim.v.lnum
+	local end_lnum = start_lnum + vim.v.count - 1
+	if start_lnum == 1 and end_lnum == vim.fn.line("$") then
 		vim.lsp.buf.format({
 			filter = function(client)
-				return client.name ~= "tsserver" or client.name ~= "sumneko_lua"
+				return client.name ~= "tsserver" and client.name ~= "sumneko_lua"
 			end,
-			bufnr = bufnr,
+			bufnr = vim.fn.bufnr(),
 			timeout_ms = 2000,
 		})
-	end)
+		return 0
+	end
+	return vim.lsp.formatexpr(opts)
 end
 
 return M
