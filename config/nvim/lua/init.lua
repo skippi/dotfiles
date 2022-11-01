@@ -174,6 +174,8 @@ end, { desc = "jump to last terminal buffer" })
 map({ "n", "x", "o" }, "j", [[v:count ? 'j' : 'gj']], { desc = "smart j", expr = true })
 map({ "n", "x", "o" }, "k", [[v:count ? 'k' : 'gk']], { desc = "smart k", expr = true })
 
+map("n", "ZF", "gggqG<C-o>")
+
 map({ "x", "o" }, "ie", "ae", { desc = "select all", remap = true })
 map("o", "ae", ":<C-u>norm vae<CR>", { desc = "select all" })
 map("x", "ae", [[<ESC>m':<C-u>keepjumps normal! vGoggV<CR>]], { desc = "select all", silent = true })
