@@ -93,7 +93,6 @@ end, { desc = "open new window and jump to mark", expr = true, remap = true })
 map("n", "<C-w>gd", "<C-w>sgd", { remap = true })
 map("n", "<C-h>", "<BS>", { remap = true }) -- windows <BS> fix
 map("n", "<Space>", "<Nop>")
-map("n", "<Space>d", "<Cmd>Kwbd<CR>")
 map("n", "<Space>j", ":tag /")
 map("n", "<Space>q", "<Cmd>q<CR>")
 map("n", "_", function()
@@ -175,6 +174,7 @@ map({ "n", "x", "o" }, "j", [[v:count ? 'j' : 'gj']], { desc = "smart j", expr =
 map({ "n", "x", "o" }, "k", [[v:count ? 'k' : 'gk']], { desc = "smart k", expr = true })
 
 map("n", "ZF", "gggqG<C-o>")
+map("n", "ZD", "<Cmd>Kwbd<CR>")
 
 map({ "x", "o" }, "ie", "ae", { desc = "select all", remap = true })
 map("o", "ae", ":<C-u>norm vae<CR>", { desc = "select all" })
