@@ -170,8 +170,9 @@ map("n", "'$", function()
 	end
 	vim.cmd(vim.g.Temp_last_term .. "b")
 end, { desc = "jump to last terminal buffer" })
-map({ "n", "x", "o" }, "j", [[v:count ? 'm`' . v:count . 'j' : 'gj']], { desc = "smart j", expr = true })
-map({ "n", "x", "o" }, "k", [[v:count ? 'm`' . v:count . 'k' : 'gk']], { desc = "smart k", expr = true })
+
+map({ "n", "x", "o" }, "j", [[v:count ? 'j' : 'gj']], { desc = "smart j", expr = true })
+map({ "n", "x", "o" }, "k", [[v:count ? 'k' : 'gk']], { desc = "smart k", expr = true })
 
 map({ "x", "o" }, "ie", "ae", { desc = "select all", remap = true })
 map("o", "ae", ":<C-u>norm vae<CR>", { desc = "select all" })
