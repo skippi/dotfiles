@@ -476,8 +476,20 @@ return require("packer").startup(function(use)
 	use({
 		"tpope/vim-surround",
 		config = function()
+			vim.g.surround_no_mappings = 1
 			vim.g.surround_13 = "\n\r\n"
 			vim.g.surround_indent = 1
+			vim.keymap.set("n", "ds", "<Plug>Dsurround")
+			vim.keymap.set("n", "cs", "<Plug>Csurround")
+			vim.keymap.set("n", "cS", "<Plug>CSurround")
+			vim.keymap.set("n", "s", "<Plug>Ysurround")
+			vim.keymap.set("n", "S", "<Plug>YSurround")
+			vim.keymap.set("n", "ss", "<Plug>Yssurround")
+			vim.keymap.set("n", "Ss", "<Plug>YSsurround")
+			vim.keymap.set("n", "SS", "<Plug>YSsurround")
+			vim.keymap.set("x", "s", "<Plug>VSurround")
+			vim.keymap.set("x", "S", "<Plug>VgSurround")
+			vim.keymap.set("i", "<C-s>", "<Plug>Isurround")
 		end,
 	})
 	use("tpope/vim-vinegar")
