@@ -39,6 +39,7 @@ local function grep(args)
 	vim.cmd("sil grep" .. params)
 end
 
+vim.o.autowriteall = true
 vim.o.cmdwinheight = 7
 vim.o.completeopt = "menuone,noselect"
 vim.o.completeslash = "slash"
@@ -203,22 +204,6 @@ vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "CursorHold", "CursorHo
 	end,
 })
 
-vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
-	desc = "auto save file",
-	group = group,
-	pattern = "*",
-	nested = true,
-	callback = function()
-		if not vim.bo.modified then
-			return
-		end
-		local change_marks = { vim.fn.getpos("'["), vim.fn.getpos("']") }
-		vim.cmd("sil! update")
-		vim.fn.setpos("'[", change_marks[1])
-		vim.fn.setpos("']", change_marks[2])
-	end,
-})
-
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "yank highlighting",
 	group = group,
@@ -258,4 +243,12 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 		end
 		vim.cmd.TrimWS()
 	end,
+})
+
+vim.api.nvim_create_autocmd({ "FocusLost", "TermEnter" }, {
+	desc = "auto save files",
+	group = group,
+	pattern = "*",
+	nested = true,
+	command = ":wall"
 })
