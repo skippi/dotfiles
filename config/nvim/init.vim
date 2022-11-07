@@ -75,7 +75,6 @@ command! EditEmacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') 
 command! HighlightTest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! -bang Kwbd call kwbd#run(<bang>0)
 command! Scratch sp +enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
-command! TrimWS %s/\s\+$//e
 
 aug terminal
   au!

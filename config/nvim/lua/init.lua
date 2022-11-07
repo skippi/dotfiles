@@ -1,4 +1,4 @@
-local job = require("plenary.job")
+local abbrev = require("skippi.abbrev")
 
 local function vim_regex_to_pcre(str)
 	str = string.gsub(str, "\\<", "\\b")
@@ -71,6 +71,9 @@ vim.o.tabstop = 2
 if vim.loop.os_uname().sysname:find("Windows") then
 	vim.o.shellcmdflag = "/s /v /c"
 end
+
+vim.api.nvim_create_user_command("TrimWS", [[%s/\s\+$//e]], { desc = "trim whitespace", force = true })
+abbrev.cabbrev("tri[mws]", "TrimWS")
 
 local map = vim.keymap.set
 
@@ -188,8 +191,7 @@ if vim.loop.os_uname().sysname:find("Windows") then
 	map("n", "<C-z>", "<Nop>") -- disable <C-z> windows memory leak
 end
 
-local group = vim.api.nvim_create_augroup("skippi", { clear = false })
-vim.api.nvim_clear_autocmds({ group = group })
+local group = vim.api.nvim_create_augroup("skippi", { clear = true })
 vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "CursorHold", "CursorHoldI" }, {
 	desc = "auto reload file",
 	group = group,
@@ -200,10 +202,12 @@ vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "CursorHold", "CursorHo
 		end
 	end,
 })
+
 vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
 	desc = "auto save file",
 	group = group,
 	pattern = "*",
+	nested = true,
 	callback = function()
 		if not vim.bo.modified then
 			return
@@ -214,6 +218,7 @@ vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
 		vim.fn.setpos("']", change_marks[2])
 	end,
 })
+
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "yank highlighting",
 	group = group,
@@ -222,20 +227,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		vim.highlight.on_yank()
 	end,
 })
-vim.api.nvim_create_autocmd("BufLeave", {
-	desc = "file context marks",
-	group = group,
-	pattern = "*",
-	callback = function()
-		local ext = vim.fn.expand("%:e")
-		if ext ~= "" then
-			vim.cmd("mark " .. ext:sub(1, 1):upper())
-		end
-		if vim.bo.buftype == "terminal" then
-			vim.g.Temp_last_term = vim.fn.bufnr()
-		end
-	end,
-})
+
 vim.api.nvim_create_autocmd("BufReadPost", {
 	desc = "jump to last known position",
 	group = group,
@@ -253,5 +245,17 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	group = group,
 	callback = function(args)
 		vim.bo[args.buf].formatexpr = "v:lua.require('skippi.lsp').formatexpr()"
+	end,
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+	desc = "auto trim whitespace",
+	group = group,
+	pattern = "*",
+	callback = function()
+		if vim.bo.filetype == "markdown" then
+			return
+		end
+		vim.cmd.TrimWS()
 	end,
 })
