@@ -241,7 +241,9 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 		if vim.bo.filetype == "markdown" then
 			return
 		end
+		vim.cmd.norm("mz")
 		vim.cmd.TrimWS()
+		vim.cmd.norm("'z")
 	end,
 })
 
@@ -250,5 +252,5 @@ vim.api.nvim_create_autocmd({ "FocusLost", "TermEnter" }, {
 	group = group,
 	pattern = "*",
 	nested = true,
-	command = ":wall"
+	command = ":wall",
 })
