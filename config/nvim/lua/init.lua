@@ -19,14 +19,10 @@ local function visual_selection()
 		start_col, end_col = end_col, start_col
 	end
 	local lines = vim.fn.getline(start_row, end_row)
-	local n = 0
-	for _ in pairs(lines) do
-		n = n + 1
-	end
-	if n <= 0 then
+	if #lines <= 0 then
 		return nil
 	end
-	lines[n] = string.sub(lines[n], 1, end_col)
+	lines[#lines] = string.sub(lines[#lines], 1, end_col)
 	lines[1] = string.sub(lines[1], start_col)
 	return table.concat(lines, "\n")
 end

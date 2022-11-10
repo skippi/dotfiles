@@ -19,9 +19,9 @@ vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
 		end
 		if modified then
 			vim.cmd.wall()
-			vim.defer_fn(function()
+			vim.schedule(function()
 				vim.cmd("edit")
-			end, 0)
+			end)
 		end
 	end,
 })
