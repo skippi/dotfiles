@@ -241,9 +241,9 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 		if vim.bo.filetype == "markdown" then
 			return
 		end
-		vim.cmd.norm("mz")
+		local pos = vim.fn.getpos(".")
 		vim.cmd.TrimWS()
-		vim.cmd.norm("'z")
+		vim.fn.setpos(".", pos)
 	end,
 })
 
