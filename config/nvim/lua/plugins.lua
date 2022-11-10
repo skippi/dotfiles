@@ -470,6 +470,16 @@ return require("packer").startup(function(use)
 			vim.keymap.set("n", "gb", "<Cmd>G blame<CR>")
 		end,
 	})
+	use({
+		"gbprod/substitute.nvim",
+		config = function()
+			require("substitute").setup({})
+			vim.keymap.set("n", "cx", require('substitute.exchange').operator)
+			vim.keymap.set("n", "cxx", require('substitute.exchange').line)
+			vim.keymap.set("x", "X", require('substitute.exchange').visual)
+			vim.keymap.set("n", "cxc", require('substitute.exchange').cancel)
+		end,
+	})
 	use("tpope/vim-obsession")
 	use("tpope/vim-repeat")
 	use("tpope/vim-sleuth")
