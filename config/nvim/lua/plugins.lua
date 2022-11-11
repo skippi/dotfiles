@@ -489,6 +489,7 @@ return require("packer").startup(function(use)
 			vim.keymap.set("n", "cxc", require("substitute.exchange").cancel)
 		end,
 	})
+	use("romainl/vim-cool")
 	use("tpope/vim-obsession")
 	use("tpope/vim-repeat")
 	use("tpope/vim-sleuth")
