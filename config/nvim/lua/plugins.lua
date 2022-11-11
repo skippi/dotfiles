@@ -471,6 +471,15 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use({
+		"ruifm/gitlinker.nvim",
+		requires = "nvim-lua/plenary.nvim",
+		config = function()
+			require("gitlinker").setup({ mappings = nil })
+			vim.keymap.set("n", "gy", "<Cmd>lua require('gitlinker').get_buf_range_url('n')<CR>")
+			vim.keymap.set("x", "gy", "<Cmd>lua require('gitlinker').get_buf_range_url('v')<CR>")
+		end,
+	})
+	use({
 		"gbprod/substitute.nvim",
 		config = function()
 			require("substitute").setup({})
