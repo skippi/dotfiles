@@ -73,6 +73,8 @@ end
 vim.api.nvim_create_user_command("TrimWS", [[%s/\s\+$//e]], { desc = "trim whitespace", force = true })
 abbrev.cabbrev("tri[mws]", "TrimWS")
 
+abbrev.cabbrev("H", "h")
+
 local map = vim.keymap.set
 
 map("", "'", "`")
