@@ -254,3 +254,24 @@ vim.api.nvim_create_autocmd({ "FocusLost", "TermEnter" }, {
 		end
 	end,
 })
+
+vim.api.nvim_create_autocmd("BufNewFile", {
+	desc = "edit windows files",
+	group = group,
+	pattern = "*",
+	nested = true,
+	callback = function()
+		if not vim.loop.os_uname().sysname:find("Linux") then
+			return
+		end
+		local name = vim.fn.bufname()
+		if not name:find("^C:") then
+			return
+		end
+		local bufnr = vim.fn.bufnr()
+		vim.cmd("edit " .. vim.trim(vim.fn.system({ "wslpath", "-a", name })))
+		vim.schedule(function()
+			vim.api.nvim_buf_delete(bufnr, { force = true })
+		end)
+	end,
+})
