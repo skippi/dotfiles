@@ -14,7 +14,7 @@ function M.cabbrev(abbr, expand)
 			vim.cmd(
 				"cnoreabbrev <expr> "
 					.. str
-					.. [[ (getcmdtype() ==# ':' && getcmdline() =~# "\\('.*,'.*\\)\\?]]
+					.. [[ (getcmdtype() ==# ':' && getcmdline() =~# "^\\('.*,'.*\\)\\?]]
 					.. str
 					.. [[") ? "]]
 					.. expand
