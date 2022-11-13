@@ -178,10 +178,6 @@ map({ "n", "x", "o" }, "k", [[v:count ? 'k' : 'gk']], { desc = "smart k", expr =
 map("n", "ZF", "gggqG<C-o>")
 map("n", "ZD", "<Cmd>Kwbd<CR>")
 
-map({ "x", "o" }, "ie", "ae", { desc = "select all", remap = true })
-map("o", "ae", ":<C-u>norm vae<CR>", { desc = "select all" })
-map("x", "ae", [[<ESC>m':<C-u>keepjumps normal! vGoggV<CR>]], { desc = "select all", silent = true })
-
 map({ "x", "o" }, "aj", ":<C-u>norm! 0v$<cr>", { desc = "select line", silent = true })
 map({ "x", "o" }, "ij", ":<C-u>norm! _vg_<cr>", { desc = "select inside line", silent = true })
 

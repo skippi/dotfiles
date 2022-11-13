@@ -490,6 +490,7 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use("romainl/vim-cool")
+	use({"kana/vim-textobj-entire", requires = "kana/vim-textobj-user"})
 	use("tpope/vim-obsession")
 	use("tpope/vim-repeat")
 	use("tpope/vim-sleuth")
