@@ -71,9 +71,10 @@ if vim.loop.os_uname().sysname:find("Windows") then
 end
 
 vim.api.nvim_create_user_command("TrimWS", [[%s/\s\+$//e]], { desc = "trim whitespace", force = true })
-abbrev.cabbrev("tri[mws]", "TrimWS")
+abbrev.create_short_cmds("tri[mws]", "TrimWS")
 
-abbrev.cabbrev("H", "h")
+abbrev.create_short_cmds("E", "e")
+abbrev.create_short_cmds("H", "h")
 
 local map = vim.keymap.set
 

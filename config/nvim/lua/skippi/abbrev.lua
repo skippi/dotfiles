@@ -1,6 +1,6 @@
 local M = {}
 
-function M.cabbrev(abbr, expand)
+function M.create_short_cmds(abbr, expand)
 	local str = ""
 	local add = false
 	for i = 1, #abbr do
