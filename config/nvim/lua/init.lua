@@ -1,4 +1,5 @@
 local abbrev = require("skippi.abbrev")
+local buffers = require("skippi.buffers")
 
 local function vim_regex_to_pcre(str)
 	str = string.gsub(str, "\\<", "\\b")
@@ -248,5 +249,10 @@ vim.api.nvim_create_autocmd({ "FocusLost", "TermEnter" }, {
 	group = group,
 	pattern = "*",
 	nested = true,
-	command = ":wall",
+	callback = function()
+		local bufs = buffers.find_all_modified()
+		if next(bufs) ~= nil then
+			buffers.bulk_write(bufs)
+		end
+	end,
 })
