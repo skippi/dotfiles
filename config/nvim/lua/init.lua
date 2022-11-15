@@ -1,5 +1,6 @@
 local abbrev = require("skippi.abbrev")
 local buffers = require("skippi.buffers")
+local opfunc = require("skippi.opfunc")
 
 local function vim_regex_to_pcre(str)
 	str = string.gsub(str, "\\<", "\\b")
@@ -177,6 +178,19 @@ end, { desc = "jump to last terminal buffer" })
 
 map({ "n", "x", "o" }, "j", [[v:count ? 'j' : 'gj']], { desc = "smart j", expr = true })
 map({ "n", "x", "o" }, "k", [[v:count ? 'k' : 'gk']], { desc = "smart k", expr = true })
+
+opfunc.map("[w", opfunc.win_path_to_wsl, {
+	desc = "convert windows path to wsl",
+	expr = true,
+})
+opfunc.map("]w", opfunc.wsl_path_to_win, {
+	desc = "convert wsl path to windows",
+	expr = true,
+})
+opfunc.map("<C-_>", opfunc.toggle_path_slash, {
+	desc = "toggle path slashes",
+	expr = true,
+})
 
 map("n", "ZF", "gggqG<C-o>")
 map("n", "ZD", "<Cmd>Kwbd<CR>")
