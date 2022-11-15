@@ -22,7 +22,7 @@ function M.bulk_write(bufnrs)
 		return
 	end
 	vim.api.nvim_buf_call(bufnrs[1], function()
-		vim.cmd(table.concat(bufnrs, ",") .. "bufdo! sil!update")
+		vim.cmd("sil! " .. table.concat(bufnrs, ",") .. "bufdo! sil!update")
 	end)
 end
 
