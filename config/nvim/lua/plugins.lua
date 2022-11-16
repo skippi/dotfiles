@@ -484,6 +484,10 @@ return require("packer").startup(function(use)
 		"gbprod/substitute.nvim",
 		config = function()
 			require("substitute").setup({})
+			vim.keymap.set("n", "s", require("substitute").operator)
+			vim.keymap.set("n", "ss", require("substitute").line)
+			vim.keymap.set("n", "S", require("substitute").eol)
+			vim.keymap.set("x", "s", require("substitute").visual)
 			vim.keymap.set("n", "cx", require("substitute.exchange").operator)
 			vim.keymap.set("n", "cxx", require("substitute.exchange").line)
 			vim.keymap.set("x", "X", require("substitute.exchange").visual)
@@ -491,28 +495,16 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use("romainl/vim-cool")
-	use({"kana/vim-textobj-entire", requires = "kana/vim-textobj-user"})
-	use({"Julian/vim-textobj-variable-segment", requires = "kana/vim-textobj-user"})
+	use({ "kana/vim-textobj-entire", requires = "kana/vim-textobj-user" })
+	use({ "Julian/vim-textobj-variable-segment", requires = "kana/vim-textobj-user" })
 	use("tpope/vim-obsession")
 	use("tpope/vim-repeat")
 	use("tpope/vim-sleuth")
 	use({
 		"tpope/vim-surround",
 		config = function()
-			vim.g.surround_no_mappings = 1
 			vim.g.surround_13 = "\n\r\n"
 			vim.g.surround_indent = 1
-			vim.keymap.set("n", "ds", "<Plug>Dsurround")
-			vim.keymap.set("n", "cs", "<Plug>Csurround")
-			vim.keymap.set("n", "cS", "<Plug>CSurround")
-			vim.keymap.set("n", "s", "<Plug>Ysurround")
-			vim.keymap.set("n", "S", "<Plug>YSurround")
-			vim.keymap.set("n", "ss", "<Plug>Yssurround")
-			vim.keymap.set("n", "Ss", "<Plug>YSsurround")
-			vim.keymap.set("n", "SS", "<Plug>YSsurround")
-			vim.keymap.set("x", "s", "<Plug>VSurround")
-			vim.keymap.set("x", "S", "<Plug>VgSurround")
-			vim.keymap.set("i", "<C-s>", "<Plug>Isurround")
 		end,
 	})
 	use("tpope/vim-vinegar")
