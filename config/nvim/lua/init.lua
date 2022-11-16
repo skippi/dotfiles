@@ -71,7 +71,11 @@ if vim.loop.os_uname().sysname:find("Windows") then
 	vim.o.shellcmdflag = "/s /v /c"
 end
 
-vim.api.nvim_create_user_command("TrimWS", [[%s/\s\+$//e]], { desc = "trim whitespace", force = true })
+vim.api.nvim_create_user_command("TrimWS", function()
+	local pos = vim.fn.getpos(".")
+	vim.cmd([[%s/\s\+$//e]])
+	vim.fn.setpos(".", pos)
+end, { desc = "trim whitespace", force = true })
 abbrev.create_short_cmds("tri[mws]", "TrimWS")
 
 abbrev.create_short_cmds("E", "e")
@@ -251,9 +255,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 		if vim.bo.filetype == "markdown" then
 			return
 		end
-		local pos = vim.fn.getpos(".")
 		vim.cmd.TrimWS()
-		vim.fn.setpos(".", pos)
 	end,
 })
 
