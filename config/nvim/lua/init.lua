@@ -198,6 +198,7 @@ opfunc.map("<C-_>", opfunc.toggle_path_slash, {
 
 map("n", "ZF", "gggqG<C-o>")
 map("n", "ZD", "<Cmd>Kwbd<CR>")
+map("n", "ZS", "<Cmd>Scratch<CR>")
 
 map({ "x", "o" }, "aj", ":<C-u>norm! 0v$<cr>", { desc = "select line", silent = true })
 map({ "x", "o" }, "ij", ":<C-u>norm! _vg_<cr>", { desc = "select inside line", silent = true })
