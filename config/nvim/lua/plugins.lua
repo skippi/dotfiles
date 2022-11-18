@@ -497,6 +497,12 @@ return require("packer").startup(function(use)
 	use("romainl/vim-cool")
 	use({ "kana/vim-textobj-entire", requires = "kana/vim-textobj-user" })
 	use({ "Julian/vim-textobj-variable-segment", requires = "kana/vim-textobj-user" })
+	use({
+		"elihunter173/dirbuf.nvim",
+		config = function()
+			require("dirbuf").setup({ sort_order = "directories_first" })
+		end,
+	})
 	use("tpope/vim-obsession")
 	use("tpope/vim-repeat")
 	use("tpope/vim-sleuth")
@@ -507,7 +513,6 @@ return require("packer").startup(function(use)
 			vim.g.surround_indent = 1
 		end,
 	})
-	use("tpope/vim-vinegar")
 
 	-- UI
 	use({
