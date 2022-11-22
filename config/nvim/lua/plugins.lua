@@ -435,6 +435,8 @@ return require("packer").startup(function(use)
 							["ic"] = "@class.inner",
 							["aa"] = "@parameter.outer",
 							["ia"] = "@parameter.inner",
+							["ai"] = "@block.outer",
+							["ii"] = "@block.inner",
 						},
 					},
 				},
