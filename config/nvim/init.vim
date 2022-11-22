@@ -70,7 +70,6 @@ command! EditIdea sil exe "!idea64" expand("%:p") . ":" . line('.')
 command! EditEmacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') bufname("%")
 command! HighlightTest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
 command! -bang Kwbd call kwbd#run(<bang>0)
-command! Scratch sp +enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 
 aug terminal
   au!

@@ -78,6 +78,13 @@ vim.api.nvim_create_user_command("TrimWS", function()
 end, { desc = "trim whitespace", force = true })
 abbrev.create_short_cmds("tri[mws]", "TrimWS")
 
+vim.api.nvim_create_user_command(
+	"Scratch",
+	[[enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile]],
+	{ force = true }
+)
+abbrev.create_short_cmds("scra[tch]", "Scratch")
+
 abbrev.create_short_cmds("E", "e")
 abbrev.create_short_cmds("H", "h")
 
