@@ -227,6 +227,14 @@ if vim.loop.os_uname().sysname:find("Windows") then
 end
 
 local group = vim.api.nvim_create_augroup("skippi", { clear = true })
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+	desc = "auto reload plugin config",
+	group = group,
+	pattern = "plugins.lua",
+	command = "source <afile> | PackerSync",
+})
+
 vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "CursorHold", "CursorHoldI" }, {
 	desc = "auto reload file",
 	group = group,
