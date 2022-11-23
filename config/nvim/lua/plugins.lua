@@ -503,6 +503,7 @@ return require("packer").startup(function(use)
 			vim.keymap.set("n", "gb", "<Cmd>G blame<CR>")
 		end,
 	})
+	use({ "rbong/vim-flog", requires = "tpope/vim-fugitive" })
 	use({
 		"ruifm/gitlinker.nvim",
 		requires = "nvim-lua/plenary.nvim",
