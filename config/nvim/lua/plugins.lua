@@ -514,6 +514,14 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use({
+		"ThePrimeagen/harpoon",
+		requires = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+		config = function()
+			vim.keymap.set("n", "m.", require("harpoon.mark").add_file, { desc = "add harpoon file" })
+			vim.keymap.set("n", "<Space>m", require("harpoon.ui").toggle_quick_menu, { desc = "show harpoon menu" })
+		end,
+	})
+	use({
 		"gbprod/substitute.nvim",
 		config = function()
 			require("substitute").setup({})
