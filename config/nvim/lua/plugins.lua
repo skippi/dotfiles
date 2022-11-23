@@ -549,6 +549,21 @@ return require("packer").startup(function(use)
 
 	-- UI
 	use({
+		"NvChad/nvim-colorizer.lua",
+		config = function()
+			require("colorizer").setup({
+				filetypes = {
+					"css",
+					"javascript",
+					"javascriptreact",
+					"typescript",
+					"typescriptreact",
+					html = { mode = "foreground" },
+				},
+			})
+		end,
+	})
+	use({
 		"MaxMEllon/vim-jsx-pretty",
 		ft = {
 			"javascript",
