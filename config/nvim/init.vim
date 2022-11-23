@@ -27,16 +27,8 @@ func s:edit_file_by_offset(offset) abort
   exe "edit" dir . '/' . get(files, idx)
 endfunc
 
-nnoremap [<C-q> <Cmd>cpfile<CR>
 nnoremap [<M-q> <Cmd>exe "sil!uns colder" v:count1<CR>
-nnoremap [q <Cmd>cprev<CR>
-nnoremap [t <Cmd>tprev<CR>
-nnoremap ]<C-q> <Cmd>cnfile<CR>
 nnoremap ]<M-q> <Cmd>exe "sil!uns cnewer" v:count1<CR>
-nnoremap ]q <Cmd>cnext<CR>
-nnoremap ]t <Cmd>tnext<CR>
-noremap [n <Cmd>for _ in range(v:count1)<CR>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "bsW")<CR>endfor<CR>
-noremap ]n <Cmd>for _ in range(v:count1)<CR>call search('^<<<<<<<\\|^=======\\|^>>>>>>>', "sW")<CR>endfor<CR>
 
 " search and replace
 nnoremap <Space><Space> :'{,'}s\M\<<C-r><C-w>\>g<Left><Left>
