@@ -1,8 +1,8 @@
 local buffers = require("skippi.buffers")
 
-vim.keymap.set({ "n", "v", "o" }, "q", "q")
-vim.keymap.set("n", "sb", [[<Cmd>G reset --soft HEAD^<CR>]])
-vim.keymap.set("n", "sb", [[<Cmd>G commit -c ORIG_HEAD<CR>]])
+vim.keymap.set({ "n", "v", "o" }, "q", "q", { buffer = true })
+vim.keymap.set("n", "sb", [[<Cmd>G reset --soft HEAD^<CR>]], { buffer = true })
+vim.keymap.set("n", "sb", [[<Cmd>G commit -c ORIG_HEAD<CR>]], { buffer = true })
 
 local group = vim.api.nvim_create_augroup("skippi.fugitive", { clear = true })
 
