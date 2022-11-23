@@ -55,11 +55,12 @@ function M.toggle_path_slash(str)
 end
 
 function M.map(input, transform, opts)
-	local callback = function()
+	vim.keymap.set({ "n", "x" }, input, function()
 		return transform_setup(transform)
-	end
-	vim.keymap.set({ "n", "x" }, input, callback, opts)
-	vim.keymap.set("n", input .. input, callback, opts)
+	end, opts)
+	vim.keymap.set("n", input .. input, function()
+		return transform_setup(transform) .. "_"
+	end, opts)
 end
 
 return M
