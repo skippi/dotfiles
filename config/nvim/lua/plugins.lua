@@ -527,7 +527,6 @@ return require("packer").startup(function(use)
 			vim.keymap.set("n", "cxc", require("substitute.exchange").cancel)
 		end,
 	})
-	use("romainl/vim-cool")
 	use({ "kana/vim-textobj-entire", requires = "kana/vim-textobj-user" })
 	use({ "Julian/vim-textobj-variable-segment", requires = "kana/vim-textobj-user" })
 	use({
