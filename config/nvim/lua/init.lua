@@ -41,6 +41,7 @@ vim.o.autowriteall = true
 vim.o.cmdwinheight = 7
 vim.o.completeopt = "menuone,noselect"
 vim.o.completeslash = "slash"
+vim.o.exrc = true
 vim.o.fileformat = "unix"
 vim.o.fileformats = "unix,dos"
 vim.o.grepformat = "%f:%l:%c:%m,%f:%l:%m"
