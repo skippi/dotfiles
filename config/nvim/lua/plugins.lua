@@ -160,6 +160,7 @@ return require("packer").startup(function(use)
 			{ "hrsh7th/cmp-path" },
 			{ "hrsh7th/cmp-vsnip" },
 			{ "hrsh7th/vim-vsnip" },
+			{ "lukas-reineke/cmp-under-comparator" },
 			{ "quangnguyen30192/cmp-nvim-tags" },
 		},
 		config = function()
@@ -174,6 +175,18 @@ return require("packer").startup(function(use)
 					expand = function(args)
 						vim.fn["vsnip#anonymous"](args.body)
 					end,
+				},
+				sorting = {
+					comparators = {
+						cmp.config.compare.offset,
+						cmp.config.compare.exact,
+						cmp.config.compare.score,
+						require("cmp-under-comparator").under,
+						cmp.config.compare.kind,
+						cmp.config.compare.sort_text,
+						cmp.config.compare.length,
+						cmp.config.compare.order,
+					},
 				},
 				mapping = cmp.mapping.preset.insert({
 					["<Tab>"] = cmp.mapping(function(fallback)
