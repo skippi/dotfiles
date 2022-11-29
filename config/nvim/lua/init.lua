@@ -240,7 +240,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	desc = "auto reload plugin config",
 	group = group,
 	pattern = "plugins.lua",
-	command = "source <afile> | PackerCompile",
+	command = "sil! source <afile> | sil! PackerCompile",
 })
 
 vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "CursorHold", "CursorHoldI" }, {
