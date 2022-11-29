@@ -548,6 +548,7 @@ return require("packer").startup(function(use)
 			require("dirbuf").setup({ sort_order = "directories_first" })
 		end,
 	})
+	use("jghauser/mkdir.nvim")
 	use("tpope/vim-obsession")
 	use("tpope/vim-repeat")
 	use("tpope/vim-sleuth")
