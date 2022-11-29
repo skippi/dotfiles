@@ -155,6 +155,7 @@ return require("packer").startup(function(use)
 			{ "hrsh7th/cmp-calc" },
 			{ "hrsh7th/cmp-cmdline", commit = "6d45c70" }, -- don't update until visual cmdline fixed
 			{ "hrsh7th/cmp-nvim-lsp" },
+			{ "hrsh7th/cmp-nvim-lua" },
 			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
 			{ "hrsh7th/cmp-path" },
 			{ "hrsh7th/cmp-vsnip" },
@@ -205,6 +206,7 @@ return require("packer").startup(function(use)
 				}),
 				sources = cmp.config.sources({
 					{ name = "nvim_lsp_signature_help" },
+					{ name = "nvim_lua" },
 					{ name = "nvim_lsp" },
 					{ name = "vsnip" },
 					{ name = "calc" },
