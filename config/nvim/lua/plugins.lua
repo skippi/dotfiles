@@ -564,6 +564,12 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use("jghauser/mkdir.nvim")
+	use({
+		"j-hui/fidget.nvim",
+		config = function()
+			require("fidget").setup({})
+		end,
+	})
 	use("tpope/vim-obsession")
 	use("tpope/vim-repeat")
 	use("tpope/vim-sleuth")
