@@ -265,6 +265,7 @@ return require("packer").startup(function(use)
 		requires = {
 			{ "jose-elias-alvarez/nvim-lsp-ts-utils", requires = "nvim-lua/plenary.nvim" },
 			"williamboman/mason.nvim",
+			"b0o/schemastore.nvim",
 		},
 		config = function()
 			local lsc = require("lspconfig")
@@ -295,6 +296,14 @@ return require("packer").startup(function(use)
 				end,
 			})
 			lsc.vimls.setup(opts)
+			lsc.jsonls.setup(vim.tbl_extend("force", opts, {
+				settings = {
+					json = {
+						schemas = require("schemastore").json.schemas(),
+						validate = { enable = true },
+					},
+				},
+			}))
 		end,
 	})
 	use({
