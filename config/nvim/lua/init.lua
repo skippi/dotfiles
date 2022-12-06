@@ -330,3 +330,13 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 		end)
 	end,
 })
+
+vim.on_key(function(char)
+	if vim.fn.mode() ~= "n" then
+		return
+	end
+	local is_hl_key = vim.tbl_contains({ "<CR>", "n", "N", "*", "#", "?", "/" }, vim.fn.keytrans(char))
+	if vim.o.hlsearch ~= is_hl_key then
+		vim.o.hlsearch = is_hl_key
+	end
+end, vim.api.nvim_create_namespace("auto hlsearch"))
