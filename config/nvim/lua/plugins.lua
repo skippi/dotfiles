@@ -390,6 +390,7 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use("AndrewRadev/splitjoin.vim")
+	use({ "anuvyklack/hydra.nvim" })
 	use({
 		"mattn/emmet-vim",
 		setup = function()
