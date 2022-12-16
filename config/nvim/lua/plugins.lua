@@ -433,6 +433,13 @@ return require("packer").startup(function(use)
 		end,
 	})
 	use({
+		"mfussenegger/nvim-treehopper",
+		config = function()
+			vim.keymap.set("o", ".", ":<C-u>lua require('tsht').nodes()<CR>", { silent = true })
+			vim.keymap.set("x", ".", ":lua require('tsht').nodes()<CR>", { silent = true })
+		end,
+	})
+	use({
 		"nvim-treesitter/nvim-treesitter",
 		requires = {
 			"nvim-treesitter/nvim-treesitter-textobjects",
@@ -520,10 +527,10 @@ return require("packer").startup(function(use)
 	use({
 		"tpope/vim-eunuch",
 		config = function()
-			vim.keymap.set("n", "c.", [[:Rename! .<C-r>=expand("%:e")<CR><C-B><C-Right><Right>]], {
+			vim.keymap.set("n", "ZR", [[:Rename! .<C-r>=expand("%:e")<CR><C-B><C-Right><Right>]], {
 				desc = "rename current file",
 			})
-			vim.keymap.set("n", "d.", "<Cmd>Remove!<CR>", { desc = "delete current file" })
+			vim.keymap.set("n", "ZX", "<Cmd>Remove!<CR>", { desc = "delete current file" })
 		end,
 	})
 	use({
@@ -532,7 +539,7 @@ return require("packer").startup(function(use)
 			vim.keymap.set("n", "g.", "<Cmd>Gvdiffsplit<CR>")
 			vim.keymap.set("n", "g<CR>", "<Cmd>G<CR>")
 			vim.keymap.set("n", "g<Space>", ":G<Space>")
-			vim.keymap.set("n", "gL", "<Cmd>G log --first-parent<CR>")
+			vim.keymap.set("n", "gL", "<Cmd>G log<CR>")
 			vim.keymap.set("n", "gb", "<Cmd>G blame<CR>")
 		end,
 	})
