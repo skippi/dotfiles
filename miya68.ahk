@@ -1,20 +1,18 @@
-#HotkeyInterval 99000000
-#KeyHistory 0
-#MaxHotkeysPerInterval 99000000
-#MenuMaskKey vkE8
-#NoEnv
+﻿A_HotkeyInterval := 99000000
+A_MaxHotkeysPerInterval := 99000000
+A_MenuMaskKey := "vkE8"
+KeyHistory 0
 #SingleInstance
-#UseHook On
-ListLines Off
-SetBatchLines -1
-SetCapsLockState AlwaysOff
+#UseHook true
+ListLines(false)
+SetCapsLockState("AlwaysOff")
 
-!<#Down::Send #{Down}
-!<#Left::Send #{Left}
-!<#Right::Send #{Right}
-!<#Up::Send #{Up}
+!<#Down::Send("#{Down}")
+!<#Left::Send("#{Left}")
+!<#Right::Send("#{Right}")
+!<#Up::Send("#{Up}")
 
-!Capslock Up::SendInput ^{Esc}
+!Capslock Up::SendInput("^{Esc}")
 !Capslock::Return
 *AppsKey::RCtrl
 <#Capslock::Capslock
@@ -22,14 +20,14 @@ SetCapsLockState AlwaysOff
 <#Up::Return
 LWin::Return
 
-<#+Left::SendInput +{Home}
-<#+Right::SendInput +{End}
-<#Left::SendInput {Home}
-<#Right::SendInput {End}
-<#^+Left::SendInput ^+{Home}
-<#^+Right::SendInput ^+{End}
-<#^Left::SendInput ^{Home}
-<#^Right::SendInput ^{End}
+<#+Left::SendInput("+{Home}")
+<#+Right::SendInput("+{End}")
+<#Left::SendInput("{Home}")
+<#Right::SendInput("{End}")
+<#^+Left::SendInput("^+{Home}")
+<#^+Right::SendInput("^+{End}")
+<#^Left::SendInput("^{Home}")
+<#^Right::SendInput("^{End}")
 
 Capslock::Esc
 Esc::`
