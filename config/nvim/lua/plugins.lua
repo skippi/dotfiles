@@ -109,14 +109,14 @@ return require("packer").startup(function(use)
 						opts.buffer = bufnr
 						vim.keymap.set(mode, l, r, opts)
 					end
-					map("n", "]c", function()
+					map({ "n", "x", "o" }, "]c", function()
 						if vim.wo.diff then
 							return "]c"
 						end
 						vim.schedule(gs.next_hunk)
 						return "<Ignore>"
 					end, { expr = true })
-					map("n", "[c", function()
+					map({ "n", "x", "o" }, "[c", function()
 						if vim.wo.diff then
 							return "[c"
 						end
