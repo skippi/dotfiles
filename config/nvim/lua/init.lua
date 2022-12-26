@@ -94,13 +94,11 @@ abbrev.create_short_cmds("H", "h")
 local map = vim.keymap.set
 
 map({ "n", "x", "o" }, "'", "`")
-map({ "n", "x", "o" }, "<Space>P", '"+P', { remap = true })
-map({ "n", "x", "o" }, "<Space>Y", '"+Y', { remap = true })
-map({ "n", "x", "o" }, "<Space>p", '"+p', { remap = true })
-map({ "n", "x", "o" }, "<Space>y", '"+y', { remap = true })
 map({ "n", "x", "o" }, "gh", "^")
 map({ "n", "x", "o" }, "gl", "g_")
 map("n", "<BS>", "<C-^>")
+map("x", "*", [[:<C-u>let @z=@"<CR>gvy/\V<C-R>"<CR>:let @"=@z|<CR>]], { silent = true })
+map("x", "#", [[:<C-u>let @z=@"<CR>gvy?\V<C-R>"<CR>:let @"=@z<CR>]], { silent = true })
 
 map("n", "<C-w>'", function()
 	local ESC = 27
@@ -110,7 +108,6 @@ map("n", "<C-w>'", function()
 	end
 	return "<C-w>s'" .. vim.fn.nr2char(keynr)
 end, { desc = "open new window and jump to mark", expr = true, remap = true })
-map("n", "<C-w>gd", "<C-w>sgd", { remap = true })
 map("n", "<C-w>yod", function()
 	local wins = vim.api.nvim_tabpage_list_wins(0)
 	local diffcmd = "diffoff"
@@ -120,11 +117,9 @@ map("n", "<C-w>yod", function()
 			break
 		end
 	end
-	for _, id in ipairs(wins) do
-		vim.api.nvim_win_call(id, function()
-			vim.cmd("windo " .. diffcmd)
-		end)
-	end
+	vim.api.nvim_win_call(0, function()
+		vim.cmd("windo " .. diffcmd)
+	end)
 end, { desc = "toggle window diff" })
 
 map("n", "<C-h>", "<BS>", { remap = true }) -- windows <BS> fix
@@ -159,9 +154,6 @@ end)
 map("n", "gw", "<C-w>", { remap = true })
 map("n", "m,", "#NcgN")
 map("n", "m;", "*Ncgn")
-map("n", "yp", function()
-	vim.fn.setreg(vim.v.register, vim.fn.expand("%:p"))
-end)
 map("x", "g<C-s>", function()
 	local pattern = visual_selection()
 	vim.fn.setreg("/", "\\V" .. vim.fn.escape(pattern, "\\"))
@@ -178,14 +170,6 @@ map("x", "m,", [["zy?\V<C-R>=escape(@z,'/\')<CR><CR>NcgN]])
 map("x", "m;", [["zy/\V<C-R>=escape(@z,'/\')<CR><CR>Ncgn]])
 map({ "i", "c" }, "<C-r>", "<C-r><C-o>")
 map({ "i", "c" }, "<C-r><C-o>", "<C-r>")
-map({ "i", "c" }, "<C-r><C-d>", '<C-r>=expand("%:p:h")<CR>/')
-map("n", "y<C-d>", function()
-	vim.fn.setreg(vim.v.register, vim.fn.expand("%:p:h") .. "/")
-end)
-map({ "i", "c" }, "<C-r><C-t>", '<C-r>=expand("%:t")<CR>')
-map("n", "y<C-t>", function()
-	vim.fn.setreg(vim.v.register, vim.fn.expand("%:t"))
-end)
 map("n", "yd", vim.diagnostic.open_float)
 map({ "n", "x", "o" }, "[d", function()
 	vim.diagnostic.goto_prev({ float = false })
@@ -215,6 +199,29 @@ end, { desc = "jump to last terminal buffer" })
 
 map({ "n", "x", "o" }, "j", [[v:count ? 'j' : 'gj']], { desc = "smart j", expr = true })
 map({ "n", "x", "o" }, "k", [[v:count ? 'k' : 'gk']], { desc = "smart k", expr = true })
+
+for _, op in ipairs({ "p", "P", "y", "Y", "gp", "gP", "=p", "=P" }) do
+	map({ "n", "x", "o" }, "<Space>" .. op, '"+' .. op, { remap = true })
+end
+
+for key, fn in pairs({
+	["<C-d>"] = function()
+		return vim.fn.expand("%:p:h") .. "/"
+	end,
+	["<C-t>"] = function()
+		return vim.fn.expand("%:t")
+	end,
+	["p"] = function()
+		return vim.fn.expand("%:p")
+	end,
+}) do
+	map("n", "y" .. key, function()
+		vim.fn.setreg(vim.v.register, fn())
+	end)
+	map({ "i", "c" }, "<C-r>" .. key, function()
+		return "<C-r>='" .. fn() .. "'<CR>"
+	end, { expr = true })
+end
 
 opfunc.map("[w", opfunc.win_path_to_wsl, {
 	desc = "convert windows path to wsl",
