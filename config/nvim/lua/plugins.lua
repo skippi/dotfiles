@@ -522,6 +522,7 @@ return require("packer").startup(function(use)
 			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 		end,
 	})
+	use("rafamadriz/friendly-snippets")
 	use("skippi/vim-abolish")
 	use("tpope/vim-commentary")
 	use({
