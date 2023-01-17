@@ -33,7 +33,7 @@
             "font": 
             {
                 "face": "Cascadia Mono",
-                "size": 14
+                "size": 14.0
             },
             "foreground": "#D4D4D4",
             "padding": "2",
