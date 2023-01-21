@@ -1,23 +1,9 @@
-local fn = vim.fn
-local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-if fn.empty(fn.glob(install_path)) > 0 then
-	PACKER_BOOTSTRAP = fn.system({
-		"git",
-		"clone",
-		"--depth",
-		"1",
-		"https://github.com/wbthomason/packer.nvim",
-		install_path,
-	})
-end
-
-return require("packer").startup(function(use)
-	use("wbthomason/packer.nvim")
-	use({
+return {
+	{
 		"nvim-telescope/telescope.nvim",
-		requires = {
+		dependencies = {
 			{ "nvim-lua/plenary.nvim" },
-			{ "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
+			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 			{ "nvim-telescope/telescope-ui-select.nvim" },
 			{ "smartpde/telescope-recent-files" },
 		},
@@ -67,8 +53,8 @@ return require("packer").startup(function(use)
 				builtin.current_buffer_fuzzy_find({ previewer = false })
 			end)
 		end,
-	})
-	use({
+	},
+	{
 		"jose-elias-alvarez/null-ls.nvim",
 		config = function()
 			local nls = require("null-ls")
@@ -90,8 +76,8 @@ return require("packer").startup(function(use)
 				},
 			})
 		end,
-	})
-	use({
+	},
+	{
 		"lewis6991/gitsigns.nvim",
 		config = function()
 			require("gitsigns").setup({
@@ -147,10 +133,10 @@ return require("packer").startup(function(use)
 				end,
 			})
 		end,
-	})
-	use({
+	},
+	{
 		"hrsh7th/nvim-cmp",
-		requires = {
+		dependencies = {
 			{ "hrsh7th/cmp-buffer" },
 			{ "hrsh7th/cmp-calc" },
 			{ "hrsh7th/cmp-cmdline", commit = "6d45c70" }, -- don't update until visual cmdline fixed
@@ -259,11 +245,11 @@ return require("packer").startup(function(use)
 				}),
 			})
 		end,
-	})
-	use({
+	},
+	{
 		"neovim/nvim-lspconfig",
-		requires = {
-			{ "jose-elias-alvarez/nvim-lsp-ts-utils", requires = "nvim-lua/plenary.nvim" },
+		dependencies = {
+			{ "jose-elias-alvarez/nvim-lsp-ts-utils", dependencies = "nvim-lua/plenary.nvim" },
 			"williamboman/mason.nvim",
 			"b0o/schemastore.nvim",
 		},
@@ -305,18 +291,18 @@ return require("packer").startup(function(use)
 				},
 			}))
 		end,
-	})
-	use({
+	},
+	{
 		"williamboman/mason.nvim",
-		requires = { "williamboman/mason-lspconfig.nvim" },
+		dependencies = { "williamboman/mason-lspconfig.nvim" },
 		config = function()
 			require("mason").setup()
 			require("mason-lspconfig").setup()
 		end,
-	})
-	use({
+	},
+	{
 		"ray-x/go.nvim",
-		requires = { "neovim/nvim-lspconfig" },
+		dependencies = { "neovim/nvim-lspconfig" },
 		ft = "go",
 		cond = function()
 			return vim.loop.os_uname().sysname == "Linux"
@@ -324,8 +310,8 @@ return require("packer").startup(function(use)
 		config = function()
 			require("go").setup({})
 		end,
-	})
-	use({
+	},
+	{
 		"mfussenegger/nvim-jdtls",
 		config = function()
 			vim.api.nvim_create_autocmd("FileType", {
@@ -372,33 +358,33 @@ return require("packer").startup(function(use)
 				end,
 			})
 		end,
-	})
-	use({
+	},
+	{
 		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
 		config = function()
 			require("lsp_lines").setup()
 			vim.diagnostic.config({ virtual_text = false, virtual_lines = false })
 			vim.keymap.set("n", "yr", require("lsp_lines").toggle, { desc = "toggle lsp_lines" })
 		end,
-	})
-	use({
+	},
+	{
 		"wellle/targets.vim",
 		config = function()
 			vim.fn["targets#mappings#extend"]({
 				r = { pair = { { o = "[", c = "]" } } },
 			})
 		end,
-	})
-	use("AndrewRadev/splitjoin.vim")
-	use({ "anuvyklack/hydra.nvim" })
-	use({
+	},
+	"AndrewRadev/splitjoin.vim",
+	"anuvyklack/hydra.nvim",
+	{
 		"mattn/emmet-vim",
 		setup = function()
 			vim.g.user_emmet_leader_key = "<Space>e"
 			vim.g.user_emmet_mode = "nv"
 		end,
-	})
-	use({
+	},
+	{
 		"monaqa/dial.nvim",
 		config = function()
 			local augend = require("dial.augend")
@@ -421,9 +407,9 @@ return require("packer").startup(function(use)
 			vim.keymap.set("x", "g<C-a>", require("dial.map").inc_gvisual())
 			vim.keymap.set("x", "g<C-x>", require("dial.map").dec_gvisual())
 		end,
-	})
-	use("lewis6991/impatient.nvim")
-	use({
+	},
+	"lewis6991/impatient.nvim",
+	{
 		"folke/trouble.nvim",
 		config = function()
 			require("trouble").setup({
@@ -431,17 +417,17 @@ return require("packer").startup(function(use)
 			})
 			vim.keymap.set("n", "<Space>t", ":TroubleToggle<CR>")
 		end,
-	})
-	use({
+	},
+	{
 		"mfussenegger/nvim-treehopper",
 		config = function()
 			vim.keymap.set("o", ".", ":<C-u>lua require('tsht').nodes()<CR>", { silent = true })
 			vim.keymap.set("x", ".", ":lua require('tsht').nodes()<CR>", { silent = true })
 		end,
-	})
-	use({
+	},
+	{
 		"nvim-treesitter/nvim-treesitter",
-		requires = {
+		dependencies = {
 			"nvim-treesitter/nvim-treesitter-textobjects",
 			"windwp/nvim-ts-autotag",
 		},
@@ -498,10 +484,10 @@ return require("packer").startup(function(use)
 				},
 			})
 		end,
-	})
-	use({
+	},
+	{
 		"andymass/vim-matchup",
-		requires = { "nvim-treesitter/nvim-treesitter" },
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		config = function()
 			vim.g.matchup_matchparen_enabled = 0
 			vim.g.matchup_matchparen_offscreen = {}
@@ -511,21 +497,21 @@ return require("packer").startup(function(use)
 				matchup = { enable = true },
 			})
 		end,
-	})
-	use({
+	},
+	{
 		"windwp/nvim-autopairs",
-		requires = { "hrsh7th/nvim-cmp" },
+		dependencies = { "hrsh7th/nvim-cmp" },
 		config = function()
 			require("nvim-autopairs").setup({})
 			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 			local cmp = require("cmp")
 			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 		end,
-	})
-	use("rafamadriz/friendly-snippets")
-	use("skippi/vim-abolish")
-	use("tpope/vim-commentary")
-	use({
+	},
+	"rafamadriz/friendly-snippets",
+	"skippi/vim-abolish",
+	"tpope/vim-commentary",
+	{
 		"tpope/vim-eunuch",
 		config = function()
 			vim.keymap.set("n", "ZR", [[:Rename! .<C-r>=expand("%:e")<CR><C-B><C-Right><Right>]], {
@@ -533,8 +519,8 @@ return require("packer").startup(function(use)
 			})
 			vim.keymap.set("n", "ZX", "<Cmd>Remove!<CR>", { desc = "delete current file" })
 		end,
-	})
-	use({
+	},
+	{
 		"tpope/vim-fugitive",
 		config = function()
 			vim.keymap.set("n", "g.", "<Cmd>Gvdiffsplit<CR>")
@@ -543,26 +529,26 @@ return require("packer").startup(function(use)
 			vim.keymap.set("n", "gL", "<Cmd>G log<CR>")
 			vim.keymap.set("n", "gb", "<Cmd>G blame<CR>")
 		end,
-	})
-	use({ "rbong/vim-flog", requires = "tpope/vim-fugitive" })
-	use({
+	},
+	{ "rbong/vim-flog", dependencies = "tpope/vim-fugitive" },
+	{
 		"ruifm/gitlinker.nvim",
-		requires = "nvim-lua/plenary.nvim",
+		dependencies = "nvim-lua/plenary.nvim",
 		config = function()
 			require("gitlinker").setup({ mappings = nil })
 			vim.keymap.set("n", "gy", "<Cmd>lua require('gitlinker').get_buf_range_url('n')<CR>")
 			vim.keymap.set("x", "gy", "<Cmd>lua require('gitlinker').get_buf_range_url('v')<CR>")
 		end,
-	})
-	use({
+	},
+	{
 		"ThePrimeagen/harpoon",
-		requires = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
 		config = function()
 			vim.keymap.set("n", "m.", require("harpoon.mark").add_file, { desc = "add harpoon file" })
 			vim.keymap.set("n", "<Space>m", require("harpoon.ui").toggle_quick_menu, { desc = "show harpoon menu" })
 		end,
-	})
-	use({
+	},
+	{
 		"gbprod/substitute.nvim",
 		config = function()
 			require("substitute").setup({})
@@ -576,38 +562,38 @@ return require("packer").startup(function(use)
 			vim.keymap.set("x", "X", require("substitute.exchange").visual)
 			vim.keymap.set("n", "cxc", require("substitute.exchange").cancel)
 		end,
-	})
-	use({ "kana/vim-textobj-entire", requires = "kana/vim-textobj-user" })
-	use({ "Julian/vim-textobj-variable-segment", requires = "kana/vim-textobj-user" })
-	use({
+	},
+	{ "kana/vim-textobj-entire", dependencies = "kana/vim-textobj-user" },
+	{ "Julian/vim-textobj-variable-segment", dependencies = "kana/vim-textobj-user" },
+	{
 		"chomosuke/term-edit.nvim",
 		tag = "v1.*",
 		config = function()
 			require("term-edit").setup({ prompt_end = "%$ " })
 		end,
-	})
-	use("jghauser/mkdir.nvim")
-	use({
+	},
+	"jghauser/mkdir.nvim",
+	{
 		"j-hui/fidget.nvim",
 		config = function()
 			require("fidget").setup({})
 		end,
-	})
-	use("tpope/vim-obsession")
-	use("tpope/vim-repeat")
-	use("tpope/vim-sleuth")
-	use("tpope/vim-unimpaired")
-	use({
+	},
+	"tpope/vim-obsession",
+	"tpope/vim-repeat",
+	"tpope/vim-sleuth",
+	"tpope/vim-unimpaired",
+	{
 		"tpope/vim-surround",
 		config = function()
 			vim.g.surround_13 = "\n\r\n"
 			vim.g.surround_indent = 1
 		end,
-	})
-	use("tpope/vim-vinegar")
+	},
+	"tpope/vim-vinegar",
 
 	-- UI
-	use({
+	{
 		"NvChad/nvim-colorizer.lua",
 		config = function()
 			require("colorizer").setup({
@@ -621,8 +607,8 @@ return require("packer").startup(function(use)
 				},
 			})
 		end,
-	})
-	use({
+	},
+	{
 		"MaxMEllon/vim-jsx-pretty",
 		ft = {
 			"javascript",
@@ -630,10 +616,10 @@ return require("packer").startup(function(use)
 			"typescript",
 			"typescriptreact",
 		},
-	})
-	use({ "MTDL9/vim-log-highlighting", ft = "log" })
-	use({ "pprovost/vim-ps1", ft = "ps1" })
-	use({
+	},
+	{ "MTDL9/vim-log-highlighting", ft = "log" },
+	{ "pprovost/vim-ps1", ft = "ps1" },
+	{
 		"tomasiser/vim-code-dark",
 		config = function()
 			vim.api.nvim_create_autocmd("ColorScheme", {
@@ -647,11 +633,5 @@ return require("packer").startup(function(use)
 			})
 			vim.cmd("silent! colorscheme codedark")
 		end,
-	})
-
-	-- Automatically set up your configuration after cloning packer.nvim
-	-- Put this at the end after all plugins
-	if PACKER_BOOTSTRAP then
-		require("packer").sync()
-	end
-end)
+	},
+}
