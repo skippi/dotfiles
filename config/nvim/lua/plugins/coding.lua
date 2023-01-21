@@ -21,6 +21,10 @@ return {
 			local ai = require("mini.ai")
 			return {
 				n_lines = 500,
+				mappings = {
+					goto_left = "m[",
+					goto_right = "m]",
+				},
 				custom_textobjects = {
 					r = { { "%b[]" }, "^.().*().$" },
 					f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }, {}),
