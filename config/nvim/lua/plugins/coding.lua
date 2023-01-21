@@ -88,7 +88,7 @@ return {
 					goto_left = "m[",
 					goto_right = "m]",
 				},
-				search_method = "nearest",
+				search_method = "cover_or_nearest",
 				custom_textobjects = {
 					r = { { "%b[]" }, "^.().*().$" },
 					f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }, {}),

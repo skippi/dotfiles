@@ -82,4 +82,8 @@ return {
 			require("telescope").load_extension("recent_files")
 		end,
 	},
+	"jghauser/mkdir.nvim",
+	"tpope/vim-obsession",
+	"tpope/vim-sleuth",
+	"tpope/vim-vinegar",
 }
