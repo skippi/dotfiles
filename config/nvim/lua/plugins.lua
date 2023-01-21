@@ -1,60 +1,5 @@
 return {
 	{
-		"nvim-telescope/telescope.nvim",
-		dependencies = {
-			{ "nvim-lua/plenary.nvim" },
-			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-			{ "nvim-telescope/telescope-ui-select.nvim" },
-			{ "smartpde/telescope-recent-files" },
-		},
-		config = function()
-			local actions = require("telescope.actions")
-			require("telescope").setup({
-				defaults = require("telescope.themes").get_ivy({
-					mappings = {
-						i = {
-							["<C-a>"] = actions.toggle_all,
-							["<C-q>"] = require("skippi.actions").send_to_qflist,
-							["<C-r><C-w>"] = require("skippi.actions").insert_cword,
-							["<C-r><C-a>"] = require("skippi.actions").insert_cWORD,
-						},
-					},
-					layout_config = { height = 17 },
-					results_title = "",
-					selection_caret = "  ",
-					cache_picker = {
-						num_pickers = 10,
-					},
-				}),
-				extensions = {
-					fzf = {
-						override_generic_sorter = true,
-						override_file_sorter = true,
-						case_mode = "smart_case",
-					},
-				},
-			})
-			require("telescope").load_extension("fzf")
-			require("telescope").load_extension("ui-select")
-			require("telescope").load_extension("recent_files")
-			local builtin = require("telescope.builtin")
-			vim.keymap.set("n", "g!", require("skippi.picker").pkill)
-			vim.keymap.set("n", "<C-q>", builtin.quickfix)
-			vim.keymap.set("n", "<C-s>", require("skippi.picker").tselect)
-			vim.keymap.set("n", "<Space>F", ":lua require('telescope.builtin').fd{cwd=''}<Left><Left>")
-			vim.keymap.set("n", "<Space>f", builtin.find_files)
-			vim.keymap.set("n", "<Space>g", builtin.git_files)
-			vim.keymap.set("n", "<Space>h", function()
-				require("telescope").extensions.recent_files.pick()
-			end, { desc = "telescope recent files" })
-			vim.keymap.set("n", "<Space>.", builtin.resume)
-			vim.keymap.set("n", "<Space><BS>", builtin.buffers)
-			vim.keymap.set("n", "z/", function()
-				builtin.current_buffer_fuzzy_find({ previewer = false })
-			end)
-		end,
-	},
-	{
 		"jose-elias-alvarez/null-ls.nvim",
 		config = function()
 			local nls = require("null-ls")
@@ -410,59 +355,6 @@ return {
 		end,
 	},
 	{
-		"mfussenegger/nvim-treehopper",
-		config = function()
-			vim.keymap.set("o", ".", ":<C-u>lua require('tsht').nodes()<CR>", { silent = true })
-			vim.keymap.set("x", ".", ":lua require('tsht').nodes()<CR>", { silent = true })
-		end,
-	},
-	{
-		"nvim-treesitter/nvim-treesitter",
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter-textobjects",
-			"windwp/nvim-ts-autotag",
-		},
-		config = function()
-			require("nvim-treesitter.configs").setup({
-				ensure_installed = {},
-				autotag = { enable = true },
-				highlight = {
-					enable = true,
-					disable = function(_, buf)
-						local max_filesize = 20971520 -- 20 MB
-						local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-						if ok and stats and stats.size > max_filesize then
-							return true
-						end
-						return false
-					end,
-				},
-				textobjects = {
-					move = {
-						enable = true,
-						set_jumps = true, -- whether to set jumps in the jumplist
-						goto_next_start = {
-							["]m"] = "@function.outer",
-							["]]"] = "@class.outer",
-						},
-						goto_next_end = {
-							["]M"] = "@function.outer",
-							["]["] = "@class.outer",
-						},
-						goto_previous_start = {
-							["[m"] = "@function.outer",
-							["[["] = "@class.outer",
-						},
-						goto_previous_end = {
-							["[M"] = "@function.outer",
-							["[]"] = "@class.outer",
-						},
-					},
-				},
-			})
-		end,
-	},
-	{
 		"andymass/vim-matchup",
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		config = function()
@@ -473,16 +365,6 @@ return {
 			require("nvim-treesitter.configs").setup({
 				matchup = { enable = true },
 			})
-		end,
-	},
-	{
-		"windwp/nvim-autopairs",
-		dependencies = { "hrsh7th/nvim-cmp" },
-		config = function()
-			require("nvim-autopairs").setup({})
-			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-			local cmp = require("cmp")
-			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 		end,
 	},
 	"rafamadriz/friendly-snippets",
