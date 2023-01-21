@@ -579,6 +579,13 @@ return require("packer").startup(function(use)
 	})
 	use({ "kana/vim-textobj-entire", requires = "kana/vim-textobj-user" })
 	use({ "Julian/vim-textobj-variable-segment", requires = "kana/vim-textobj-user" })
+	use({
+		"chomosuke/term-edit.nvim",
+		tag = "v1.*",
+		config = function()
+			require("term-edit").setup({ prompt_end = "%$ " })
+		end,
+	})
 	use("jghauser/mkdir.nvim")
 	use({
 		"j-hui/fidget.nvim",
