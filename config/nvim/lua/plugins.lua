@@ -367,15 +367,6 @@ return {
 			vim.keymap.set("n", "yr", require("lsp_lines").toggle, { desc = "toggle lsp_lines" })
 		end,
 	},
-	{
-		"wellle/targets.vim",
-		config = function()
-			vim.fn["targets#mappings#extend"]({
-				r = { pair = { { o = "[", c = "]" } } },
-			})
-		end,
-	},
-	"AndrewRadev/splitjoin.vim",
 	"anuvyklack/hydra.nvim",
 	{
 		"mattn/emmet-vim",
@@ -563,8 +554,6 @@ return {
 			vim.keymap.set("n", "cxc", require("substitute.exchange").cancel)
 		end,
 	},
-	{ "kana/vim-textobj-entire", dependencies = "kana/vim-textobj-user" },
-	{ "Julian/vim-textobj-variable-segment", dependencies = "kana/vim-textobj-user" },
 	{
 		"chomosuke/term-edit.nvim",
 		tag = "v1.*",
@@ -591,47 +580,4 @@ return {
 		end,
 	},
 	"tpope/vim-vinegar",
-
-	-- UI
-	{
-		"NvChad/nvim-colorizer.lua",
-		config = function()
-			require("colorizer").setup({
-				filetypes = {
-					"css",
-					"javascript",
-					"javascriptreact",
-					"typescript",
-					"typescriptreact",
-					html = { mode = "foreground" },
-				},
-			})
-		end,
-	},
-	{
-		"MaxMEllon/vim-jsx-pretty",
-		ft = {
-			"javascript",
-			"javascriptreact",
-			"typescript",
-			"typescriptreact",
-		},
-	},
-	{ "MTDL9/vim-log-highlighting", ft = "log" },
-	{ "pprovost/vim-ps1", ft = "ps1" },
-	{
-		"tomasiser/vim-code-dark",
-		config = function()
-			vim.api.nvim_create_autocmd("ColorScheme", {
-				desc = "skippi: add gitsigns color",
-				pattern = "*",
-				callback = function()
-					vim.cmd("hi GitSignsAdd guifg=#5D7D20")
-					vim.cmd("hi GitSignsChange guifg=#37718C")
-					vim.cmd("hi GitSignsDelete guifg=#95161B")
-				end,
-			})
-			vim.cmd("silent! colorscheme codedark")
-		end,
-	},
 }
