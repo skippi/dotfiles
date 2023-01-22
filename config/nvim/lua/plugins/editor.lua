@@ -82,8 +82,17 @@ return {
 			require("telescope").load_extension("recent_files")
 		end,
 	},
+	"anuvyklack/hydra.nvim",
 	"jghauser/mkdir.nvim",
 	"tpope/vim-obsession",
 	"tpope/vim-sleuth",
 	"tpope/vim-vinegar",
+	{
+		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+		config = function()
+			require("lsp_lines").setup()
+			vim.diagnostic.config({ virtual_text = false, virtual_lines = false })
+			vim.keymap.set("n", "yr", require("lsp_lines").toggle, { desc = "toggle lsp_lines" })
+		end,
+	},
 }

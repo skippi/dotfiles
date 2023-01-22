@@ -305,15 +305,6 @@ return {
 		end,
 	},
 	{
-		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-		config = function()
-			require("lsp_lines").setup()
-			vim.diagnostic.config({ virtual_text = false, virtual_lines = false })
-			vim.keymap.set("n", "yr", require("lsp_lines").toggle, { desc = "toggle lsp_lines" })
-		end,
-	},
-	"anuvyklack/hydra.nvim",
-	{
 		"mattn/emmet-vim",
 		setup = function()
 			vim.g.user_emmet_leader_key = "<Space>e"
@@ -424,21 +415,17 @@ return {
 	},
 	{
 		"chomosuke/term-edit.nvim",
-		tag = "v1.*",
 		config = function()
 			require("term-edit").setup({ prompt_end = "%$ " })
 		end,
 	},
-	"jghauser/mkdir.nvim",
 	{
 		"j-hui/fidget.nvim",
 		config = function()
 			require("fidget").setup({})
 		end,
 	},
-	"tpope/vim-obsession",
 	"tpope/vim-repeat",
-	"tpope/vim-sleuth",
 	"tpope/vim-unimpaired",
 	{
 		"tpope/vim-surround",
@@ -447,5 +434,4 @@ return {
 			vim.g.surround_indent = 1
 		end,
 	},
-	"tpope/vim-vinegar",
 }

@@ -106,4 +106,28 @@ return {
 			require("mini.ai").setup(opts)
 		end,
 	},
+	{
+		"monaqa/dial.nvim",
+		config = function()
+			local augend = require("dial.augend")
+			require("dial.config").augends:register_group({
+				default = {
+					augend.constant.alias.bool,
+					augend.date.alias["%H:%M"],
+					augend.date.alias["%Y-%m-%d"],
+					augend.date.alias["%Y/%m/%d"],
+					augend.integer.alias.binary,
+					augend.integer.alias.decimal_int,
+					augend.integer.alias.hex,
+					augend.semver.alias.semver,
+				},
+			})
+			vim.keymap.set("n", "<C-a>", require("dial.map").inc_normal())
+			vim.keymap.set("n", "<C-x>", require("dial.map").dec_normal())
+			vim.keymap.set("x", "<C-a>", require("dial.map").inc_visual())
+			vim.keymap.set("x", "<C-x>", require("dial.map").dec_visual())
+			vim.keymap.set("x", "g<C-a>", require("dial.map").inc_gvisual())
+			vim.keymap.set("x", "g<C-x>", require("dial.map").dec_gvisual())
+		end,
+	},
 }
