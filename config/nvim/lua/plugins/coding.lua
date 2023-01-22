@@ -63,7 +63,6 @@ return {
 		},
 	},
 	"AndrewRadev/splitjoin.vim",
-	{ "kana/vim-textobj-entire", dependencies = "kana/vim-textobj-user" },
 	{ "Julian/vim-textobj-variable-segment", dependencies = "kana/vim-textobj-user" },
 	{
 		"echasnovski/mini.ai",
@@ -92,6 +91,15 @@ return {
 				custom_textobjects = {
 					["b"] = { { "%b()", "%b[]", "%b{}" }, "^.%s*().-()%s*.$" },
 					["B"] = { { "%b()", "%b[]", "%b{}" }, "^.().*().$" },
+					e = function()
+						return {
+							from = { line = 1, col = 1 },
+							to = {
+								line = vim.fn.line("$"),
+								col = math.max(vim.fn.getline("$"):len(), 1),
+							},
+						}
+					end,
 					r = { { "%b[]" }, "^.().*().$" },
 					f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }, {}),
 					c = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }, {}),
