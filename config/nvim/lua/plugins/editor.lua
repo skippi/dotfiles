@@ -2,10 +2,7 @@ return {
 	{
 		"nvim-telescope/telescope.nvim",
 		cmd = "Telescope",
-		dependencies = {
-			{ "nvim-lua/plenary.nvim" },
-			{},
-		},
+		dependencies = { "nvim-lua/plenary.nvim" },
 		keys = {
 			{ "g!", require("skippi.picker").pkill, desc = "telescope kill process" },
 			{ "<C-q>", "<Cmd>Telescope quickfix<CR>" },
@@ -82,13 +79,11 @@ return {
 			require("telescope").load_extension("recent_files")
 		end,
 	},
-	"anuvyklack/hydra.nvim",
-	"jghauser/mkdir.nvim",
-	"tpope/vim-obsession",
-	"tpope/vim-sleuth",
-	"tpope/vim-vinegar",
+	{ "tpope/vim-sleuth", event = "BufReadPre" },
+	{ "tpope/vim-vinegar", keys = { "-" }, ft = "netrw" },
 	{
 		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+		event = "LspAttach",
 		config = function()
 			require("lsp_lines").setup()
 			vim.diagnostic.config({ virtual_text = false, virtual_lines = false })

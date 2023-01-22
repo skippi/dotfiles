@@ -311,7 +311,6 @@ return {
 			vim.g.user_emmet_mode = "nv"
 		end,
 	},
-	"lewis6991/impatient.nvim",
 	{
 		"folke/trouble.nvim",
 		config = function()
@@ -359,11 +358,16 @@ return {
 	{ "rbong/vim-flog", dependencies = "tpope/vim-fugitive" },
 	{
 		"ruifm/gitlinker.nvim",
+		keys = {
+			{ "gy", "<Cmd>lua require('gitlinker').get_buf_range_url('n')<CR>" },
+			{ "gy", "<Cmd>lua require('gitlinker').get_buf_range_url('v')<CR>", mode = "x" },
+		},
 		dependencies = "nvim-lua/plenary.nvim",
-		config = function()
-			require("gitlinker").setup({ mappings = nil })
-			vim.keymap.set("n", "gy", "<Cmd>lua require('gitlinker').get_buf_range_url('n')<CR>")
-			vim.keymap.set("x", "gy", "<Cmd>lua require('gitlinker').get_buf_range_url('v')<CR>")
+		opts = {
+			mappings = nil
+		},
+		config = function(_, opts)
+			require("gitlinker").setup(opts)
 		end,
 	},
 	{
