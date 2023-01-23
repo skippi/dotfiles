@@ -1,6 +1,7 @@
 return {
 	{
 		"windwp/nvim-autopairs",
+		event = "InsertEnter",
 		dependencies = { "hrsh7th/nvim-cmp" },
 		config = function()
 			require("nvim-autopairs").setup({})
@@ -59,7 +60,31 @@ return {
 			{ ".", ":lua require('tsht').nodes()<CR>", mode = "x", silent = true },
 		},
 	},
+	{
+		"andymass/vim-matchup",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		config = function()
+			vim.g.matchup_matchparen_enabled = 0
+			vim.g.matchup_matchparen_offscreen = {}
+			vim.g.matchup_surround_enabled = 1
+			vim.g.matchup_transmute_enabled = 0
+			require("nvim-treesitter.configs").setup({
+				matchup = { enable = true },
+			})
+		end,
+	},
 	"AndrewRadev/splitjoin.vim",
+	{ "skippi/vim-abolish", cmd = { "Abolish", "S" }, keys = { "cr" } },
+	{ "tpope/vim-commentary", keys = { { "gc", mode = { "n", "x" } }, "gcc", "gcgc", "gcu" } },
+	{
+		"tpope/vim-surround",
+		keys = { { "ys", mode = "n", "x" }, "cs", "ds", "yss", "yS", "ySS", { "S", mode = "x" }, { "gS", mode = "x" } },
+		config = function()
+			vim.g.surround_13 = "\n\r\n"
+			vim.g.surround_indent = 1
+		end,
+	},
+	"tpope/vim-unimpaired",
 	{ "Julian/vim-textobj-variable-segment", dependencies = "kana/vim-textobj-user" },
 	{
 		"echasnovski/mini.ai",
@@ -113,6 +138,54 @@ return {
 	},
 	{
 		"monaqa/dial.nvim",
+		keys = {
+			{
+				"<C-a>",
+				function()
+					return require("dial.map").inc_normal()
+				end,
+				expr = true,
+			},
+			{
+				"<C-x>",
+				function()
+					return require("dial.map").dec_normal()
+				end,
+				expr = true,
+			},
+			{
+				"x",
+				"<C-a>",
+				function()
+					require("dial.map").inc_visual()
+				end,
+				expr = true,
+			},
+			{
+				"x",
+				"<C-x>",
+				function()
+					require("dial.map").dec_visual()
+				end,
+				expr = true,
+			},
+			{
+				"x",
+				"g<C-a>",
+				function()
+					require("dial.map").inc_gvisual()
+				end,
+				expr = true,
+			},
+			{
+				"x",
+				"g<C-x>",
+				function()
+					require("dial.map").dec_gvisual()
+				end,
+				expr = true,
+			},
+		},
 		config = function()
 			local augend = require("dial.augend")
 			require("dial.config").augends:register_group({
@@ -127,12 +200,64 @@ return {
 					augend.semver.alias.semver,
 				},
 			})
-			vim.keymap.set("n", "<C-a>", require("dial.map").inc_normal())
-			vim.keymap.set("n", "<C-x>", require("dial.map").dec_normal())
-			vim.keymap.set("x", "<C-a>", require("dial.map").inc_visual())
-			vim.keymap.set("x", "<C-x>", require("dial.map").dec_visual())
-			vim.keymap.set("x", "g<C-a>", require("dial.map").inc_gvisual())
-			vim.keymap.set("x", "g<C-x>", require("dial.map").dec_gvisual())
+		end,
+	},
+	{
+		"gbprod/substitute.nvim",
+		keys = {
+			{
+				"s",
+				function()
+					return require("substitute").operator()
+				end,
+			},
+			{
+				"ss",
+				function()
+					return require("substitute").line()
+				end,
+			},
+			{
+				"S",
+				function()
+					return require("substitute").eol()
+				end,
+			},
+			{
+				"s",
+				function()
+					return require("substitute").visual()
+				end,
+			},
+			{ "<Space>s", '"+s', mode = { "n", "x" }, remap = true },
+			{
+				"cx",
+				function()
+					return require("substitute.exchange").operator()
+				end,
+			},
+			{
+				"cxx",
+				function()
+					return require("substitute.exchange").line()
+				end,
+			},
+			{
+				"X",
+				function()
+					return require("substitute.exchange").visual()
+				end,
+				mode = "x",
+			},
+			{
+				"cxc",
+				function()
+					return require("substitute.exchange").cancel()
+				end,
+			},
+		},
+		config = function()
+			require("substitute").setup({})
 		end,
 	},
 }
