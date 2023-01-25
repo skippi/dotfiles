@@ -154,35 +154,35 @@ return {
 				expr = true,
 			},
 			{
-				"x",
 				"<C-a>",
 				function()
 					require("dial.map").inc_visual()
 				end,
+				mode = "x",
 				expr = true,
 			},
 			{
-				"x",
 				"<C-x>",
 				function()
 					require("dial.map").dec_visual()
 				end,
+				mode = "x",
 				expr = true,
 			},
 			{
-				"x",
 				"g<C-a>",
 				function()
 					require("dial.map").inc_gvisual()
 				end,
+				mode = "x",
 				expr = true,
 			},
 			{
-				"x",
 				"g<C-x>",
 				function()
 					require("dial.map").dec_gvisual()
 				end,
+				mode = "x",
 				expr = true,
 			},
 		},
@@ -205,56 +205,14 @@ return {
 	{
 		"gbprod/substitute.nvim",
 		keys = {
-			{
-				"s",
-				function()
-					return require("substitute").operator()
-				end,
-			},
-			{
-				"ss",
-				function()
-					return require("substitute").line()
-				end,
-			},
-			{
-				"S",
-				function()
-					return require("substitute").eol()
-				end,
-			},
-			{
-				"s",
-				function()
-					return require("substitute").visual()
-				end,
-			},
+			{ "s", "<Cmd>lua require('substitute').operator()<CR>" },
+			{ "ss", "<Cmd>lua require('substitute').line()<CR>" },
+			{ "S", "<Cmd>lua require('substitute').eol()<CR>" },
+			{ "s", "<Cmd>lua require('substitute').visual()<CR>", mode = "x" },
 			{ "<Space>s", '"+s', mode = { "n", "x" }, remap = true },
-			{
-				"cx",
-				function()
-					return require("substitute.exchange").operator()
-				end,
-			},
-			{
-				"cxx",
-				function()
-					return require("substitute.exchange").line()
-				end,
-			},
-			{
-				"X",
-				function()
-					return require("substitute.exchange").visual()
-				end,
-				mode = "x",
-			},
-			{
-				"cxc",
-				function()
-					return require("substitute.exchange").cancel()
-				end,
-			},
+			{ "cx", "<Cmd>lua require('substitute.exchange').operator()<CR>" },
+			{ "cxx", "<Cmd>require('substitute.exchange').line()<CR>" },
+			{ "X", "<Cmd>lua require('substitute.exchange').visual()<CR>", mode = "x" },
 		},
 		config = function()
 			require("substitute").setup({})

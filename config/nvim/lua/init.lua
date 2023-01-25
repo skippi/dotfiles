@@ -182,8 +182,8 @@ map("x", "gs", function()
 end)
 map("x", "m,", [["zy?\V<C-R>=escape(@z,'/\')<CR><CR>NcgN]])
 map("x", "m;", [["zy/\V<C-R>=escape(@z,'/\')<CR><CR>Ncgn]])
-map({ "i", "c" }, "<C-r>", "<C-r><C-o>")
-map({ "i", "c" }, "<C-r><C-o>", "<C-r>")
+map("!", "<C-r>", "<C-r><C-o>")
+map("!", "<C-r><C-o>", "<C-r>")
 map("n", "yd", vim.diagnostic.open_float)
 map({ "n", "x", "o" }, "[d", function()
 	vim.diagnostic.goto_prev({ float = false })
@@ -232,19 +232,11 @@ for key, fn in pairs({
 	map("n", "y" .. key, function()
 		vim.fn.setreg(vim.v.register, fn())
 	end)
-	map({ "i", "c" }, "<C-r>" .. key, function()
+	map("!", "<C-r>" .. key, function()
 		return "<C-r>='" .. fn() .. "'<CR>"
 	end, { expr = true })
 end
 
-opfunc.map("[w", opfunc.win_path_to_wsl, {
-	desc = "convert windows path to wsl",
-	expr = true,
-})
-opfunc.map("]w", opfunc.wsl_path_to_win, {
-	desc = "convert wsl path to windows",
-	expr = true,
-})
 opfunc.map("<C-_>", opfunc.toggle_path_slash, {
 	desc = "toggle path slashes",
 	expr = true,
