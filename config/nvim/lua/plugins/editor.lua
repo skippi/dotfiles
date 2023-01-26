@@ -152,7 +152,7 @@ return {
 		keys = {
 			{ "g!", "<Cmd>lua require('skippi.picker').pkill()<CR>" },
 			{ "<C-q>", "<Cmd>Telescope quickfix<CR>" },
-			{ "<C-s>", "<Cmd>require('skippi.picker').tselect()<CR>" },
+			{ "<C-s>", "<Cmd>lua require('skippi.picker').tselect()<CR>" },
 			{ "<Space>F", ":lua require('telescope.builtin').fd{cwd=''}<Left><Left>" },
 			{ "<Space>f", "<Cmd>Telescope find_files<CR>" },
 			{ "<Space>g", "<Cmd>Telescope git_files<CR>" },
@@ -297,7 +297,7 @@ return {
 					map("x", "<M-d>o", ":Gitsigns reset_hunk<CR>")
 					map("n", "du", gs.undo_stage_hunk)
 					map("n", "dy", gs.preview_hunk)
-					map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+					map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { silent = true })
 				end,
 			})
 		end,

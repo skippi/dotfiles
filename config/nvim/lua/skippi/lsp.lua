@@ -23,7 +23,7 @@ function M.on_attach(_, bufnr)
 		opts.buffer = bufnr
 		vim.keymap.set(mode, key, cmd, opts)
 	end
-	map("n", "<C-j>", "<Cmd>Telescope lsp_dynamic_workspace_symbols()<CR>")
+	map("n", "<C-j>", "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>")
 	map("n", "<C-k>", vim.lsp.buf.code_action)
 	map("n", "K", vim.lsp.buf.hover)
 	map("n", "cm", vim.lsp.buf.rename)
