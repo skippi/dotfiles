@@ -75,6 +75,20 @@ return {
 		end,
 	},
 	{
+		"barrett-ruth/import-cost.nvim",
+		ft = {
+			"javascript",
+			"javascriptreact",
+			"typescript",
+			"typescriptreact",
+		},
+		cond = function()
+			return vim.loop.os_uname().sysname == "Linux"
+		end,
+		build = "sh install.sh yarn",
+		config = true,
+	},
+	{
 		"mfussenegger/nvim-jdtls",
 		config = function()
 			vim.api.nvim_create_autocmd("FileType", {
