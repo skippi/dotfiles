@@ -25,7 +25,7 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
-			{ "jose-elias-alvarez/nvim-lsp-ts-utils", dependencies = "nvim-lua/plenary.nvim" },
+			"jose-elias-alvarez/typescript.nvim",
 			"williamboman/mason.nvim",
 			"b0o/schemastore.nvim",
 		},
@@ -50,17 +50,8 @@ return {
 						},
 					},
 				},
-			})
-			local ts_utils = require("nvim-lsp-ts-utils")
-			lsc.tsserver.setup({
-				init_options = ts_utils.init_options,
-				capabilities = opts.capabilities,
-				on_attach = function(client, bufnr)
-					opts.on_attach(client, bufnr)
-					ts_utils.setup({ auto_inlay_hints = false })
-					ts_utils.setup_client(client)
-				end,
-			})
+			}))
+			require("typescript").setup({ server = opts })
 			lsc.vimls.setup(opts)
 			lsc.jsonls.setup(vim.tbl_extend("force", opts, {
 				settings = {
