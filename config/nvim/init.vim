@@ -14,30 +14,11 @@ set wildignore+=*/.elixir_ls/*
 set wildignore+=*/node_modules/*
 set wildignore+=Session.vim
 
-func s:edit_file_by_offset(offset) abort
-  let dir = expand("%:h")
-  if !isdirectory(dir) | return | endif
-  let files = readdir(dir, { f -> !isdirectory(dir . '/' . f) })
-  let idx = index(files, expand("%:t")) + a:offset
-  if !(0 <= idx && idx < len(files))
-    echohl ErrorMsg | echo "No more items" | echohl None
-    return
-  endif
-  exe "edit" dir . '/' . get(files, idx)
-endfunc
-
-nnoremap [<M-q> <Cmd>exe "sil!uns colder" v:count1<CR>
-nnoremap ]<M-q> <Cmd>exe "sil!uns cnewer" v:count1<CR>
-
 " search and replace
 nnoremap <Space><Space> :'{,'}s\M\<<C-r><C-w>\>g<Left><Left>
 xnoremap <Space><Space> "zy:'{,'}s\M<C-r>zg<Left><Left>
 xnoremap & <Esc><Cmd>'<,'>&<CR>
 xnoremap g& <Esc><Cmd>'<,'>&&<CR>
-
-" operating system
-nnoremap [f <Cmd>call <SID>edit_file_by_offset(-v:count1)<CR>
-nnoremap ]f <Cmd>call <SID>edit_file_by_offset(v:count1)<CR>
 
 " PSReadLine bug
 tnoremap <M-c> <M-c>
