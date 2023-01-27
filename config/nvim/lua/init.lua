@@ -77,6 +77,7 @@ vim.o.updatetime = 500
 vim.o.wildcharm = vim.fn.char2nr(vim.api.nvim_replace_termcodes("<C-z>", true, true, true))
 vim.o.wildmode = "list:full"
 
+vim.opt.diffopt:append("linematch:60")
 vim.opt.listchars:append({ eol = "↴" })
 vim.opt.shortmess:append("c")
 vim.opt.sessionoptions:append("globals")
