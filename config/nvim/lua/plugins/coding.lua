@@ -81,6 +81,7 @@ return {
 		keys = { { "ys", mode = "n", "x" }, "cs", "ds", "yss", "yS", "ySS", { "S", mode = "x" }, { "gS", mode = "x" } },
 		config = function()
 			vim.g.surround_13 = "\n\r\n"
+			vim.g.surround_97 = "[\r]"
 			vim.g.surround_indent = 1
 		end,
 	},
