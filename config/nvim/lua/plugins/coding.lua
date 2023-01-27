@@ -85,7 +85,14 @@ return {
 		end,
 	},
 	"tpope/vim-unimpaired",
-	{ "Julian/vim-textobj-variable-segment", dependencies = "kana/vim-textobj-user" },
+	{
+		"Julian/vim-textobj-variable-segment",
+		keys = {
+			{ "iv", mode = { "x", "o" } },
+			{ "av", mode = { "x", "o" } },
+		},
+		dependencies = "kana/vim-textobj-user",
+	},
 	{
 		"echasnovski/mini.ai",
 		keys = {

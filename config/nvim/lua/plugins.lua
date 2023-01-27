@@ -36,13 +36,17 @@ return {
 			lsc.dartls.setup(opts)
 			lsc.pyright.setup(opts)
 			lsc.gopls.setup(opts)
-			lsc.sumneko_lua.setup({
-				on_attach = opts.on_attach,
-				capabilities = opts.capabilities,
+			lsc.sumneko_lua.setup(vim.tbl_extend("force", opts, {
 				settings = {
 					Lua = {
+						completion = {
+							callSnippet = "Replace",
+						},
 						diagnostics = {
 							globals = { "vim" },
+						},
+						workspace = {
+							checkThirdParty = false,
 						},
 					},
 				},

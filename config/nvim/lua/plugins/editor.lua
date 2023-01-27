@@ -246,7 +246,7 @@ return {
 	},
 	{
 		"lewis6991/gitsigns.nvim",
-		event = "BufEnter",
+		event = "BufReadPre",
 		config = function()
 			require("gitsigns").setup({
 				signs = {
