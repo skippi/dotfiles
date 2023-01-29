@@ -59,4 +59,26 @@ return {
 			require("trouble").setup({ icons = false })
 		end,
 	},
+	{
+		"nvim-treesitter/nvim-treesitter-context",
+		event = "BufReadPost",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		config = function()
+			require("treesitter-context").setup({})
+			local callback = function()
+				if vim.wo.cursorline then
+					vim.cmd("TSContextEnable")
+				else
+					vim.cmd("TSContextDisable")
+				end
+			end
+			vim.api.nvim_create_autocmd("OptionSet", {
+				pattern = "cursorline",
+				callback = callback,
+			})
+			vim.api.nvim_create_autocmd("WinEnter", {
+				callback = callback,
+			})
+		end,
+	},
 }
