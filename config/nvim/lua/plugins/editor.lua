@@ -202,6 +202,13 @@ return {
 		end,
 	},
 	{
+		"simrat39/symbols-outline.nvim",
+		cmd = { "SymbolsOutline", "SymbolsOutlineOpen", "SymbolsOutlineClose" },
+		config = function()
+			require("symbols-outline").setup({})
+		end,
+	},
+	{
 		"tpope/vim-eunuch",
 		config = function()
 			vim.keymap.set("n", "ZR", [[:Rename! .<C-r>=expand("%:e")<CR><C-B><C-Right><Right>]], {
