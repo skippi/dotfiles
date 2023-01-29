@@ -1,19 +1,17 @@
 return {
 	{
-		"tomasiser/vim-code-dark",
+		"Mofiqul/vscode.nvim",
 		lazy = false,
 		priority = 1000,
 		config = function()
-			vim.api.nvim_create_autocmd("ColorScheme", {
-				desc = "skippi: add gitsigns color",
-				pattern = "*",
-				callback = function()
-					vim.cmd("hi GitSignsAdd guifg=#5D7D20")
-					vim.cmd("hi GitSignsChange guifg=#37718C")
-					vim.cmd("hi GitSignsDelete guifg=#95161B")
-				end,
+			require('vscode').setup({
+				italic_comments = true,
+				group_overrides = {
+					GitSignsAdd = { fg="#5D7D20" },
+					GitSignsChange = { fg="#37718C" },
+					GitSignsDelete = { fg="#95161B" },
+				}
 			})
-			vim.cmd("silent! colorscheme codedark")
 		end,
 	},
 	{ "MTDL9/vim-log-highlighting", ft = "log" },
