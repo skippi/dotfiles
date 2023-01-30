@@ -5,6 +5,12 @@ return {
 		dependencies = {
 			{ "hrsh7th/cmp-buffer" },
 			{ "hrsh7th/cmp-cmdline" },
+			{
+				"petertriho/cmp-git",
+				name = "cmp_git",
+				dependencies = { "nvim-lua/plenary.nvim" },
+				config = true,
+			},
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
 			{ "hrsh7th/cmp-path" },
@@ -88,6 +94,8 @@ return {
 							end,
 						},
 					},
+				}, {
+					{ name = "git" },
 				}),
 			})
 			cmp.setup.cmdline("/", {
