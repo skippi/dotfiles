@@ -5,7 +5,6 @@ return {
 		priority = 1000,
 		config = function()
 			require('vscode').setup({
-				italic_comments = true,
 				group_overrides = {
 					GitSignsAdd = { fg="#5D7D20" },
 					GitSignsChange = { fg="#37718C" },
