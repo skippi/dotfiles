@@ -62,7 +62,7 @@ return {
 		event = "BufReadPost",
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		config = function()
-			require("treesitter-context").setup({})
+			require("treesitter-context").setup({ enable = vim.o.cursorline })
 			local callback = function()
 				if vim.wo.cursorline then
 					vim.cmd("TSContextEnable")
