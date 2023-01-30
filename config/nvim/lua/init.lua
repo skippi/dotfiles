@@ -80,9 +80,10 @@ vim.o.updatetime = 500
 vim.o.wildcharm = vim.fn.char2nr(vim.api.nvim_replace_termcodes("<C-z>", true, true, true))
 vim.o.wildmode = "list:full"
 
-if vim.fn.has('nvim-0.9') == 1 then
-	vim.o.statuscolumn = "%=%l%s%C"
-end
+-- bugged with cmdline window
+-- if vim.fn.has('nvim-0.9') == 1 then
+	-- vim.o.statuscolumn = "%=%l%s%C"
+-- end
 
 vim.opt.diffopt:append("linematch:60")
 vim.opt.listchars:append({ eol = "↴" })
