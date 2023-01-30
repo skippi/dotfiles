@@ -117,8 +117,8 @@ map({ "n", "x", "o" }, "'", "`")
 map({ "n", "x", "o" }, "gh", "^")
 map({ "n", "x", "o" }, "gl", "g_")
 map("n", "<BS>", "<C-^>")
-map("x", "*", [[:<C-u>let @z=@"<CR>gvy/\V<C-R>"<CR>:let @"=@z|<CR>]], { silent = true })
-map("x", "#", [[:<C-u>let @z=@"<CR>gvy?\V<C-R>"<CR>:let @"=@z<CR>]], { silent = true })
+map("x", "*", [[:<C-u>let @z=@"<CR>gvy/\V<C-R>=escape(@", '/\')<CR><CR>:let @"=@z<CR>]], { silent = true })
+map("x", "#", [[:<C-u>let @z=@"<CR>gvy?\V<C-R>=escape(@", '?\')<CR><CR>:let @"=@z<CR>]], { silent = true })
 
 map("n", "<C-w>'", function()
 	local ESC = 27
