@@ -69,6 +69,9 @@ vim.o.path = ",,**"
 vim.o.pumheight = 10
 vim.o.ruler = false
 vim.o.smartcase = true
+vim.o.shiftwidth = 2
+vim.o.tabstop = 2
+vim.o.smartindent = true
 vim.o.swapfile = false
 vim.o.termguicolors = true
 vim.o.timeoutlen = 500
@@ -77,13 +80,14 @@ vim.o.updatetime = 500
 vim.o.wildcharm = vim.fn.char2nr(vim.api.nvim_replace_termcodes("<C-z>", true, true, true))
 vim.o.wildmode = "list:full"
 
+if vim.fn.has('nvim-0.9') == 1 then
+	vim.o.statuscolumn = "%=%l%s%C"
+end
+
 vim.opt.diffopt:append("linematch:60")
 vim.opt.listchars:append({ eol = "↴" })
 vim.opt.shortmess:append("c")
 vim.opt.sessionoptions:append("globals")
-
-vim.o.shiftwidth = 2
-vim.o.tabstop = 2
 
 if vim.loop.os_uname().sysname:find("Windows") then
 	vim.o.shellcmdflag = "/s /v /c"
