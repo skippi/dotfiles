@@ -267,8 +267,8 @@ map("n", "'$", function()
 	vim.cmd(vim.g.Temp_last_term .. "b")
 end, { desc = "jump to last terminal buffer" })
 
-map({ "n", "x", "o" }, "j", [[v:count ? 'j' : 'gj']], { desc = "smart j", expr = true })
-map({ "n", "x", "o" }, "k", [[v:count ? 'k' : 'gk']], { desc = "smart k", expr = true })
+map({ "n", "x" }, "j", [[v:count ? 'j' : 'gj']], { desc = "smart j", expr = true })
+map({ "n", "x" }, "k", [[v:count ? 'k' : 'gk']], { desc = "smart k", expr = true })
 
 for _, op in ipairs({ "p", "P", "y", "Y", "gp", "gP", "=p", "=P" }) do
 	map({ "n", "x", "o" }, "<Space>" .. op, '"+' .. op, { remap = true })
