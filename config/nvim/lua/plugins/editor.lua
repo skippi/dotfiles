@@ -63,7 +63,7 @@ return {
 							fallback()
 						end
 					end),
-					["<C-Space>"] = cmp.mapping.complete(),
+					["<C-Space>"] = cmp.mapping.complete({}),
 					["<C-j>"] = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
 					["<C-k>"] = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
 				}),
@@ -103,7 +103,7 @@ return {
 				sources = cmp.config.sources({
 					{ name = "path" },
 				}, {
-					{ name = "cmdline", keyword_pattern = [=[[^[:blank:]\!]*]=] },
+					{ name = "cmdline" },
 				}),
 			})
 		end,
