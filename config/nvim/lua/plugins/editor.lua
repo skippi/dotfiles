@@ -78,9 +78,13 @@ return {
 							get_bufnrs = function()
 								local bufs = {}
 								for _, win in ipairs(vim.api.nvim_list_wins()) do
-									bufs[vim.api.nvim_win_get_buf(win)] = true
+									local b = vim.api.nvim_win_get_buf(win)
+									local size = vim.api.nvim_buf_get_offset(b, vim.api.nvim_buf_line_count(b))
+									if size <= 2 * 1024 * 1024 then
+										bufs[#bufs + 1] = b
+									end
 								end
-								return vim.tbl_keys(bufs)
+								return bufs
 							end,
 						},
 					},
