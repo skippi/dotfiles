@@ -4,7 +4,6 @@ return {
 		event = { "InsertEnter", "CmdlineEnter" },
 		dependencies = {
 			{ "hrsh7th/cmp-buffer" },
-			{ "hrsh7th/cmp-calc" },
 			{ "hrsh7th/cmp-cmdline", commit = "6d45c70" }, -- don't update until visual cmdline fixed
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
@@ -72,7 +71,6 @@ return {
 					{ name = "nvim_lsp_signature_help" },
 					{ name = "nvim_lsp" },
 					{ name = "vsnip" },
-					{ name = "calc" },
 					{ name = "tags" },
 					{
 						name = "buffer",
