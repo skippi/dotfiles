@@ -28,6 +28,12 @@ return {
 			"jose-elias-alvarez/typescript.nvim",
 			"williamboman/mason.nvim",
 			"b0o/schemastore.nvim",
+			{
+				"folke/neodev.nvim",
+				config = function()
+					require("neodev").setup({})
+				end,
+			},
 		},
 		config = function()
 			local lsc = require("lspconfig")
@@ -41,12 +47,6 @@ return {
 					Lua = {
 						completion = {
 							callSnippet = "Replace",
-						},
-						diagnostics = {
-							globals = { "vim" },
-						},
-						workspace = {
-							checkThirdParty = false,
 						},
 					},
 				},
