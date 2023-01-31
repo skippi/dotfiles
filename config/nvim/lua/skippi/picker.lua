@@ -1,4 +1,3 @@
-local action_set = require("telescope.actions.set")
 local action_state = require("telescope.actions.state")
 local actions = require("telescope.actions")
 local conf = require("telescope.config").values
@@ -7,16 +6,6 @@ local finders = require("telescope.finders")
 local pickers = require("telescope.pickers")
 
 local M = {}
-
-local function echoerr(msg)
-	vim.cmd("echohl ErrorMsg")
-	vim.cmd('echomsg "' .. msg .. '"')
-	vim.cmd("echohl None")
-end
-
-local function trim(s)
-	return s:gsub("^%s*(.-)%s*$", "%1")
-end
 
 local function getprocitems()
 	local cmd = "tasklist /fo csv /nh"
@@ -99,67 +88,80 @@ function M.pkill(opts)
 		:find()
 end
 
+local function nvim_buf_temp_call(...)
+	local old_view = vim.fn.winsaveview()
+	vim.api.nvim_buf_call(...)
+	vim.fn.winrestview(old_view)
+end
+
+local function find_tags_from_tagstack(item)
+	local results = {}
+	nvim_buf_temp_call(item.from[1], function()
+		vim.fn.setpos(".", item.from)
+		local filename = vim.fn.bufname()
+		if vim.bo.tagfunc ~= "" then
+			results =
+				vim.fn.eval(string.format("%s('%s','c',{'buf_ffname':'%s'})", vim.bo.tagfunc, item.tagname, filename))
+		else
+			local tagexpr = "\\c^" .. item.tagname .. "$"
+			if item.tagname:find("^/") ~= nil then
+				tagexpr = item.tagname:sub(2)
+			end
+			results = vim.fn.taglist(tagexpr, filename)
+		end
+	end)
+	return results
+end
+
 function M.tselect(opts)
 	local stack = vim.fn.gettagstack()
-	local item = stack.items[stack.curidx - 1]
-	if not item then
-		echoerr("E73: tag stack empty")
+	local stack_item = stack.items[stack.curidx - 1]
+	if stack_item == nil then
+		vim.notify("E73: tag stack empty", vim.log.levels.ERROR)
 		return
 	end
-	local tagexpr = "\\c^" .. item.tagname .. "$"
-	if item.tagname:find("^/") ~= nil then
-		tagexpr = item.tagname:sub(2)
-	end
-	local results = vim.fn.taglist(tagexpr)
+	local results = find_tags_from_tagstack(stack_item)
 	if #results == 0 then
-		echoerr("E492: tag not found: " .. item.tagname)
+		vim.notify("E492: tag not found: " .. stack_item.tagname, vim.log.levels.ERROR)
 		return
+	end
+	results = { unpack(results, 1, 50) }
+	for _, tag in ipairs(results) do
+		tag.bufnr = vim.fn.bufnr(tag.filename, true)
+		nvim_buf_temp_call(tag.bufnr, function()
+			vim.cmd("keepjumps " .. tag.cmd)
+			tag.text = vim.api.nvim_get_current_line()
+			local pos = vim.fn.getcurpos()
+			tag.lnum = pos[2]
+			tag.col = pos[3]
+		end)
 	end
 	pickers
 		.new(opts, {
-			prompt = "Tags",
+			prompt_title = "Tags",
 			finder = finders.new_table({
 				results = results,
 				entry_maker = function(item)
-					if item.cmd == "" or item.cmd:sub(1, 1) == "!" then
-						return nil
-					end
-					local scode = item.cmd:sub(2, item.cmd:len() - 1)
-					local value = trim(scode:sub(2, scode:len() - 1))
-					return {
-						valid = true,
-						ordinal = value .. " " .. item.filename,
-						value = value,
+					return vim.tbl_extend("force", item, {
+						ordinal = item.text .. " " .. item.filename,
+						value = item,
 						display = function(entry)
 							local displayer = entry_display.create({
-								separator = " | ",
+								separator = " ",
 								items = {
 									{ width = 22 },
 									{ remaining = true },
 								},
 							})
 							return displayer({
-								vim.fn.pathshorten(entry.filename),
-								entry.ordinal,
+								vim.fn.pathshorten(vim.fn.fnamemodify(entry.filename, ":~:.")),
+								entry.text,
 							})
 						end,
-						name = item.name,
-						filename = item.filename,
-						scode = scode,
-						lnum = 1,
-					}
+					})
 				end,
 			}),
 			sorter = conf.generic_sorter(opts),
-			attach_mappings = function()
-				action_set.select:enhance({
-					post = function()
-						vim.cmd("keepjumps norm! gg")
-						vim.fn.search(action_state.get_selected_entry().scode)
-					end,
-				})
-				return true
-			end,
 		})
 		:find()
 end
