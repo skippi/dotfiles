@@ -240,14 +240,11 @@ return {
 	{
 		"ruifm/gitlinker.nvim",
 		keys = {
-			{ "gy", "<Cmd>lua require('gitlinker').get_buf_range_url('n')<CR>" },
-			{ "gy", "<Cmd>lua require('gitlinker').get_buf_range_url('v')<CR>", mode = "x" },
+			{ "gX", "<Cmd>lua require('gitlinker').get_buf_range_url('n')<CR>" },
+			{ "gX", "<Cmd>lua require('gitlinker').get_buf_range_url('v')<CR>", mode = "x" },
 		},
 		dependencies = "nvim-lua/plenary.nvim",
 		opts = { mappings = nil },
-		config = function(_, opts)
-			require("gitlinker").setup(opts)
-		end,
 	},
 	{ "rbong/vim-flog", cmd = { "Flog", "Floggit", "Flogsplit" }, dependencies = "tpope/vim-fugitive" },
 	{
