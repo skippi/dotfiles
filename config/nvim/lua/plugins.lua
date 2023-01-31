@@ -39,6 +39,7 @@ return {
 			local lsc = require("lspconfig")
 			local lsp = require("skippi.lsp")
 			local opts = { capabilities = lsp.make_capabilities(), on_attach = lsp.on_attach }
+			lsc.clangd.setup(opts)
 			lsc.dartls.setup(opts)
 			lsc.pyright.setup(opts)
 			lsc.gopls.setup(opts)
