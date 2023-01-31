@@ -228,7 +228,7 @@ local function edit_file_by_offset(offset)
 	end
 	idx = idx + offset
 	if not (1 <= idx and idx <= #files) then
-		vim.cmd([[echohl ErrorMsg | echo "No more items" | echohl None]])
+		vim.notify("No more items", vim.log.levels.ERROR)
 		return
 	end
 	vim.cmd("edit " .. dir .. "/" .. files[idx])
