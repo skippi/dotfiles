@@ -97,6 +97,7 @@ return {
 	},
 	{
 		"echasnovski/mini.ai",
+		lazy = false,
 		keys = {
 			{ "a", mode = { "x", "o" } },
 			{ "i", mode = { "x", "o" } },
