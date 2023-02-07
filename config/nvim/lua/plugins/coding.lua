@@ -221,7 +221,7 @@ return {
 			{ "s", "<Cmd>lua require('substitute').visual()<CR>", mode = "x" },
 			{ "<Space>s", '"+s', mode = { "n", "x" }, remap = true },
 			{ "cx", "<Cmd>lua require('substitute.exchange').operator()<CR>" },
-			{ "cxx", "<Cmd>require('substitute.exchange').line()<CR>" },
+			{ "cxx", "<Cmd>lua require('substitute.exchange').line()<CR>" },
 			{ "X", "<Cmd>lua require('substitute.exchange').visual()<CR>", mode = "x" },
 		},
 		config = function()
