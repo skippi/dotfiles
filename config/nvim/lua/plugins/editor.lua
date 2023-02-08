@@ -1,6 +1,15 @@
 return {
 	{
 		"hrsh7th/nvim-cmp",
+		keys = {
+			{
+				"yo<Tab>",
+				function()
+					vim.g.__skippi_cmp_disabled = not vim.g.__skippi_cmp_disabled
+					vim.notify("cmp.enabled = " .. tostring(not vim.g.__skippi_cmp_disabled), vim.log.levels.INFO)
+				end,
+			},
+		},
 		event = { "InsertEnter", "CmdlineEnter" },
 		dependencies = {
 			{ "hrsh7th/cmp-buffer" },
@@ -27,6 +36,9 @@ return {
 				["<C-k>"] = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
 			})
 			cmp.setup({
+				enabled = function()
+					return not vim.g.__skippi_cmp_disabled
+				end,
 				snippet = {
 					expand = function(args)
 						vim.fn["vsnip#anonymous"](args.body)
