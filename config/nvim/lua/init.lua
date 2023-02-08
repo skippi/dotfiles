@@ -291,7 +291,7 @@ for key, fn in pairs({
 	end)
 	map("!", "<C-r>" .. key, function()
 		return "<C-r>='" .. fn() .. "'<CR>"
-	end, { expr = true })
+	end, { remap = true, expr = true })
 end
 
 opfunc.map("<C-_>", opfunc.toggle_path_slash, {
