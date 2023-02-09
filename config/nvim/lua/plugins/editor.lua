@@ -215,13 +215,6 @@ return {
 		end,
 	},
 	{
-		"chomosuke/term-edit.nvim",
-		event = "TermEnter",
-		config = function()
-			require("term-edit").setup({ prompt_end = "%$ " })
-		end,
-	},
-	{
 		"simrat39/symbols-outline.nvim",
 		cmd = { "SymbolsOutline", "SymbolsOutlineOpen", "SymbolsOutlineClose" },
 		config = function()
