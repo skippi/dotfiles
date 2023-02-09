@@ -274,12 +274,13 @@ return {
 		config = function()
 			require("gitsigns").setup({
 				signs = {
-					add = { hl = "GitSignsAdd", text = "┃" },
-					change = { hl = "GitSignsChange", text = "┃" },
-					delete = { hl = "GitSignsDelete", text = "┃" },
-					topdelete = { hl = "GitSignsDelete", text = "┃" },
-					changedelete = { hl = "GitSignsChange", text = "┃" },
+					add = { text = "┃" },
+					change = { text = "┃" },
+					delete = { text = "┃" },
+					topdelete = { text = "┃" },
+					changedelete = { text = "┃" },
 				},
+				update_debounce = 200,
 				on_attach = function(bufnr)
 					local gs = package.loaded.gitsigns
 					local map = function(mode, l, r, opts)
