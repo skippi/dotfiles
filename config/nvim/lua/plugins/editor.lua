@@ -37,7 +37,7 @@ return {
 			})
 			cmp.setup({
 				enabled = function()
-					return not vim.g.__skippi_cmp_disabled
+					return not vim.g.__skippi_cmp_disabled and vim.bo.filetype ~= "TelescopePrompt"
 				end,
 				snippet = {
 					expand = function(args)
