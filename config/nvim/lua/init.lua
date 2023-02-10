@@ -16,10 +16,12 @@ end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup("plugins")
 
-local function vim_regex_to_pcre(str)
-	str = string.gsub(str, "\\<", "\\b")
-	str = string.gsub(str, "\\>", "\\b")
-	return str
+local function grep_file_type()
+	local type = vim.bo.filetype
+	if type == "text" then
+		type = "txt"
+	end
+	return type
 end
 
 local function visual_selection()
@@ -154,39 +156,37 @@ map("n", "_", function()
 	end
 	return "<Cmd>sil !explorer '" .. path .. "'<CR>"
 end, { desc = "show file in explorer", expr = true })
-map("n", "g/", ':sil gr ""<Left>')
-map("n", "g<C-s>", function()
-	vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
-	vim.o.hlsearch = true
-	grep({ vim_regex_to_pcre(vim.fn.getreg("/")), "--iglob", "*." .. vim.fn.expand("%:e") })
-end)
-map("n", "g<C-_>", function()
-	local fpattern = "*." .. vim.fn.expand("%:e")
-	if not vim.loop.os_uname().sysname:find("Windows") then
-		fpattern = "\\" .. fpattern
+map("n", "g/", function()
+	local type = ""
+	if vim.v.count ~= 0 then
+		type = " -t" .. grep_file_type()
 	end
-	return ':sil gr "" --iglob ' .. fpattern .. "<C-b><C-Right><C-Right><C-Right><Left>"
-end, { expr = true })
+	return ':<C-u>sil gr ""' .. type .. "<C-b><C-Right><C-Right><C-Right><Left>"
+end, { expr = true, desc = "grep prompt" })
 map("n", "gs", function()
-	vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
-	vim.o.hlsearch = true
-	grep({ vim_regex_to_pcre(vim.fn.getreg("/")) })
-end)
+	local word = vim.fn.expand("<cword>")
+	vim.fn.setreg("/", "\\<" .. word .. "\\>")
+	vim.o.hlsearch = vim.o.hlsearch
+	local args = { "\\b" .. word .. "\\b" }
+	if vim.v.count ~= 0 then
+		args[#args + 1] = "-t" .. grep_file_type()
+	end
+	grep(args)
+end, { desc = "grep current word" })
 map("n", "gw", "<C-w>", { remap = true })
 map("n", "m,", "#NcgN")
 map("n", "m;", "*Ncgn")
-map("x", "g<C-s>", function()
-	local pattern = visual_selection()
-	vim.fn.setreg("/", "\\V" .. vim.fn.escape(pattern, "\\"))
-	vim.o.hlsearch = true
-	grep({ pattern, "-F", "--iglob", "*." .. vim.fn.expand("%:e") })
-end)
 map("x", "gs", function()
+	local count = vim.v.count -- count changes after visual_selection()
 	local pattern = visual_selection()
 	vim.fn.setreg("/", "\\V" .. vim.fn.escape(pattern, "\\"))
-	vim.o.hlsearch = true
-	grep({ pattern, "-F" })
-end)
+	vim.o.hlsearch = vim.o.hlsearch
+	local args = { pattern, "-F" }
+	if count ~= 0 then
+		args[#args + 1] = "-t" .. grep_file_type()
+	end
+	grep(args)
+end, { desc = "grep visual selection" })
 map("x", "m,", [["zy?\V<C-R>=escape(@z,'/\')<CR><CR>NcgN]])
 map("x", "m;", [["zy/\V<C-R>=escape(@z,'/\')<CR><CR>Ncgn]])
 map("!", "<C-r>", "<C-r><C-o>")
