@@ -233,6 +233,13 @@ map("n", "'$", function()
 	vim.cmd(vim.g.Temp_last_term .. "b")
 end, { desc = "jump to last terminal buffer" })
 
+map("n", "<C-g>", function()
+	if vim.v.count > 2 then
+		return '<Cmd>lua vim.treesitter.show_tree({ command = "new" })<CR><Cmd>wincmd p<CR>'
+	end
+	return "<C-g>"
+end, { expr = true })
+
 map({ "n", "x" }, "j", [[v:count ? 'j' : 'gj']], { desc = "smart j", expr = true })
 map({ "n", "x" }, "k", [[v:count ? 'k' : 'gk']], { desc = "smart k", expr = true })
 
