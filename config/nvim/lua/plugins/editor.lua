@@ -231,7 +231,24 @@ return {
 		end,
 	},
 	{ "tpope/vim-sleuth", event = "BufReadPre" },
-	{ "tpope/vim-vinegar", keys = { "-" }, ft = "netrw" },
+	{
+		"tpope/vim-vinegar",
+		keys = {
+			{
+				"-",
+				function()
+					if vim.v.count == 0 then
+						return "<Plug>VinegarUp"
+					end
+					require("skippi.util").open_buf_in_explorer()
+					return "<Ignore>"
+				end,
+				expr = true,
+				desc = "open current file parent directory",
+			},
+		},
+		ft = "netrw",
+	},
 	{
 		"tpope/vim-fugitive",
 		config = function()

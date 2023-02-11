@@ -149,13 +149,6 @@ map("n", "<C-h>", "<BS>", { remap = true }) -- windows <BS> fix
 map("n", "<Space>", "<Nop>")
 map("n", "<Space>j", ":tag /")
 map("n", "<Space>q", "<Cmd>q<CR>")
-map("n", "_", function()
-	local path = vim.fn.expand("%:p:h")
-	if vim.loop.os_uname().sysname:find("Linux") then
-		path = vim.fn.system("wslpath -w " .. path .. " | tr -d '\n'") -- xdg-open/wslview are CRAZY bugged on wsl/wt/conemu. Do not use.
-	end
-	return "<Cmd>sil !explorer '" .. path .. "'<CR>"
-end, { desc = "show file in explorer", expr = true })
 map("n", "g/", function()
 	local type = ""
 	if vim.v.count ~= 0 then
