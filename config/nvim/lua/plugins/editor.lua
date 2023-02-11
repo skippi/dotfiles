@@ -230,6 +230,12 @@ return {
 			vim.keymap.set("n", "ZX", "<Cmd>Remove!<CR>", { desc = "delete current file" })
 		end,
 	},
+	{
+		"tpope/vim-dadbod",
+		config = function()
+			require("skippi.abbrev").create_short_cmds("db", "DB")
+		end,
+	},
 	{ "tpope/vim-sleuth", event = "BufReadPre" },
 	{
 		"tpope/vim-vinegar",
