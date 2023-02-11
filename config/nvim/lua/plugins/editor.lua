@@ -251,7 +251,10 @@ return {
 	},
 	{
 		"tpope/vim-fugitive",
+		dependencies = { "tpope/vim-rhubarb" },
 		config = function()
+			vim.keymap.set("n", "gX", "<Cmd>.GBrowse<CR>", { silent = true })
+			vim.keymap.set("x", "gX", ":GBrowse<CR>", { silent = true })
 			vim.keymap.set("n", "g.", "<Cmd>Gvdiffsplit<CR>")
 			vim.keymap.set("n", "g<CR>", "<Cmd>G<CR>")
 			vim.keymap.set("n", "g<Space>", ":G<Space>")
@@ -264,15 +267,6 @@ return {
 			end)
 			vim.keymap.set("n", "gb", "<Cmd>G blame<CR>")
 		end,
-	},
-	{
-		"ruifm/gitlinker.nvim",
-		keys = {
-			{ "gX", "<Cmd>lua require('gitlinker').get_buf_range_url('n')<CR>" },
-			{ "gX", "<Cmd>lua require('gitlinker').get_buf_range_url('v')<CR>", mode = "x" },
-		},
-		dependencies = "nvim-lua/plenary.nvim",
-		opts = { mappings = nil },
 	},
 	{ "rbong/vim-flog", cmd = { "Flog", "Floggit", "Flogsplit" }, dependencies = "tpope/vim-fugitive" },
 	{
