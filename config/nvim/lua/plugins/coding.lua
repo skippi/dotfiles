@@ -198,17 +198,14 @@ return {
 		},
 		config = function()
 			local augend = require("dial.augend")
-			require("dial.config").augends:register_group({
-				default = {
+			local config = require("dial.config")
+			config.augends:register_group({
+				default = vim.tbl_extend("force", config.augends.group.default, {
 					augend.constant.alias.bool,
-					augend.date.alias["%H:%M"],
-					augend.date.alias["%Y-%m-%d"],
-					augend.date.alias["%Y/%m/%d"],
 					augend.integer.alias.binary,
 					augend.integer.alias.decimal_int,
-					augend.integer.alias.hex,
 					augend.semver.alias.semver,
-				},
+				}),
 			})
 		end,
 	},
