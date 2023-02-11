@@ -22,4 +22,27 @@ function M.jump_diagnostic(count, severity)
 	end
 end
 
+function M.edit_file_by_offset(offset)
+	local dir = vim.fn.expand("%:h")
+	if not vim.fn.isdirectory(dir) then
+		return
+	end
+	local files = vim.fn.readdir(dir, function(f)
+		return vim.fn.isdirectory(dir .. "/" .. f) == 0
+	end)
+	local idx = -math.huge
+	for i, v in ipairs(files) do
+		if v == vim.fn.expand("%:t") then
+			idx = i
+			break
+		end
+	end
+	idx = idx + offset
+	if not (1 <= idx and idx <= #files) then
+		vim.notify("No more items", vim.log.levels.ERROR)
+		return
+	end
+	vim.cmd("edit " .. dir .. "/" .. files[idx])
+end
+
 return M

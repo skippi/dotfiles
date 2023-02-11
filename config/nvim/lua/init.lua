@@ -84,7 +84,7 @@ vim.o.wildmode = "list:full"
 
 -- bugged with cmdline window
 -- if vim.fn.has('nvim-0.9') == 1 then
-	-- vim.o.statuscolumn = "%=%l%s%C"
+-- vim.o.statuscolumn = "%=%l%s%C"
 -- end
 
 vim.opt.diffopt:append("linematch:60")
@@ -199,41 +199,18 @@ for key, typ in pairs({
 	end)
 end
 
-local function edit_file_by_offset(offset)
-	local dir = vim.fn.expand("%:h")
-	if not vim.fn.isdirectory(dir) then
-		return
-	end
-	local files = vim.fn.readdir(dir, function(f)
-		return vim.fn.isdirectory(dir .. "/" .. f) == 0
-	end)
-	local idx = -math.huge
-	for i, v in ipairs(files) do
-		if v == vim.fn.expand("%:t") then
-			idx = i
-			break
-		end
-	end
-	idx = idx + offset
-	if not (1 <= idx and idx <= #files) then
-		vim.notify("No more items", vim.log.levels.ERROR)
-		return
-	end
-	vim.cmd("edit " .. dir .. "/" .. files[idx])
-end
-
 map("n", "[f", function()
 	if vim.bo.buftype == "quickfix" then
 		vim.cmd("sil!uns colder " .. vim.v.count1)
 	else
-		edit_file_by_offset(-vim.v.count1)
+		require("skippi.util").edit_file_by_offset(-vim.v.count1)
 	end
 end, { desc = "go to previous file", silent = true })
 map("n", "]f", function()
 	if vim.bo.buftype == "quickfix" then
 		vim.cmd("sil!uns cnewer " .. vim.v.count1)
 	else
-		edit_file_by_offset(vim.v.count1)
+		require("skippi.util").edit_file_by_offset(vim.v.count1)
 	end
 end, { desc = "go to next file", silent = true })
 
