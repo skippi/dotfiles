@@ -236,6 +236,7 @@ return {
 			require("skippi.abbrev").create_short_cmds("db", "DB")
 		end,
 	},
+	{ "tpope/vim-characterize", keys = { "ga" } },
 	{ "tpope/vim-sleuth", event = "BufReadPre" },
 	{
 		"tpope/vim-vinegar",
