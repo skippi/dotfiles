@@ -185,24 +185,19 @@ map("x", "m;", [["zy/\V<C-R>=escape(@z,'/\')<CR><CR>Ncgn]])
 map("!", "<C-r>", "<C-r><C-o>")
 map("!", "<C-r><C-o>", "<C-r>")
 map("n", "yd", vim.diagnostic.open_float)
-map({ "n", "x", "o" }, "[d", function()
-	vim.diagnostic.goto_prev({ float = false })
-end)
-map({ "n", "x", "o" }, "]d", function()
-	vim.diagnostic.goto_next({ float = false })
-end)
-map({ "n", "x", "o" }, "[w", function()
-	vim.diagnostic.goto_prev({ float = false, severity = vim.diagnostic.severity.WARN })
-end)
-map({ "n", "x", "o" }, "]w", function()
-	vim.diagnostic.goto_next({ float = false, severity = vim.diagnostic.severity.WARN })
-end)
-map({ "n", "x", "o" }, "[e", function()
-	vim.diagnostic.goto_prev({ float = false, severity = vim.diagnostic.severity.ERROR })
-end)
-map({ "n", "x", "o" }, "]e", function()
-	vim.diagnostic.goto_next({ float = false, severity = vim.diagnostic.severity.ERROR })
-end)
+
+for key, typ in pairs({
+	["d"] = {},
+	["w"] = vim.diagnostic.severity.WARN,
+	["e"] = vim.diagnostic.severity.ERROR,
+}) do
+	map({ "n", "x", "o" }, "[" .. key, function()
+		require("skippi.util").jump_diagnostic(-vim.v.count1, typ)
+	end)
+	map({ "n", "x", "o" }, "]" .. key, function()
+		require("skippi.util").jump_diagnostic(vim.v.count1, typ)
+	end)
+end
 
 local function edit_file_by_offset(offset)
 	local dir = vim.fn.expand("%:h")
