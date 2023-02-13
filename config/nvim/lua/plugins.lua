@@ -43,7 +43,7 @@ return {
 			lsc.dartls.setup(opts)
 			lsc.pyright.setup(opts)
 			lsc.gopls.setup(opts)
-			lsc.sumneko_lua.setup(vim.tbl_extend("force", opts, {
+			lsc.lua_ls.setup(vim.tbl_extend("force", opts, {
 				settings = {
 					Lua = {
 						completion = {
