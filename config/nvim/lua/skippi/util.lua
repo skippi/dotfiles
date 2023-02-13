@@ -45,4 +45,53 @@ function M.edit_file_by_offset(offset)
 	vim.cmd("edit " .. dir .. "/" .. files[idx])
 end
 
+local function first_nonblank_col(lnum)
+	local nonblank_col = vim.api.nvim_buf_get_lines(0, lnum - 1, lnum, false)[1]:find("%S")
+	if nonblank_col == nil then
+		return nil
+	end
+	return nonblank_col - 1
+end
+
+function M.jump_treesitter_statement(offset)
+	if vim.tbl_contains({
+		"gitcommit",
+		"help",
+		"txt",
+	}, vim.bo.filetype) then
+		return false
+	end
+	local lnum, col = unpack(vim.api.nvim_win_get_cursor(0))
+	col = first_nonblank_col(lnum) or col
+	local ok, node = pcall(vim.treesitter.get_node_at_pos, 0, lnum - 1, col, {})
+	if not ok or node == nil or node:type() == "comment" then
+		return false
+	end
+	local i, j = node:range()
+	for _ = 1, math.abs(offset) do
+		local sr = node:range()
+		while i == sr do
+			if offset < 0 then
+				node = node:prev_named_sibling() or node:parent()
+			else
+				while node do
+					if node:next_named_sibling() then
+						node = node:next_named_sibling()
+						break
+					end
+					node = node:parent()
+				end
+			end
+			if node == nil then
+				break
+			end
+			i, j = node:range()
+		end
+	end
+	j = first_nonblank_col(i + 1) or j
+	vim.api.nvim_buf_set_mark(0, "'", i + 1, j, {})
+	vim.api.nvim_win_set_cursor(0, { i + 1, j })
+	return true
+end
+
 return M

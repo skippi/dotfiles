@@ -240,6 +240,19 @@ map("n", "<C-g>", function()
 	return "<C-g>"
 end, { expr = true })
 
+map({ "n", "x", "o" }, "(", function()
+	local ok = require("skippi.util").jump_treesitter_statement(-vim.v.count1)
+	if not ok then
+		vim.api.nvim_feedkeys("(", "n", false)
+	end
+end)
+map({ "n", "x", "o" }, ")", function()
+	local ok = require("skippi.util").jump_treesitter_statement(vim.v.count1)
+	if not ok then
+		vim.api.nvim_feedkeys(")", "n", false)
+	end
+end)
+
 map({ "n", "x" }, "j", [[v:count ? 'j' : 'gj']], { desc = "smart j", expr = true })
 map({ "n", "x" }, "k", [[v:count ? 'k' : 'gk']], { desc = "smart k", expr = true })
 
