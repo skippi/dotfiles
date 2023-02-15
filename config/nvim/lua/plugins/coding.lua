@@ -74,7 +74,14 @@ return {
 			})
 		end,
 	},
-	"AndrewRadev/splitjoin.vim",
+	{
+		"Wansmer/treesj",
+		dependencies = { "nvim-treesitter" },
+		config = function()
+			require("treesj").setup({ use_default_keymaps = false, max_join_length = 260 })
+			vim.keymap.set("n", "gS", "<Cmd>TSJToggle<CR>")
+		end,
+	},
 	{ "skippi/vim-abolish", cmd = { "Abolish", "S" }, keys = { "cr" } },
 	{ "tpope/vim-commentary", keys = { { "gc", mode = { "n", "x" } }, "gcc", "gcgc", "gcu" } },
 	{
