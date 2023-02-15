@@ -123,6 +123,7 @@ map("n", "<BS>", "<C-^>")
 map("x", "*", [[:<C-u>let @z=@"<CR>gvy/\V<C-R>=escape(@", '/\')<CR><CR>:let @"=@z<CR>]], { silent = true })
 map("x", "#", [[:<C-u>let @z=@"<CR>gvy?\V<C-R>=escape(@", '?\')<CR><CR>:let @"=@z<CR>]], { silent = true })
 
+map("n", "<C-w> ", ":windo ")
 map("n", "<C-w>'", function()
 	local ESC = 27
 	local rc, keynr = pcall(vim.fn.getchar)
