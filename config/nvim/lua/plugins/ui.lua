@@ -47,16 +47,6 @@ return {
 		end,
 	},
 	{
-		"folke/trouble.nvim",
-		cmd = "Trouble",
-		keys = {
-			{ "<Space>t", "<Cmd>TroubleToggle<CR>" },
-		},
-		config = function()
-			require("trouble").setup({ icons = false })
-		end,
-	},
-	{
 		"nvim-treesitter/nvim-treesitter-context",
 		event = "BufReadPost",
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
