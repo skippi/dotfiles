@@ -137,11 +137,4 @@ return {
 			})
 		end,
 	},
-	{
-		"mattn/emmet-vim",
-		setup = function()
-			vim.g.user_emmet_leader_key = "<Space>e"
-			vim.g.user_emmet_mode = "nv"
-		end,
-	},
 }
