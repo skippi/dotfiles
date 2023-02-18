@@ -173,11 +173,29 @@ return {
 			{ "g!", "<Cmd>lua require('skippi.picker').pkill()<CR>" },
 			{ "<C-q>", "<Cmd>Telescope quickfix<CR>" },
 			{ "<C-s>", "<Cmd>lua require('skippi.picker').tselect()<CR>" },
-			{ "<Space>F", ":lua require('telescope.builtin').fd{cwd=''}<Left><Left>" },
-			{ "<Space>f", "<Cmd>Telescope find_files<CR>" },
-			{ "<Space>g", "<Cmd>Telescope git_files<CR>" },
 			{ "<Space>.", "<Cmd>Telescope resume<CR>" },
-			{ "<Space><BS>", "<Cmd>Telescope buffers<CR>" },
+			{
+				"<Space>/",
+				function()
+					require("telescope.builtin").live_grep({
+						cwd = require("skippi.util").workspace_root() or vim.fn.getcwd(),
+					})
+				end,
+			},
+			{ "<Space>?", "<Cmd>Telescope commands<CR>" },
+			{ "<Space>b", "<Cmd>Telescope buffers<CR>" },
+			{ "<Space>d", "<Cmd>Telescope diagnostics<CR>" },
+			{
+				"<Space>f",
+				function()
+					require("telescope.builtin").find_files({
+						cwd = require("skippi.util").workspace_root() or vim.fn.getcwd(),
+					})
+				end,
+			},
+			{ "<Space>F", "<Cmd>Telescope find_files<CR>" },
+			{ "<Space>l", "<Cmd>Telescope lsp_document_symbols<CR>" },
+			{ "<Space>L", "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>" },
 			{
 				"z/",
 				function()

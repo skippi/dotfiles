@@ -1,5 +1,13 @@
 local M = {}
 
+function M.workspace_root()
+	local dir = vim.fn.system("git rev-parse --show-toplevel")
+	if vim.v.shell_error ~= 0 then
+		return nil
+	end
+	return vim.trim(dir)
+end
+
 function M.open_buf_in_explorer()
 	local path = vim.fn.expand("%:p:h")
 	if vim.loop.os_uname().sysname:find("Linux") then

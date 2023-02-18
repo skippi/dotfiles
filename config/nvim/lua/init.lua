@@ -148,7 +148,6 @@ end, { desc = "toggle window diff" })
 
 map("n", "<C-h>", "<BS>", { remap = true }) -- windows <BS> fix
 map("n", "<Space>", "<Nop>")
-map("n", "<Space>j", ":tag /")
 map("n", "<Space>q", "<Cmd>q<CR>")
 map("n", "g/", function()
 	local type = ""

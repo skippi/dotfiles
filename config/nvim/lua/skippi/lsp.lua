@@ -23,10 +23,9 @@ function M.on_attach(_, bufnr)
 		opts.buffer = bufnr
 		vim.keymap.set(mode, key, cmd, opts)
 	end
-	map("n", "<C-j>", "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>")
-	map("n", "<C-k>", vim.lsp.buf.code_action)
-	map("n", "K", vim.lsp.buf.hover)
-	map("n", "cm", vim.lsp.buf.rename)
+	map("n", "<Space>a", vim.lsp.buf.code_action)
+	map("n", "<Space>k", vim.lsp.buf.hover)
+	map("n", "<Space>r", vim.lsp.buf.rename)
 	map({ "n", "x" }, "gd", function()
 		vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
 		vim.o.hlsearch = true
@@ -41,12 +40,6 @@ function M.on_attach(_, bufnr)
 		vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
 		vim.o.hlsearch = true
 		require("telescope.builtin").lsp_references()
-	end)
-	map("n", "m?", function()
-		require("telescope.builtin").diagnostics({
-			previewer = false,
-			wrap_results = true,
-		})
 	end)
 end
 
