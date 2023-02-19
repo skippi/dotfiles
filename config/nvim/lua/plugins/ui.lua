@@ -4,12 +4,12 @@ return {
 		lazy = false,
 		priority = 1000,
 		config = function()
-			require('vscode').setup({
+			require("vscode").setup({
 				group_overrides = {
-					GitSignsAdd = { fg="#5D7D20" },
-					GitSignsChange = { fg="#37718C" },
-					GitSignsDelete = { fg="#95161B" },
-				}
+					GitSignsAdd = { fg = "#5D7D20" },
+					GitSignsChange = { fg = "#37718C" },
+					GitSignsDelete = { fg = "#95161B" },
+				},
 			})
 		end,
 	},
