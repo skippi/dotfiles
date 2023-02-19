@@ -34,20 +34,14 @@ return {
 						enable = true,
 						set_jumps = true, -- whether to set jumps in the jumplist
 						goto_next_start = {
+							["]a"] = "@parameter.inner",
 							["]m"] = "@function.outer",
-							["]]"] = "@class.outer",
-						},
-						goto_next_end = {
-							["]M"] = "@function.outer",
-							["]["] = "@class.outer",
+							["]g"] = "@comment.outer",
 						},
 						goto_previous_start = {
+							["[a"] = "@parameter.inner",
 							["[m"] = "@function.outer",
-							["[["] = "@class.outer",
-						},
-						goto_previous_end = {
-							["[M"] = "@function.outer",
-							["[]"] = "@class.outer",
+							["[g"] = "@comment.outer",
 						},
 					},
 				},
@@ -109,15 +103,7 @@ return {
 			{ "a", mode = { "x", "o" } },
 			{ "i", mode = { "x", "o" } },
 		},
-		dependencies = {
-			{
-				"nvim-treesitter/nvim-treesitter-textobjects",
-				init = function()
-					-- no need to load the plugin, since we only need its queries
-					require("lazy.core.loader").disable_rtp_plugin("nvim-treesitter-textobjects")
-				end,
-			},
-		},
+		dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
 		opts = function()
 			local ai = require("mini.ai")
 			return {
