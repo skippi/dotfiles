@@ -57,7 +57,7 @@ function M.formatexpr(opts)
 	if start_lnum == 1 and end_lnum == vim.fn.line("$") then
 		vim.lsp.buf.format({
 			filter = function(client)
-				return client.name ~= "tsserver" and client.name ~= "sumneko_lua"
+				return client.name ~= "tsserver" and client.name ~= "lua_ls"
 			end,
 			bufnr = vim.fn.bufnr(),
 			timeout_ms = 2000,
