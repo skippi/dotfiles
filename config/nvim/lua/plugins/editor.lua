@@ -174,6 +174,7 @@ return {
 			{ "<C-q>", "<Cmd>Telescope quickfix<CR>" },
 			{ "<C-s>", "<Cmd>lua require('skippi.picker').tselect()<CR>" },
 			{ "<Space>.", "<Cmd>Telescope resume<CR>" },
+			{ "<Space>>", "<Cmd>Telescope pickers<CR>" },
 			{
 				"<Space>/",
 				function()
@@ -206,22 +207,32 @@ return {
 		opts = function()
 			local actions = require("telescope.actions")
 			return {
-				defaults = require("telescope.themes").get_ivy({
+				defaults = {
 					mappings = {
 						i = {
+							["<Esc>"] = actions.close,
+							["<Tab>"] = actions.move_selection_next,
+							["<S-Tab>"] = actions.move_selection_previous,
+							["<C-k>"] = actions.toggle_selection + actions.move_selection_better,
+							["<C-j>"] = actions.toggle_selection + actions.move_selection_worse,
+							["<C-y>"] = require("telescope.actions.layout").toggle_preview,
 							["<C-a>"] = actions.toggle_all,
-							["<C-q>"] = require("skippi.actions").send_to_qflist,
+							["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
 							["<C-r><C-w>"] = require("skippi.actions").insert_cword,
 							["<C-r><C-a>"] = require("skippi.actions").insert_cWORD,
 						},
 					},
-					layout_config = { height = 17 },
+					layout_config = {
+						prompt_position = "top",
+						width = 0.9,
+					},
+					sorting_strategy = "ascending",
 					results_title = "",
 					selection_caret = "  ",
 					cache_picker = {
-						num_pickers = 10,
+						num_pickers = 20,
 					},
-				}),
+				},
 				extensions = {
 					fzf = {
 						override_generic_sorter = true,
