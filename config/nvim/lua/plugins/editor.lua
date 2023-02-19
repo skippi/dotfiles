@@ -81,7 +81,7 @@ return {
 							fallback()
 						end
 					end),
-					["<C-Space>"] = cmp.mapping.complete({}),
+					["<C-x>"] = cmp.mapping.complete({}),
 					["<C-j>"] = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
 					["<C-k>"] = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
 				}),
