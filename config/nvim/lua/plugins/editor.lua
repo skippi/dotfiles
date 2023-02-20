@@ -186,7 +186,8 @@ return {
 			},
 			{ "<Space>?", "<Cmd>Telescope commands<CR>" },
 			{ "<Space>b", "<Cmd>Telescope buffers<CR>" },
-			{ "<Space>d", "<Cmd>Telescope diagnostics<CR>" },
+			{ "<Space>d", "<Cmd>Telescope diagnostics bufnr=0<CR>" },
+			{ "<Space>D", "<Cmd>Telescope diagnostics<CR>" },
 			{
 				"<Space>f",
 				function()
