@@ -88,6 +88,7 @@ vim.o.wildmode = "list:full"
 -- end
 
 vim.opt.diffopt:append("linematch:60")
+vim.opt.jumpoptions:append({ "stack", "view" })
 vim.opt.listchars:append({ eol = "↴" })
 vim.opt.shortmess:append("c")
 vim.opt.sessionoptions:append("globals")
