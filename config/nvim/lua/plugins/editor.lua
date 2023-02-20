@@ -153,22 +153,6 @@ return {
 					require("telescope").load_extension("ui-select")
 				end,
 			},
-			{
-				"smartpde/telescope-recent-files",
-				keys = {
-					{
-						"<Space>h",
-						function()
-							require("telescope").extensions.recent_files.pick()
-						end,
-						desc = "telescope recent files",
-					},
-				},
-				dependencies = "nvim-telescope/telescope.nvim",
-				config = function()
-					require("telescope").load_extension("recent_files")
-				end,
-			},
 		},
 		cmd = "Telescope",
 		keys = {
