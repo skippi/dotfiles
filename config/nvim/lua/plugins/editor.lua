@@ -188,6 +188,7 @@ return {
 			{ "<Space>b", "<Cmd>Telescope buffers<CR>" },
 			{ "<Space>d", "<Cmd>Telescope diagnostics bufnr=0<CR>" },
 			{ "<Space>D", "<Cmd>Telescope diagnostics<CR>" },
+			{ "<Space>j", "<Cmd>Telescope jumplist<CR>" },
 			{
 				"<Space>f",
 				function()
