@@ -31,6 +31,7 @@ function M.on_attach(_, bufnr)
 		vim.o.hlsearch = true
 		require("telescope.builtin").lsp_definitions()
 	end)
+	map({ "n", "x", "o" }, "gy", require("telescope.builtin").lsp_type_definitions)
 	map({ "n", "x" }, "gI", function()
 		vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
 		vim.o.hlsearch = true
