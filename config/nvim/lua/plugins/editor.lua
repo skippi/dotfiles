@@ -86,13 +86,14 @@ return {
 					["<C-k>"] = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
 				}),
 				sources = cmp.config.sources({
+					{ name = "git" },
+				}, {
 					{ name = "nvim_lsp_signature_help" },
 				}, {
 					{ name = "nvim_lsp" },
 					{ name = "vsnip" },
 					{ name = "tags" },
 				}, {
-					{ name = "git" },
 					{
 						name = "buffer",
 						option = {
