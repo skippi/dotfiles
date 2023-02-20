@@ -3,7 +3,7 @@ return {
 		"hrsh7th/nvim-cmp",
 		keys = {
 			{
-				"yo<Tab>",
+				"yo<C-x>",
 				function()
 					vim.g.__skippi_cmp_disabled = not vim.g.__skippi_cmp_disabled
 					vim.notify("cmp.enabled = " .. tostring(not vim.g.__skippi_cmp_disabled), vim.log.levels.INFO)
@@ -87,9 +87,12 @@ return {
 				}),
 				sources = cmp.config.sources({
 					{ name = "nvim_lsp_signature_help" },
+				}, {
 					{ name = "nvim_lsp" },
 					{ name = "vsnip" },
 					{ name = "tags" },
+				}, {
+					{ name = "git" },
 					{
 						name = "buffer",
 						option = {
@@ -106,8 +109,6 @@ return {
 							end,
 						},
 					},
-				}, {
-					{ name = "git" },
 				}),
 			})
 			cmp.setup.cmdline("/", {
