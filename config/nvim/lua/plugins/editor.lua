@@ -204,6 +204,10 @@ return {
 							["<C-k>"] = actions.toggle_selection + actions.move_selection_better,
 							["<C-j>"] = actions.toggle_selection + actions.move_selection_worse,
 							["<C-y>"] = require("telescope.actions.layout").toggle_preview,
+							["<PageUp>"] = actions.preview_scrolling_up,
+							["<PageDown>"] = actions.preview_scrolling_down,
+							["<C-u>"] = actions.results_scrolling_up,
+							["<C-d>"] = actions.results_scrolling_down,
 							["<C-a>"] = actions.toggle_all,
 							["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
 							["<C-r><C-w>"] = require("skippi.actions").insert_cword,
@@ -216,7 +220,6 @@ return {
 					},
 					sorting_strategy = "ascending",
 					results_title = "",
-					selection_caret = "  ",
 					cache_picker = {
 						num_pickers = 20,
 					},
