@@ -25,10 +25,7 @@ local function grep_file_type()
 end
 
 local function visual_selection()
-	local mode = vim.fn.mode()
-	if mode ~= "v" and mode ~= "V" and mode ~= "CTRL-V" then
-		return nil
-	end
+	assert(vim.tbl_contains({ "v", "V", "CTRL-V" }, vim.fn.mode()), "not in visual mode")
 	vim.cmd([[visual]])
 	local _, start_row, start_col, _ = unpack(vim.fn.getpos("'<"))
 	local _, end_row, end_col, _ = unpack(vim.fn.getpos("'>"))
@@ -43,14 +40,6 @@ local function visual_selection()
 	lines[#lines] = string.sub(lines[#lines], 1, end_col)
 	lines[1] = string.sub(lines[1], start_col)
 	return table.concat(lines, "\n")
-end
-
-local function grep(args)
-	local params = ""
-	for _, arg in ipairs(args) do
-		params = params .. " " .. vim.fn.escape(vim.fn.shellescape(arg, 1), "|")
-	end
-	vim.cmd("sil grep" .. params)
 end
 
 vim.o.autowriteall = true
@@ -159,30 +148,32 @@ map("n", "g/", function()
 	end
 	return ':<C-u>sil gr ""' .. type .. "<C-b><C-Right><C-Right><C-Right><Left>"
 end, { expr = true, desc = "grep prompt" })
-map("n", "gs", function()
-	local word = vim.fn.expand("<cword>")
-	vim.fn.setreg("/", "\\<" .. word .. "\\>")
-	vim.o.hlsearch = vim.o.hlsearch
-	local args = { "\\b" .. word .. "\\b" }
+map({ "n", "x" }, "gs", function()
+	local args = {}
 	if vim.v.count ~= 0 then
 		args[#args + 1] = "-t" .. grep_file_type()
 	end
-	grep(args)
-end, { desc = "grep current word" })
+	local search = nil
+	if vim.tbl_contains({ "v", "V", "CTRL-V" }, vim.fn.mode()) then
+		search = visual_selection()
+		vim.fn.setreg("/", "\\V" .. vim.fn.escape(search, "\\"))
+		args[#args + 1] = "-F"
+	else
+		local word = vim.fn.expand("<cword>")
+		vim.fn.setreg("/", "\\<" .. word .. "\\>")
+		search = "\\b" .. word .. "\\b"
+	end
+	vim.o.hlsearch = vim.o.hlsearch
+	require("telescope.builtin").grep_string({
+		additional_args = args,
+		cwd = require("skippi.util").workspace_root() or vim.fn.getcwd(),
+		search = search,
+		use_regex = true,
+	})
+end, { desc = "grep current word or selection" })
 map("n", "gw", "<C-w>", { remap = true })
 map("n", "m,", "#NcgN")
 map("n", "m;", "*Ncgn")
-map("x", "gs", function()
-	local count = vim.v.count -- count changes after visual_selection()
-	local pattern = visual_selection()
-	vim.fn.setreg("/", "\\V" .. vim.fn.escape(pattern, "\\"))
-	vim.o.hlsearch = vim.o.hlsearch
-	local args = { pattern, "-F" }
-	if count ~= 0 then
-		args[#args + 1] = "-t" .. grep_file_type()
-	end
-	grep(args)
-end, { desc = "grep visual selection" })
 map("x", "m,", [["zy?\V<C-R>=escape(@z,'/\')<CR><CR>NcgN]])
 map("x", "m;", [["zy/\V<C-R>=escape(@z,'/\')<CR><CR>Ncgn]])
 map("!", "<C-r>", "<C-r><C-o>")
