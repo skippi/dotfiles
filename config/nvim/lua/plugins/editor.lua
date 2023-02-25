@@ -173,7 +173,6 @@ return {
 			{ "<Space>b", "<Cmd>Telescope buffers<CR>" },
 			{ "<Space>d", "<Cmd>Telescope diagnostics bufnr=0<CR>" },
 			{ "<Space>D", "<Cmd>Telescope diagnostics<CR>" },
-			{ "<Space>j", "<Cmd>Telescope jumplist<CR>" },
 			{
 				"<Space>f",
 				function()
@@ -183,6 +182,7 @@ return {
 				end,
 			},
 			{ "<Space>F", "<Cmd>Telescope find_files<CR>" },
+			{ "<Space>j", "<Cmd>Telescope jumplist<CR>" },
 			{ "<Space>l", "<Cmd>Telescope lsp_document_symbols<CR>" },
 			{ "<Space>L", "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>" },
 			{
@@ -362,6 +362,16 @@ return {
 					map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { silent = true })
 				end,
 			})
+		end,
+	},
+	{
+		"mfussenegger/nvim-dap",
+		keys = {
+			{ "<Space>g", '<Cmd>lua require("skippi.hydra").debug:activate()<CR>', nowait = true },
+		},
+		dependencies = { "anuvyklack/hydra.nvim", "leoluz/nvim-dap-go" },
+		config = function()
+			require("dap-go").setup()
 		end,
 	},
 }
