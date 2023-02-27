@@ -188,7 +188,11 @@ return {
 			{
 				"z/",
 				function()
-					require("telescope.builtin").current_buffer_fuzzy_find({ previewer = false })
+					if vim.bo.buftype == "quickfix" then
+						require("telescope.builtin").quickfix({ previewer = false })
+					else
+						require("telescope.builtin").current_buffer_fuzzy_find({ previewer = false })
+					end
 				end,
 			},
 		},
