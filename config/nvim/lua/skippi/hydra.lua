@@ -15,7 +15,6 @@ local hint = [[
   _t_ Terminate debug session
   _s_ Switch stack frame
   ^
-       ^^^^                   _<Esc>_
 ]]
 
 local scopeViews = {}
@@ -62,9 +61,9 @@ M.debug = Hydra({
 				frameViews[bufnr] = sidebar
 			end,
 		},
+		{ "<Esc>", nil, { exit = true } },
 		{ "p", "<Space>gp", { remap = true, exit = true } },
 		{ "P", "<Space>gP", { remap = true, exit = true } },
-		{ "<Esc>", nil, { exit = true } },
 	},
 })
 
