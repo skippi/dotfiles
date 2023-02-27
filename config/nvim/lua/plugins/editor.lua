@@ -257,7 +257,13 @@ return {
 		end,
 	},
 	{ "tpope/vim-characterize", keys = { "ga" } },
-	{ "tpope/vim-sleuth", event = "BufReadPre" },
+	{
+		"tpope/vim-sleuth",
+		event = "BufReadPre",
+		config = function()
+			vim.g.sleuth_lua_defaults = "tabstop=2"
+		end,
+	},
 	{
 		"tpope/vim-vinegar",
 		keys = {
