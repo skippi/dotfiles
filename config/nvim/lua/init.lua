@@ -59,6 +59,7 @@ vim.o.mouse = "a"
 vim.o.path = ",,**"
 vim.o.pumheight = 10
 vim.o.ruler = false
+vim.o.scrolloff = 4
 vim.o.smartcase = true
 vim.o.shiftwidth = 2
 vim.o.tabstop = 2
