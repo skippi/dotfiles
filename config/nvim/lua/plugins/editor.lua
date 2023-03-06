@@ -169,7 +169,8 @@ return {
 					})
 				end,
 			},
-			{ "<Space>?", "<Cmd>Telescope commands<CR>" },
+			{ "<Space>?", "<Cmd>Telescope live_grep<CR>" },
+			{ "<Space>:", "<Cmd>Telescope commands<CR>" },
 			{ "<Space>b", "<Cmd>Telescope buffers<CR>" },
 			{ "<Space>d", "<Cmd>Telescope diagnostics bufnr=0<CR>" },
 			{ "<Space>D", "<Cmd>Telescope diagnostics<CR>" },
