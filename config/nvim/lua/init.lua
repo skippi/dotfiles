@@ -228,11 +228,11 @@ map("n", "'$", function()
 	vim.cmd(vim.g.Temp_last_term .. "b")
 end, { desc = "jump to last terminal buffer" })
 
-map("n", "<C-g>", function()
-	if vim.v.count > 2 then
-		return '<Cmd>lua vim.treesitter.show_tree({ command = "new" })<CR><Cmd>wincmd p<CR>'
+map("n", "gO", function()
+	if not vim.tbl_contains({ "man", "help" }, vim.bo.filetype) then
+		return [[mz<Cmd>keepjumps lua vim.treesitter.inspect_tree({ command = "new" })<CR><Cmd>wincmd p<CR>'z]]
 	end
-	return "<C-g>"
+	return "gO"
 end, { expr = true })
 
 map({ "n", "x", "o" }, "(", function()
