@@ -66,17 +66,26 @@ return {
 	},
 	{
 		"Wansmer/treesj",
+		keys = { { "gS", "<Cmd>TSJToggle<CR>" } },
 		dependencies = { "nvim-treesitter" },
 		config = function()
 			require("treesj").setup({ use_default_keymaps = false, max_join_length = 260 })
-			vim.keymap.set("n", "gS", "<Cmd>TSJToggle<CR>")
 		end,
 	},
 	{ "skippi/vim-abolish", cmd = { "Abolish", "S" }, keys = { "cr" } },
 	{ "tpope/vim-commentary", keys = { { "gc", mode = { "n", "x" } }, "gcc", "gcgc", "gcu" } },
 	{
 		"tpope/vim-surround",
-		keys = { { "ys", mode = "n", "x" }, "cs", "ds", "yss", "yS", "ySS", { "S", mode = "x" }, { "gS", mode = "x" } },
+		keys = {
+			{ "ys", mode = { "n", "x" } },
+			"cs",
+			"ds",
+			"yss",
+			"yS",
+			"ySS",
+			{ "S", mode = "x" },
+			{ "gS", mode = "x" },
+		},
 		config = function()
 			vim.g.surround_13 = "\n\r\n"
 			vim.g.surround_97 = "[\r]"
@@ -94,7 +103,6 @@ return {
 	},
 	{
 		"echasnovski/mini.ai",
-		lazy = false,
 		keys = {
 			{ "a", mode = { "x", "o" } },
 			{ "i", mode = { "x", "o" } },
