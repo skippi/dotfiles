@@ -11,6 +11,7 @@ return {
 					GitSignsDelete = { fg = "#95161B" },
 				},
 			})
+			require("vscode").load()
 		end,
 	},
 	{ "MTDL9/vim-log-highlighting", ft = "log" },
