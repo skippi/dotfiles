@@ -71,7 +71,7 @@ function M.jump_treesitter_statement(offset)
 	end
 	local lnum, col = unpack(vim.api.nvim_win_get_cursor(0))
 	col = first_nonblank_col(lnum) or col
-	local ok, node = pcall(vim.treesitter.get_node_at_pos, 0, lnum - 1, col, {})
+	local ok, node = pcall(vim.treesitter.get_node, { bufnr = 0, pos = { lnum - 1, col} })
 	if not ok or node == nil or node:type() == "comment" then
 		return false
 	end

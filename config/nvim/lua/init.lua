@@ -181,6 +181,9 @@ map("!", "<C-r>", "<C-r><C-o>")
 map("!", "<C-r><C-o>", "<C-r>")
 map("n", "yd", vim.diagnostic.open_float)
 
+map("n", "<M-[>", "<Cmd>tabmove -<CR>")
+map("n", "<M-]>", "<Cmd>tabmove +<CR>")
+
 for key, typ in pairs({
 	["d"] = {},
 	["w"] = vim.diagnostic.severity.WARN,

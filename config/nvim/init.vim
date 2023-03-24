@@ -24,9 +24,6 @@ xnoremap g& <Esc><Cmd>'<,'>&&<CR>
 tnoremap <M-c> <M-c>
 tnoremap <M-h> <M-h>
 
-nnoremap <expr> <M-[> '<Cmd>tabmove -' . v:count1 . '<CR>'
-nnoremap <expr> <M-]> '<Cmd>tabmove +' . v:count1 . '<CR>'
-
 for key in ["<Left>", "<Right>", "<C-Left>", "<C-Right>"]
   exe "inoremap" key "<C-g>U" . key
 endfor
