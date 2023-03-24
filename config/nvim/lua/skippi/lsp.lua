@@ -25,7 +25,6 @@ function M.on_attach(_, bufnr)
 	end
 	map("n", "<Space>a", vim.lsp.buf.code_action)
 	map("n", "<Space>k", vim.lsp.buf.hover)
-	map("n", "<Space>r", vim.lsp.buf.rename)
 	map({ "n", "x" }, "gd", function()
 		vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
 		vim.o.hlsearch = true

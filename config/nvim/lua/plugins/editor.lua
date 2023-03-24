@@ -317,6 +317,13 @@ return {
 		end,
 	},
 	{
+		"smjonas/inc-rename.nvim",
+		config = function()
+			require("inc_rename").setup()
+			vim.keymap.set("n", "<Space><Space>", ":IncRename ")
+		end,
+	},
+	{
 		"lewis6991/gitsigns.nvim",
 		event = "BufReadPre",
 		config = function()
