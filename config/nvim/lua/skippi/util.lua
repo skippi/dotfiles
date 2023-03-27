@@ -1,5 +1,13 @@
 local M = {}
 
+function M.cursor_has_words_before()
+	if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+		return false
+	end
+	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+	return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
+end
+
 function M.workspace_root()
 	local dir = vim.fn.system("git rev-parse --show-toplevel")
 	if vim.v.shell_error ~= 0 then
@@ -71,7 +79,7 @@ function M.jump_treesitter_statement(offset)
 	end
 	local lnum, col = unpack(vim.api.nvim_win_get_cursor(0))
 	col = first_nonblank_col(lnum) or col
-	local ok, node = pcall(vim.treesitter.get_node, { bufnr = 0, pos = { lnum - 1, col} })
+	local ok, node = pcall(vim.treesitter.get_node, { bufnr = 0, pos = { lnum - 1, col } })
 	if not ok or node == nil or node:type() == "comment" then
 		return false
 	end

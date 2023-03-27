@@ -1,5 +1,14 @@
 return {
 	{
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		event = "InsertEnter",
+		opts = {
+			suggestion = { enabled = false },
+			panel = { enabled = false },
+		},
+	},
+	{
 		"hrsh7th/nvim-cmp",
 		keys = {
 			{
@@ -27,6 +36,13 @@ return {
 			{ "hrsh7th/vim-vsnip", dependencies = { "rafamadriz/friendly-snippets" } },
 			{ "lukas-reineke/cmp-under-comparator" },
 			{ "quangnguyen30192/cmp-nvim-tags" },
+			{
+				"zbirenbaum/copilot-cmp",
+				dependencies = { "copilot.lua" },
+				config = function()
+					require("copilot_cmp").setup()
+				end,
+			},
 		},
 		config = function()
 			local cmp = require("cmp")
@@ -45,7 +61,9 @@ return {
 					end,
 				},
 				sorting = {
+					priority_weight = 2,
 					comparators = {
+						require("copilot_cmp.comparators").prioritize,
 						cmp.config.compare.offset,
 						cmp.config.compare.exact,
 						cmp.config.compare.score,
@@ -58,8 +76,8 @@ return {
 				},
 				mapping = cmp.mapping.preset.insert({
 					["<Tab>"] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.confirm({ select = true })
+						if cmp.visible() and require("skippi.util").cursor_has_words_before() then
+							cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
 						elseif vim.fn["vsnip#available"](1) ~= 0 then
 							vim.api.nvim_feedkeys(
 								vim.api.nvim_replace_termcodes("<Plug>(vsnip-expand-or-jump)", true, false, true),
@@ -90,6 +108,7 @@ return {
 				}, {
 					{ name = "nvim_lsp_signature_help" },
 				}, {
+					{ name = "copilot" },
 					{ name = "nvim_lsp" },
 					{ name = "vsnip" },
 					{ name = "tags" },
