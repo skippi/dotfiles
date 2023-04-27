@@ -23,19 +23,19 @@ return {
 		dependencies = {
 			{ "hrsh7th/cmp-buffer" },
 			{ "hrsh7th/cmp-cmdline" },
-			{
-				"petertriho/cmp-git",
-				name = "cmp_git",
-				dependencies = { "nvim-lua/plenary.nvim" },
-				config = true,
-			},
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
 			{ "hrsh7th/cmp-path" },
-			{ "hrsh7th/cmp-vsnip" },
-			{ "hrsh7th/vim-vsnip", dependencies = { "rafamadriz/friendly-snippets" } },
+			{ "saadparwaiz1/cmp_luasnip" },
 			{ "lukas-reineke/cmp-under-comparator" },
 			{ "quangnguyen30192/cmp-nvim-tags" },
+			{
+				"L3MON4D3/LuaSnip",
+				dependencies = { "rafamadriz/friendly-snippets" },
+				config = function()
+					require("luasnip.loaders.from_vscode").lazy_load()
+				end,
+			},
 			{
 				"zbirenbaum/copilot-cmp",
 				dependencies = { "copilot.lua" },
@@ -46,6 +46,7 @@ return {
 		},
 		config = function()
 			local cmp = require("cmp")
+			local luasnip = require("luasnip")
 			local types = require("cmp.types")
 			local cmdline_mapping = cmp.mapping.preset.cmdline({
 				["<C-j>"] = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
@@ -57,7 +58,7 @@ return {
 				end,
 				snippet = {
 					expand = function(args)
-						vim.fn["vsnip#anonymous"](args.body)
+						luasnip.lsp_expand(args.body)
 					end,
 				},
 				sorting = {
@@ -78,43 +79,31 @@ return {
 					["<Tab>"] = cmp.mapping(function(fallback)
 						if cmp.visible() and require("skippi.util").cursor_has_words_before() then
 							cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
-						elseif vim.fn["vsnip#available"](1) ~= 0 then
-							vim.api.nvim_feedkeys(
-								vim.api.nvim_replace_termcodes("<Plug>(vsnip-expand-or-jump)", true, false, true),
-								"n",
-								false
-							)
+						elseif luasnip.expand_or_locally_jumpable() then
+							luasnip.expand_or_jump()
 						else
 							fallback()
 						end
 					end, { "i", "s" }),
 					["<S-Tab>"] = cmp.mapping(function(fallback)
-						if vim.fn["vsnip#jumpable"](-1) ~= 0 then
-							vim.api.nvim_feedkeys(
-								vim.api.nvim_replace_termcodes("<Plug>(vsnip-jump-prev)", true, false, true),
-								"n",
-								false
-							)
+						if luasnip.jumpable(-1) then
+							luasnip.jump(-1)
 						else
 							fallback()
 						end
-					end),
-					["<C-x>"] = cmp.mapping.complete({}),
-					["<C-j>"] = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
-					["<C-k>"] = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
+					end, { "i", "s" }),
 				}),
 				sources = cmp.config.sources({
-					{ name = "git" },
-				}, {
 					{ name = "nvim_lsp_signature_help" },
 				}, {
 					{ name = "copilot" },
 					{ name = "nvim_lsp" },
-					{ name = "vsnip" },
 					{ name = "tags" },
+					{ name = "luasnip", keyword_length = 2 },
 				}, {
 					{
 						name = "buffer",
+						keyword_length = 3,
 						option = {
 							get_bufnrs = function()
 								local bufs = {}
