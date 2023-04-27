@@ -4,7 +4,6 @@ return {
 		config = function()
 			local nls = require("null-ls")
 			nls.setup({
-				on_attach = require("skippi.lsp").on_attach,
 				sources = {
 					nls.builtins.diagnostics.cppcheck.with({
 						extra_args = { "--language=c++" },
@@ -36,14 +35,20 @@ return {
 			},
 		},
 		config = function()
-			local lsc = require("lspconfig")
 			local lsp = require("skippi.lsp")
-			local opts = { capabilities = lsp.make_capabilities(), on_attach = lsp.on_attach }
-			lsc.clangd.setup(opts)
-			lsc.dartls.setup(opts)
-			lsc.pyright.setup(opts)
-			lsc.gopls.setup(opts)
-			lsc.lua_ls.setup(vim.tbl_extend("force", opts, {
+			vim.api.nvim_create_autocmd("LspAttach", {
+				group = vim.api.nvim_create_augroup("skippi.lsp.attach", {}),
+				callback = function(e)
+					lsp.on_attach({}, e.buf)
+				end,
+			})
+			local lsc = require("lspconfig")
+			lsc.util.default_config = lsp.make_capabilities()
+			lsc.clangd.setup({})
+			lsc.dartls.setup({})
+			lsc.pyright.setup({})
+			lsc.gopls.setup({})
+			lsc.lua_ls.setup({
 				settings = {
 					Lua = {
 						completion = {
@@ -51,17 +56,17 @@ return {
 						},
 					},
 				},
-			}))
-			require("typescript").setup({ server = opts })
-			lsc.vimls.setup(opts)
-			lsc.jsonls.setup(vim.tbl_extend("force", opts, {
+			})
+			require("typescript").setup({})
+			lsc.vimls.setup({})
+			lsc.jsonls.setup({
 				settings = {
 					json = {
 						schemas = require("schemastore").json.schemas(),
 						validate = { enable = true },
 					},
 				},
-			}))
+			})
 		end,
 	},
 	{
@@ -95,10 +100,8 @@ return {
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = "java",
 				callback = function()
-					require("jdtls.setup").add_commands()
-					local project = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
-					local on_attach = function(client, bufnr)
-						require("skippi.lsp").on_attach(client, bufnr)
+					local on_attach = function(_, bufnr)
+						require("jdtls.setup").add_commands()
 						vim.api.nvim_buf_create_user_command(
 							bufnr,
 							"JdtOrganizeImports",
@@ -106,6 +109,7 @@ return {
 							{ desc = "organize java imports", force = true }
 						)
 					end
+					local project = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 					local config = {
 						cmd = {
 							"jdtls",

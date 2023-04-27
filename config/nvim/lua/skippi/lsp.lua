@@ -1,18 +1,11 @@
 local M = {}
 
 function M.make_capabilities()
-	local cap = require("cmp_nvim_lsp").default_capabilities()
+	local cap = require("lspconfig").util.default_config
+	cap = vim.tbl_deep_extend("force", cap, require("cmp_nvim_lsp").default_capabilities())
 	cap.textDocument.foldingRange = {
 		dynamicRegistration = false,
 		lineFoldingOnly = true,
-	}
-	cap.textDocument.completion.completionItem.snippetSupport = true
-	cap.textDocument.completion.completionItem.resolveSupport = {
-		properties = {
-			"additionalTextEdits",
-			"detail",
-			"documentation",
-		},
 	}
 	return cap
 end
