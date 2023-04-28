@@ -19,6 +19,9 @@ return {
 				highlight = {
 					enable = true,
 					disable = function(_, buf)
+						if vim.api.nvim_buf_line_count(buf) > 50000 then
+							return true
+						end
 						local max_filesize = 20971520 -- 20 MB
 						local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
 						return ok and stats and stats.size > max_filesize
