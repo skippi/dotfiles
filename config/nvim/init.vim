@@ -15,8 +15,8 @@ set wildignore+=*/node_modules/*
 set wildignore+=Session.vim
 
 " search and replace
-nnoremap <Space><Space> :'{,'}s\M\<<C-r><C-w>\>g<Left><Left>
-xnoremap <Space><Space> "zy:'{,'}s\M<C-r>zg<Left><Left>
+nnoremap <Space>r :'{,'}s\M\<<C-r><C-w>\>g<Left><Left>
+xnoremap <Space>r "zy:'{,'}s\M<C-r>zg<Left><Left>
 xnoremap & <Esc><Cmd>'<,'>&<CR>
 xnoremap g& <Esc><Cmd>'<,'>&&<CR>
 
