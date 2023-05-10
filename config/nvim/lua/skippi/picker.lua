@@ -8,11 +8,14 @@ local pickers = require("telescope.pickers")
 local M = {}
 
 local function getprocitems()
-	local cmd = "tasklist /fo csv /nh"
-	local match = '[^",]+'
-	if vim.loop.os_uname().sysname:find("Linux") then
+	local cmd, match
+	local is_linux = vim.loop.os_uname().sysname:find("Linux")
+	if is_linux then
 		cmd = [[ps --no-header -o args:200 -o \0%p x]]
 		match = "[^\\x00]+"
+	else
+		cmd = "tasklist /fo csv /nh"
+		match = '[^",]+'
 	end
 	local output = vim.fn.systemlist(cmd)
 	local results = {}
@@ -21,10 +24,17 @@ local function getprocitems()
 		for v in s:gmatch(match) do
 			splited[#splited + 1] = v
 		end
-		results[#results + 1] = {
-			filename = table.concat({ unpack(splited, 1, #splited - 1) }),
-			pid = tonumber(splited[#splited]),
-		}
+		if is_linux then
+			results[#results + 1] = {
+				filename = table.concat(splited, "", 1, #splited - 1),
+				pid = tonumber(splited[#splited]),
+			}
+		else
+			results[#results + 1] = {
+				filename = splited[1],
+				pid = tonumber(splited[2]),
+			}
+		end
 	end
 	return results
 end
