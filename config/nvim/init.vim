@@ -5,7 +5,7 @@ set statusline=
 set statusline+=%(\ %{toupper(mode(0))}%)
 set statusline+=%(\ @%{FugitiveHead()}%)
 set statusline+=%(\ %<%f%)
-set statusline+=\ %h%m%r%w
+set statusline+=\ %{v:lua.require('dap').status()!=''?'[!]':''}%h%m%r%w
 set statusline+=%=
 set statusline+=%([%n]%)
 set statusline+=%(%<\ [%{&ff}]\ %y\ %l:%c\ %p%%\ %)
