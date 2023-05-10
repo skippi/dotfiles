@@ -3,10 +3,7 @@ return {
 		"zbirenbaum/copilot.lua",
 		cmd = "Copilot",
 		event = "InsertEnter",
-		opts = {
-			suggestion = { enabled = false },
-			panel = { enabled = false },
-		},
+		opts = {},
 	},
 	{
 		"hrsh7th/nvim-cmp",
@@ -36,13 +33,6 @@ return {
 					require("luasnip.loaders.from_vscode").lazy_load()
 				end,
 			},
-			{
-				"zbirenbaum/copilot-cmp",
-				dependencies = { "copilot.lua" },
-				config = function()
-					require("copilot_cmp").setup()
-				end,
-			},
 		},
 		config = function()
 			local cmp = require("cmp")
@@ -64,7 +54,6 @@ return {
 				sorting = {
 					priority_weight = 2,
 					comparators = {
-						require("copilot_cmp.comparators").prioritize,
 						cmp.config.compare.offset,
 						cmp.config.compare.exact,
 						cmp.config.compare.score,
@@ -96,7 +85,6 @@ return {
 				sources = cmp.config.sources({
 					{ name = "nvim_lsp_signature_help" },
 				}, {
-					{ name = "copilot" },
 					{ name = "nvim_lsp" },
 					{ name = "tags" },
 					{ name = "luasnip", keyword_length = 2 },
