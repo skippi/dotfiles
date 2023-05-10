@@ -1,3 +1,4 @@
+.exrc
 .nvim.lua
 .projections.json
 Session.vim
