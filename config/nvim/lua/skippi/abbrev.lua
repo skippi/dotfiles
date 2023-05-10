@@ -25,7 +25,17 @@ function M.create_short_cmds(abbr, expand)
 		end
 	end
 	if not add then
-		vim.cmd("cnoreabbrev " .. str .. " " .. expand)
+		vim.cmd(
+			"cnoreabbrev <expr> "
+				.. str
+				.. [[ (getcmdtype() ==# ':' && getcmdline() =~# "^\\('.*,'.*\\)\\?]]
+				.. str
+				.. [[") ? "]]
+				.. expand
+				.. [[" : "]]
+				.. str
+				.. '"'
+		)
 	end
 end
 
