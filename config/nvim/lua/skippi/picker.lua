@@ -9,19 +9,21 @@ local M = {}
 
 local function getprocitems()
 	local cmd = "tasklist /fo csv /nh"
+	local match = '[^",]+'
 	if vim.loop.os_uname().sysname:find("Linux") then
-		cmd = [[ps --no-header -o %p -o ,%a x]]
+		cmd = [[ps --no-header -o args:200 -o \0%p x]]
+		match = "[^\\x00]+"
 	end
 	local output = vim.fn.systemlist(cmd)
 	local results = {}
 	for _, s in ipairs(output) do
 		local splited = {}
-		for v in s:gmatch("[^,]+") do
+		for v in s:gmatch(match) do
 			splited[#splited + 1] = v
 		end
 		results[#results + 1] = {
-			pid = tonumber(splited[1]),
-			filename = splited[2],
+			filename = table.concat({ unpack(splited, 1, #splited - 1) }),
+			pid = tonumber(splited[#splited]),
 		}
 	end
 	return results
