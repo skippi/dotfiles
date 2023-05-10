@@ -378,10 +378,7 @@ return {
 	},
 	{
 		"mfussenegger/nvim-dap",
-		keys = {
-			{ "<Space>g", '<Cmd>lua require("skippi.hydra").debug:activate()<CR>', nowait = true },
-		},
-		dependencies = { "anuvyklack/hydra.nvim", "leoluz/nvim-dap-go" },
+		dependencies = { "leoluz/nvim-dap-go" },
 		config = function()
 			require("dap-go").setup()
 		end,
