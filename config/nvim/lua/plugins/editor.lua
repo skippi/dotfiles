@@ -25,7 +25,6 @@ return {
 			{ "hrsh7th/cmp-path" },
 			{ "saadparwaiz1/cmp_luasnip" },
 			{ "lukas-reineke/cmp-under-comparator" },
-			{ "quangnguyen30192/cmp-nvim-tags" },
 			{
 				"L3MON4D3/LuaSnip",
 				dependencies = { "rafamadriz/friendly-snippets" },
@@ -86,7 +85,6 @@ return {
 					{ name = "nvim_lsp_signature_help" },
 				}, {
 					{ name = "nvim_lsp" },
-					{ name = "tags" },
 					{ name = "luasnip", keyword_length = 2 },
 				}, {
 					{
