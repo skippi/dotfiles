@@ -13,6 +13,7 @@ return {
 					}),
 					nls.builtins.diagnostics.gitlint,
 					nls.builtins.diagnostics.mypy,
+					nls.builtins.formatting.black,
 					nls.builtins.formatting.prettier.with({
 						prefer_local = "node_modules/.bin",
 					}),
