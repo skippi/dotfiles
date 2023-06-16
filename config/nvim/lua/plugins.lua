@@ -74,9 +74,6 @@ return {
 		"ray-x/go.nvim",
 		dependencies = { "neovim/nvim-lspconfig" },
 		ft = "go",
-		cond = function()
-			return vim.loop.os_uname().sysname == "Linux"
-		end,
 		config = function()
 			require("go").setup({})
 		end,
