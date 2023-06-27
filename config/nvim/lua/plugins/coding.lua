@@ -48,13 +48,6 @@ return {
 		end,
 	},
 	{
-		"mfussenegger/nvim-treehopper",
-		dependencies = { "nvim-treesitter/nvim-treesitter" },
-		keys = {
-			{ ".", ":lua require('tsht').nodes()<CR>", mode = { "o", "x" }, silent = true },
-		},
-	},
-	{
 		"andymass/vim-matchup",
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		config = function()

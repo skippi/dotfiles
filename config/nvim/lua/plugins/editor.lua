@@ -390,4 +390,18 @@ return {
 			require("dap-go").setup()
 		end,
 	},
+	{
+		"folke/flash.nvim",
+		enabled = true,
+		event = "VeryLazy",
+		opts = {
+			modes = {
+				char = { enabled = false },
+			},
+		},
+		keys = {
+			{ "r", mode = "o", require("flash").remote, desc = "Remote Flash" },
+			{ "R", mode = { "n", "o", "x" }, require("flash").treesitter_search, desc = "Treesitter Search" },
+		},
+	},
 }
