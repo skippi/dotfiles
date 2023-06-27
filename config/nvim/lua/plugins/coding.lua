@@ -60,14 +60,6 @@ return {
 			})
 		end,
 	},
-	{
-		"Wansmer/treesj",
-		keys = { { "gS", "<Cmd>TSJToggle<CR>" } },
-		dependencies = { "nvim-treesitter" },
-		config = function()
-			require("treesj").setup({ use_default_keymaps = false, max_join_length = 260 })
-		end,
-	},
 	{ "skippi/vim-abolish", cmd = { "Abolish", "S" }, keys = { "cr" } },
 	{ "tpope/vim-commentary", keys = { { "gc", mode = { "n", "x" } }, "gcc", "gcgc", "gcu" } },
 	{
