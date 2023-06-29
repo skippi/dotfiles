@@ -400,8 +400,22 @@ return {
 			},
 		},
 		keys = {
-			{ "r", mode = "o", require("flash").remote, desc = "Remote Flash" },
-			{ "R", mode = { "n", "o", "x" }, require("flash").treesitter_search, desc = "Treesitter Search" },
+			{
+				"r",
+				mode = "o",
+				function()
+					require("flash").remote()
+				end,
+				desc = "Remote Flash",
+			},
+			{
+				"R",
+				mode = { "n", "o", "x" },
+				function()
+					require("flash").treesitter_search()
+				end,
+				desc = "Treesitter Search",
+			},
 		},
 	},
 }
