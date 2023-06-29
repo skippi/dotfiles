@@ -73,9 +73,7 @@ vim.o.wildcharm = vim.fn.char2nr(vim.api.nvim_replace_termcodes("<C-z>", true, t
 vim.o.wildmode = "list:full"
 
 -- bugged with cmdline window
--- if vim.fn.has('nvim-0.9') == 1 then
--- vim.o.statuscolumn = "%=%l%s%C"
--- end
+vim.o.statuscolumn = "%=%l%s%C"
 
 vim.opt.diffopt:append("linematch:60")
 vim.opt.jumpoptions:append({ "stack", "view" })
