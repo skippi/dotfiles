@@ -72,7 +72,6 @@ vim.o.updatetime = 500
 vim.o.wildcharm = vim.fn.char2nr(vim.api.nvim_replace_termcodes("<C-z>", true, true, true))
 vim.o.wildmode = "list:full"
 
--- bugged with cmdline window
 vim.o.statuscolumn = "%=%l%s%C"
 
 vim.opt.diffopt:append("linematch:60")
@@ -111,8 +110,8 @@ map({ "n", "x", "o" }, "gl", "g_")
 map({ "n", "x" }, "<M-c>", '"_c')
 map({ "n", "x" }, "<M-d>", '"_d')
 map("n", "<BS>", "<C-^>")
-map("x", "*", [[:<C-u>let @z=@"<CR>gvy/\V<C-R>=escape(@", '/\')<CR><CR>:let @"=@z<CR>]], { silent = true })
-map("x", "#", [[:<C-u>let @z=@"<CR>gvy?\V<C-R>=escape(@", '?\')<CR><CR>:let @"=@z<CR>]], { silent = true })
+map("x", "*", [[:<C-u>let @z=@"<CR>gvymz/\V<C-R>=escape(@", '/\')<CR><CR>:let @"=@z<CR>`z]], { silent = true })
+map("x", "#", [[:<C-u>let @z=@"<CR>gvymz?\V<C-R>=escape(@", '?\')<CR><CR>:let @"=@z<CR>`z]], { silent = true })
 
 map("n", "<C-w> ", ":windo ")
 map("n", "<C-w>'", function()
@@ -173,8 +172,8 @@ end, { desc = "grep current word or selection" })
 map("n", "gw", "<C-w>", { remap = true })
 map("n", "m,", "#NcgN")
 map("n", "m;", "*Ncgn")
-map("x", "m,", [["zy?\V<C-R>=escape(@z,'/\')<CR><CR>NcgN]])
-map("x", "m;", [["zy/\V<C-R>=escape(@z,'/\')<CR><CR>Ncgn]])
+map("x", "m,", "#cgN", { remap = true })
+map("x", "m;", "*cgn", { remap = true })
 map("!", "<C-r>", "<C-r><C-o>")
 map("!", "<C-r><C-o>", "<C-r>")
 map("n", "yd", vim.diagnostic.open_float)
