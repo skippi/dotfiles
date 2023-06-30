@@ -46,6 +46,7 @@ function M.edit_file_by_offset(offset)
 	local files = vim.fn.readdir(dir, function(f)
 		return vim.fn.isdirectory(dir .. "/" .. f) == 0
 	end)
+	table.sort(files, function(a, b) return a:lower() < b:lower() end)
 	local idx = -math.huge
 	for i, v in ipairs(files) do
 		if v == vim.fn.expand("%:t") then
