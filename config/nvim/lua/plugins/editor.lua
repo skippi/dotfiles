@@ -359,27 +359,30 @@ return {
 						vim.schedule(gs.prev_hunk)
 						return "<Ignore>"
 					end, { expr = true })
-					map("n", "dp", function()
+					local diffp_fn = function()
 						if vim.wo.diff then
 							return "dp"
 						end
 						vim.schedule(gs.stage_hunk)
 						return "<Ignore>"
-					end, { expr = true })
-					map("n", "do", function()
+					end
+					map("n", "dp", diffp_fn, { expr = true })
+					map({ "n", "x" }, "mdp", diffp_fn, { expr = true })
+					local diffo_fn = function()
 						if vim.wo.diff then
 							return "do"
 						end
 						vim.schedule(gs.reset_hunk)
 						return "<Ignore>"
-					end, { expr = true })
+					end
+					map("n", "do", diffo_fn, { expr = true })
+					map({ "n", "x" }, "mdo", diffo_fn, { expr = true })
 					map("n", "dO", gs.reset_buffer)
 					map("n", "dP", gs.stage_buffer)
-					map({ "n", "x" }, "[h", ":Gitsigns stage_hunk<CR>")
-					map({ "n", "x" }, "]h", ":Gitsigns reset_hunk<CR>")
 					map("n", "du", gs.undo_stage_hunk)
 					map("n", "dy", gs.preview_hunk)
 					map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { silent = true })
+					map({ "o", "x" }, "ah", ":<C-U>Gitsigns select_hunk<CR>", { silent = true })
 				end,
 			})
 		end,
@@ -393,7 +396,6 @@ return {
 	},
 	{
 		"folke/flash.nvim",
-		enabled = true,
 		event = "VeryLazy",
 		opts = {
 			modes = {
