@@ -72,7 +72,6 @@ return {
 			"yS",
 			"ySS",
 			{ "S", mode = "x" },
-			{ "gS", mode = "x" },
 		},
 		config = function()
 			vim.g.surround_13 = "\n\r\n"

@@ -42,6 +42,30 @@ local function visual_selection()
 	return table.concat(lines, "\n")
 end
 
+local function grep_text(cwd)
+	local args = {}
+	if vim.v.count ~= 0 then
+		args[#args + 1] = "-t" .. grep_file_type()
+	end
+	local search = nil
+	if vim.tbl_contains({ "v", "V", "CTRL-V" }, vim.fn.mode()) then
+		search = visual_selection()
+		vim.fn.setreg("/", "\\V" .. vim.fn.escape(search, "\\"))
+		args[#args + 1] = "-F"
+	else
+		local word = vim.fn.expand("<cword>")
+		vim.fn.setreg("/", "\\<" .. word .. "\\>")
+		search = "\\b" .. word .. "\\b"
+	end
+	vim.o.hlsearch = vim.o.hlsearch
+	require("telescope.builtin").grep_string({
+		additional_args = args,
+		cwd = cwd,
+		search = search,
+		use_regex = true,
+	})
+end
+
 vim.o.autowriteall = true
 vim.o.cmdwinheight = 7
 vim.o.completeopt = "menuone,noselect"
@@ -147,28 +171,11 @@ map("n", "g/", function()
 	return ':<C-u>sil gr ""' .. type .. "<C-b><C-Right><C-Right><C-Right><Left>"
 end, { expr = true, desc = "grep prompt" })
 map({ "n", "x" }, "gs", function()
-	local args = {}
-	if vim.v.count ~= 0 then
-		args[#args + 1] = "-t" .. grep_file_type()
-	end
-	local search = nil
-	if vim.tbl_contains({ "v", "V", "CTRL-V" }, vim.fn.mode()) then
-		search = visual_selection()
-		vim.fn.setreg("/", "\\V" .. vim.fn.escape(search, "\\"))
-		args[#args + 1] = "-F"
-	else
-		local word = vim.fn.expand("<cword>")
-		vim.fn.setreg("/", "\\<" .. word .. "\\>")
-		search = "\\b" .. word .. "\\b"
-	end
-	vim.o.hlsearch = vim.o.hlsearch
-	require("telescope.builtin").grep_string({
-		additional_args = args,
-		cwd = require("skippi.util").workspace_root() or vim.fn.getcwd(),
-		search = search,
-		use_regex = true,
-	})
-end, { desc = "grep current word or selection" })
+	grep_text(require("skippi.util").workspace_root() or vim.fn.getcwd())
+end, { desc = "grep current word or selection in project" })
+map({ "n", "x" }, "gS", function()
+	grep_text(vim.fn.getcwd())
+end, { desc = "grep current word or selection in cwd" })
 map("n", "gw", "<C-w>", { remap = true })
 map("n", "m,", "#NcgN")
 map("n", "m;", "*Ncgn")
