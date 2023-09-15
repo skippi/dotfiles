@@ -1,4 +1,6 @@
 $Env:FZF_DEFAULT_OPTS = "--bind ctrl-a:select-all,ctrl-d:deselect-all" +
+                        " --layout=reverse " +
+                        " --info=inline " +
                         " --color=gutter:-1" +
                         " --marker=+"
 $FZF_BASE_COMMAND = ("fd --hidden --follow" +
