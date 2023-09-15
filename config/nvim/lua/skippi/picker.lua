@@ -40,14 +40,14 @@ local function getprocitems()
 end
 
 function M.pkill(opts)
-	local displayer = entry_display.create({
-		separator = " | ",
-		items = {
-			{ width = 5 },
-			{ remaining = true },
-		},
-	})
 	local make_display = function(entry)
+		local displayer = entry_display.create({
+			separator = " | ",
+			items = {
+				{ width = 5 },
+				{ remaining = true },
+			},
+		})
 		return displayer({
 			{ entry.pid, "TelescopeResultsSpecialComment" },
 			{ entry.filename },
