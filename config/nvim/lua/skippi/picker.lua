@@ -107,25 +107,23 @@ local function nvim_buf_temp_call(...)
 end
 
 local function find_tags_from_tagstack(item)
-	local results = {}
+	local results = nil
 	nvim_buf_temp_call(item.from[1], function()
 		vim.fn.setpos(".", item.from)
 		local filename = vim.fn.bufname()
 		if vim.bo.tagfunc ~= "" then
-			results =
-				vim.fn.eval(string.format("%s('%s','c',{'buf_ffname':'%s'})", vim.bo.tagfunc, item.tagname, filename))
-		else
-			local tagexpr = "\\c^" .. item.tagname .. "$"
-			if item.tagname:find("^/") ~= nil then
-				tagexpr = item.tagname:sub(2)
-			end
-			results = vim.fn.taglist(tagexpr, filename)
+			local tag_fn = assert(loadstring("return " .. vim.bo.tagfunc:sub(7) .. "(...)"))
+			results = tag_fn(item.tagname, "c", { buf_ffname = filename })
+		end
+		if results == nil or results == vim.NIL then
+			results = vim.fn.taglist(("^%s$"):format(item.tagname), filename)
 		end
 	end)
 	return results
 end
 
 function M.tselect(opts)
+	opts = opts or {}
 	local stack = vim.fn.gettagstack()
 	local stack_item = stack.items[stack.curidx - 1]
 	if stack_item == nil then
@@ -139,14 +137,25 @@ function M.tselect(opts)
 	end
 	results = { unpack(results, 1, 50) }
 	for _, tag in ipairs(results) do
-		tag.bufnr = vim.fn.bufnr(tag.filename, true)
-		nvim_buf_temp_call(tag.bufnr, function()
-			vim.cmd("keepjumps " .. tag.cmd)
-			tag.text = vim.api.nvim_get_current_line()
-			local pos = vim.fn.getcurpos()
-			tag.lnum = pos[2]
-			tag.col = pos[3]
-		end)
+		if tag.cmd:find("^/%^") ~= nil then
+			local lines = vim.fn.readfile(tag.filename, "")
+			local pat = tag.cmd:gsub("^/%^", "\\V"):gsub("/$", ""):gsub("%$$", "")
+			local idx = vim.fn.match(lines, pat)
+			tag.text = lines[idx + 1]
+			if tag.text == nil then
+				tag.text = pat
+			end
+			tag.lnum = idx + 1
+		else
+			tag.bufnr = vim.fn.bufnr(tag.filename, true)
+			nvim_buf_temp_call(tag.bufnr, function()
+				vim.cmd("keepjumps " .. tag.cmd)
+				tag.text = vim.api.nvim_get_current_line()
+				local pos = vim.fn.getcurpos()
+				tag.lnum = pos[2]
+				tag.col = pos[3]
+			end)
+		end
 	end
 	pickers
 		.new(opts, {
@@ -173,6 +182,7 @@ function M.tselect(opts)
 					})
 				end,
 			}),
+			previewer = conf.grep_previewer(opts),
 			sorter = conf.generic_sorter(opts),
 		})
 		:find()
