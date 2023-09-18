@@ -122,6 +122,26 @@ local function find_tags_from_tagstack(item)
 	return results
 end
 
+local function make_entry_from_tag(item)
+	return vim.tbl_extend("force", item, {
+		ordinal = item.text .. " " .. item.filename,
+		value = item,
+		display = function(entry)
+			local displayer = entry_display.create({
+				separator = " ",
+				items = {
+					{ width = 22 },
+					{ remaining = true },
+				},
+			})
+			return displayer({
+				vim.fn.pathshorten(vim.fn.fnamemodify(entry.filename, ":~:.")),
+				entry.text,
+			})
+		end,
+	})
+end
+
 function M.tselect(opts)
 	opts = opts or {}
 	local stack = vim.fn.gettagstack()
@@ -135,17 +155,19 @@ function M.tselect(opts)
 		vim.notify("E492: tag not found: " .. stack_item.tagname, vim.log.levels.ERROR)
 		return
 	end
-	results = { unpack(results, 1, 50) }
+	results = { unpack(results, 1, 128) }
 	for _, tag in ipairs(results) do
 		if tag.cmd:find("^/%^") ~= nil then
 			local lines = vim.fn.readfile(tag.filename, "")
 			local pat = tag.cmd:gsub("^/%^", "\\V"):gsub("/$", ""):gsub("%$$", "")
 			local idx = vim.fn.match(lines, pat)
-			tag.text = lines[idx + 1]
-			if tag.text == nil then
+			if idx ~= -1 then
+				tag.text = lines[idx + 1]
+				tag.lnum = idx + 1
+			else
 				tag.text = pat
+				tag.lnum = 1
 			end
-			tag.lnum = idx + 1
 		else
 			tag.bufnr = vim.fn.bufnr(tag.filename, true)
 			nvim_buf_temp_call(tag.bufnr, function()
@@ -162,25 +184,7 @@ function M.tselect(opts)
 			prompt_title = "Tags",
 			finder = finders.new_table({
 				results = results,
-				entry_maker = function(item)
-					return vim.tbl_extend("force", item, {
-						ordinal = item.text .. " " .. item.filename,
-						value = item,
-						display = function(entry)
-							local displayer = entry_display.create({
-								separator = " ",
-								items = {
-									{ width = 22 },
-									{ remaining = true },
-								},
-							})
-							return displayer({
-								vim.fn.pathshorten(vim.fn.fnamemodify(entry.filename, ":~:.")),
-								entry.text,
-							})
-						end,
-					})
-				end,
+				entry_maker = make_entry_from_tag,
 			}),
 			previewer = conf.grep_previewer(opts),
 			sorter = conf.generic_sorter(opts),
