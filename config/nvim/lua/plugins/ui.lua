@@ -26,47 +26,10 @@ return {
 		},
 	},
 	{
-		"NvChad/nvim-colorizer.lua",
-		config = function()
-			require("colorizer").setup({
-				filetypes = {
-					"css",
-					"javascript",
-					"javascriptreact",
-					"typescript",
-					"typescriptreact",
-					html = { mode = "foreground" },
-				},
-			})
-		end,
-	},
-	{
 		"j-hui/fidget.nvim",
 		event = "LspAttach",
 		config = function()
 			require("fidget").setup({})
-		end,
-	},
-	{
-		"nvim-treesitter/nvim-treesitter-context",
-		event = "BufReadPost",
-		dependencies = { "nvim-treesitter/nvim-treesitter" },
-		config = function()
-			require("treesitter-context").setup({ enable = vim.o.cursorline })
-			local callback = function()
-				if vim.wo.cursorline then
-					vim.cmd("TSContextEnable")
-				else
-					vim.cmd("TSContextDisable")
-				end
-			end
-			vim.api.nvim_create_autocmd("OptionSet", {
-				pattern = "cursorline",
-				callback = callback,
-			})
-			vim.api.nvim_create_autocmd("WinEnter", {
-				callback = callback,
-			})
 		end,
 	},
 }

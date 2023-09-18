@@ -1,11 +1,5 @@
 return {
 	{
-		"zbirenbaum/copilot.lua",
-		cmd = "Copilot",
-		event = "InsertEnter",
-		opts = {},
-	},
-	{
 		"hrsh7th/nvim-cmp",
 		keys = {
 			{
@@ -242,13 +236,6 @@ return {
 		end,
 	},
 	{
-		"simrat39/symbols-outline.nvim",
-		cmd = { "SymbolsOutline", "SymbolsOutlineOpen", "SymbolsOutlineClose" },
-		config = function()
-			require("symbols-outline").setup({})
-		end,
-	},
-	{
 		"tpope/vim-eunuch",
 		config = function()
 			vim.keymap.set("n", "ZR", [[:Rename! .<C-r>=expand("%:e")<CR><C-B><C-Right><Right>]], {
@@ -308,7 +295,6 @@ return {
 			vim.keymap.set("n", "gb", "<Cmd>G blame<CR>")
 		end,
 	},
-	{ "rbong/vim-flog", cmd = { "Flog", "Floggit", "Flogsplit" }, dependencies = "tpope/vim-fugitive" },
 	{
 		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
 		event = "LspAttach",
@@ -316,13 +302,6 @@ return {
 			require("lsp_lines").setup()
 			vim.diagnostic.config({ virtual_text = false, virtual_lines = false })
 			vim.keymap.set("n", "yr", require("lsp_lines").toggle, { desc = "toggle lsp_lines" })
-		end,
-	},
-	{
-		"smjonas/inc-rename.nvim",
-		config = function()
-			require("inc_rename").setup()
-			vim.keymap.set("n", "<Space><Space>", ":IncRename ")
 		end,
 	},
 	{

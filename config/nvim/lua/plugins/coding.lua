@@ -60,7 +60,7 @@ return {
 			})
 		end,
 	},
-	{ "skippi/vim-abolish", cmd = { "Abolish", "S" }, keys = { "cr" } },
+	{ "tpope/vim-abolish", cmd = { "Abolish", "S" }, keys = { "cr" } },
 	{ "tpope/vim-commentary", keys = { { "gc", mode = { "n", "x" } }, "gcc", "gcgc", "gcu" } },
 	{
 		"tpope/vim-surround",
@@ -128,69 +128,6 @@ return {
 		end,
 		config = function(_, opts)
 			require("mini.ai").setup(opts)
-		end,
-	},
-	{
-		"monaqa/dial.nvim",
-		keys = {
-			{
-				"<C-a>",
-				function()
-					return require("dial.map").inc_normal()
-				end,
-				expr = true,
-			},
-			{
-				"<C-x>",
-				function()
-					return require("dial.map").dec_normal()
-				end,
-				expr = true,
-			},
-			{
-				"<C-a>",
-				function()
-					require("dial.map").inc_visual()
-				end,
-				mode = "x",
-				expr = true,
-			},
-			{
-				"<C-x>",
-				function()
-					require("dial.map").dec_visual()
-				end,
-				mode = "x",
-				expr = true,
-			},
-			{
-				"g<C-a>",
-				function()
-					require("dial.map").inc_gvisual()
-				end,
-				mode = "x",
-				expr = true,
-			},
-			{
-				"g<C-x>",
-				function()
-					require("dial.map").dec_gvisual()
-				end,
-				mode = "x",
-				expr = true,
-			},
-		},
-		config = function()
-			local augend = require("dial.augend")
-			local config = require("dial.config")
-			config.augends:register_group({
-				default = vim.tbl_extend("force", config.augends.group.default, {
-					augend.constant.alias.bool,
-					augend.integer.alias.binary,
-					augend.integer.alias.decimal_int,
-					augend.semver.alias.semver,
-				}),
-			})
 		end,
 	},
 	{

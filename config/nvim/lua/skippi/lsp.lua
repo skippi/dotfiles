@@ -16,6 +16,7 @@ function M.on_attach(_, bufnr)
 		opts.buffer = bufnr
 		vim.keymap.set(mode, key, cmd, opts)
 	end
+	map("n", "<Space><Space>", vim.lsp.buf.rename)
 	map("n", "<Space>a", vim.lsp.buf.code_action)
 	map("n", "<Space>k", vim.lsp.buf.hover)
 	map({ "n", "x" }, "gd", function()
