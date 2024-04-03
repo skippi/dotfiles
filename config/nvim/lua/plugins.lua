@@ -1,15 +1,12 @@
 return {
 	{
-		"jose-elias-alvarez/null-ls.nvim",
+		"nvimtools/none-ls.nvim",
 		config = function()
 			local nls = require("null-ls")
 			nls.setup({
 				sources = {
 					nls.builtins.diagnostics.cppcheck.with({
 						extra_args = { "--language=c++" },
-					}),
-					nls.builtins.diagnostics.eslint_d.with({
-						prefer_local = "node_modules/.bin",
 					}),
 					nls.builtins.diagnostics.gitlint,
 					nls.builtins.diagnostics.mypy,
@@ -47,6 +44,7 @@ return {
 			lsc.util.default_config = lsp.make_capabilities()
 			lsc.clangd.setup({})
 			lsc.dartls.setup({})
+			lsc.eslint.setup({})
 			lsc.pyright.setup({})
 			lsc.gopls.setup({})
 			lsc.lua_ls.setup({
