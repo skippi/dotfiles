@@ -308,6 +308,15 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
 	end,
 })
 
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+	desc = "jenkinsfile",
+	group = group,
+	pattern = "*.Jenkinsfile",
+	callback = function()
+		vim.cmd("set ft=groovy")
+	end,
+})
+
 vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "CursorHold", "CursorHoldI" }, {
 	desc = "auto reload file",
 	group = group,
