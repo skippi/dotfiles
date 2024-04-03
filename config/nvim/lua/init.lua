@@ -299,6 +299,15 @@ end
 
 local group = vim.api.nvim_create_augroup("skippi", { clear = true })
 
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+	desc = "javascript",
+	group = group,
+	pattern = "*.sj",
+	callback = function()
+		vim.cmd("set ft=javascript")
+	end,
+})
+
 vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "CursorHold", "CursorHoldI" }, {
 	desc = "auto reload file",
 	group = group,
