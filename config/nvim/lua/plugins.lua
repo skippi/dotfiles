@@ -23,7 +23,6 @@ return {
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			"jose-elias-alvarez/typescript.nvim",
-			"williamboman/mason.nvim",
 			"b0o/schemastore.nvim",
 			{
 				"folke/neodev.nvim",
