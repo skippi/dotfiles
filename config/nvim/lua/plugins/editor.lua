@@ -370,6 +370,7 @@ return {
 		"folke/flash.nvim",
 		event = "VeryLazy",
 		opts = {
+			prompt = { enabled = false },
 			modes = {
 				search = { enabled = false },
 				char = { enabled = false },
@@ -377,21 +378,19 @@ return {
 		},
 		keys = {
 			{
-				"r",
-				mode = "o",
+				".",
+				mode = { "n", "x", "o" },
 				function()
-					require("flash").remote()
+					require("flash").treesitter()
 				end,
-				desc = "Remote Flash",
+				desc = "Flash Treesitter",
 			},
-			{
-				"R",
-				mode = { "n", "o", "x" },
-				function()
-					require("flash").treesitter_search()
-				end,
-				desc = "Treesitter Search",
-			},
+		},
+	},
+	{
+		"stevearc/oil.nvim",
+		opts = {
+			default_file_explorer = false,
 		},
 	},
 }
