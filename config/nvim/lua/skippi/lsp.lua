@@ -54,7 +54,7 @@ function M.formatexpr(opts)
 				return client.name ~= "tsserver" and client.name ~= "lua_ls"
 			end,
 			bufnr = vim.fn.bufnr(),
-			timeout_ms = 2000,
+			timeout_ms = 10000,
 		})
 		return 0
 	end
