@@ -393,4 +393,5 @@ return {
 			default_file_explorer = false,
 		},
 	},
+	{ "axelf4/vim-strip-trailing-whitespace" },
 }

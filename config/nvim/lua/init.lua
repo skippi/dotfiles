@@ -357,18 +357,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	end,
 })
 
-vim.api.nvim_create_autocmd("BufWritePre", {
-	desc = "auto trim whitespace",
-	group = group,
-	pattern = "*",
-	callback = function()
-		if vim.bo.filetype == "markdown" then
-			return
-		end
-		vim.cmd.TrimWS()
-	end,
-})
-
 vim.api.nvim_create_autocmd({ "FocusLost", "TermEnter" }, {
 	desc = "auto save files",
 	group = group,
