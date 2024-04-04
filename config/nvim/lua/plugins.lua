@@ -22,7 +22,6 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
-			"jose-elias-alvarez/typescript.nvim",
 			"b0o/schemastore.nvim",
 			{
 				"folke/neodev.nvim",
@@ -42,6 +41,8 @@ return {
 			local lsc = require("lspconfig")
 			lsc.util.default_config.capabilities = lsp.make_capabilities()
 			lsc.clangd.setup({})
+			lsc.cssls.setup({})
+			lsc.html.setup({})
 			lsc.dartls.setup({})
 			lsc.eslint.setup({})
 			lsc.pyright.setup({})
@@ -62,7 +63,6 @@ return {
 					},
 				},
 			})
-			require("typescript").setup({})
 			lsc.vimls.setup({})
 			lsc.jsonls.setup({
 				settings = {
@@ -73,6 +73,17 @@ return {
 				},
 			})
 		end,
+	},
+	{
+		"pmizio/typescript-tools.nvim",
+		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+		ft = {
+			"javascript",
+			"typescript",
+			"javascriptreact",
+			"typescriptreact",
+		},
+		opts = {},
 	},
 	{
 		"ray-x/go.nvim",
