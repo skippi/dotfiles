@@ -40,7 +40,7 @@ return {
 				end,
 			})
 			local lsc = require("lspconfig")
-			lsc.util.default_config = lsp.make_capabilities()
+			lsc.util.default_config.capabilities = lsp.make_capabilities()
 			lsc.clangd.setup({})
 			lsc.dartls.setup({})
 			lsc.eslint.setup({})
