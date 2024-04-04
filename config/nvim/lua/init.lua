@@ -1,4 +1,3 @@
-local abbrev = require("skippi.abbrev")
 local buffers = require("skippi.buffers")
 local opfunc = require("skippi.opfunc")
 local util = require("skippi.util")
@@ -25,32 +24,14 @@ local function grep_file_type()
 	return type
 end
 
-local function visual_selection()
-	assert(vim.tbl_contains({ "v", "V", "CTRL-V" }, vim.fn.mode()), "not in visual mode")
-	vim.cmd([[visual]])
-	local _, start_row, start_col, _ = unpack(vim.fn.getpos("'<"))
-	local _, end_row, end_col, _ = unpack(vim.fn.getpos("'>"))
-	if start_row > end_row or (start_row == end_row and start_col > end_col) then
-		start_row, end_row = end_row, start_row
-		start_col, end_col = end_col, start_col
-	end
-	local lines = vim.fn.getline(start_row, end_row)
-	if #lines <= 0 then
-		return nil
-	end
-	lines[#lines] = string.sub(lines[#lines], 1, end_col)
-	lines[1] = string.sub(lines[1], start_col)
-	return table.concat(lines, "\n")
-end
-
 local function grep_text(cwd)
 	local args = {}
 	if vim.v.count ~= 0 then
 		args[#args + 1] = "-t" .. grep_file_type()
 	end
 	local search = nil
-	if vim.tbl_contains({ "v", "V", "CTRL-V" }, vim.fn.mode()) then
-		search = visual_selection()
+	if util.edit_mode_is_visual() then
+		search = util.visual_selection()
 		vim.fn.setreg("/", "\\V" .. vim.fn.escape(search, "\\"))
 		args[#args + 1] = "-F"
 	else
@@ -121,8 +102,8 @@ util.create_user_command(
 	{ abbrev = "scra[tch]", force = true }
 )
 
-abbrev.create_short_cmds("E", "e")
-abbrev.create_short_cmds("H", "h")
+util.create_command_alias("E", "e")
+util.create_command_alias("H", "h")
 
 local map = vim.keymap.set
 
@@ -170,7 +151,7 @@ map("n", "g/", function()
 	return ':<C-u>sil gr ""' .. type .. "<C-b><C-Right><C-Right><C-Right><Left>"
 end, { expr = true, desc = "grep prompt" })
 map({ "n", "x" }, "gs", function()
-	grep_text(require("skippi.util").workspace_root() or vim.fn.getcwd())
+	grep_text(util.workspace_root() or vim.fn.getcwd())
 end, { desc = "grep current word or selection in project" })
 map({ "n", "x" }, "gS", function()
 	grep_text(vim.fn.getcwd())
@@ -193,10 +174,10 @@ for key, typ in pairs({
 	["e"] = vim.diagnostic.severity.ERROR,
 }) do
 	map({ "n", "x", "o" }, "[" .. key, function()
-		require("skippi.util").jump_diagnostic(-vim.v.count1, typ)
+		util.jump_diagnostic(-vim.v.count1, typ)
 	end)
 	map({ "n", "x", "o" }, "]" .. key, function()
-		require("skippi.util").jump_diagnostic(vim.v.count1, typ)
+		util.jump_diagnostic(vim.v.count1, typ)
 	end)
 end
 
@@ -204,14 +185,14 @@ map("n", "[f", function()
 	if vim.bo.buftype == "quickfix" then
 		vim.cmd("sil!uns colder " .. vim.v.count1)
 	else
-		require("skippi.util").edit_file_by_offset(-vim.v.count1)
+		util.edit_file_by_offset(-vim.v.count1)
 	end
 end, { desc = "go to previous file", silent = true })
 map("n", "]f", function()
 	if vim.bo.buftype == "quickfix" then
 		vim.cmd("sil!uns cnewer " .. vim.v.count1)
 	else
-		require("skippi.util").edit_file_by_offset(vim.v.count1)
+		util.edit_file_by_offset(vim.v.count1)
 	end
 end, { desc = "go to next file", silent = true })
 
@@ -242,13 +223,13 @@ map("n", "gO", function()
 end, { expr = true })
 
 map({ "n", "x", "o" }, "(", function()
-	local ok = require("skippi.util").jump_treesitter_statement(-vim.v.count1)
+	local ok = util.jump_treesitter_statement(-vim.v.count1)
 	if not ok then
 		vim.api.nvim_feedkeys("(", "n", false)
 	end
 end)
 map({ "n", "x", "o" }, ")", function()
-	local ok = require("skippi.util").jump_treesitter_statement(vim.v.count1)
+	local ok = util.jump_treesitter_statement(vim.v.count1)
 	if not ok then
 		vim.api.nvim_feedkeys(")", "n", false)
 	end

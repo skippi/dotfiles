@@ -1,5 +1,3 @@
-local abbrev = require("skippi.abbrev")
-
 local M = {}
 
 function M.cursor_has_words_before()
@@ -121,11 +119,72 @@ function M.create_user_command(name, command, opts)
 			opts.abbrev = { opts.abbrev }
 		end
 		for _, a in ipairs(opts.abbrev) do
-			abbrev.create_short_cmds(a, name)
+			M.create_command_alias(a, name)
 		end
 		opts.abbrev = nil
 	end
 	vim.api.nvim_create_user_command(name, command, opts)
+end
+
+function M.visual_selection()
+	assert(M.edit_mode_is_visual(), "not in visual mode")
+	vim.cmd([[visual]])
+	local _, start_row, start_col, _ = unpack(vim.fn.getpos("'<"))
+	local _, end_row, end_col, _ = unpack(vim.fn.getpos("'>"))
+	if start_row > end_row or (start_row == end_row and start_col > end_col) then
+		start_row, end_row = end_row, start_row
+		start_col, end_col = end_col, start_col
+	end
+	local lines = vim.fn.getline(start_row, end_row)
+	if #lines <= 0 then
+		return nil
+	end
+	lines[#lines] = string.sub(lines[#lines], 1, end_col)
+	lines[1] = string.sub(lines[1], start_col)
+	return table.concat(lines, "\n")
+end
+
+function M.edit_mode_is_visual()
+	return vim.tbl_contains({ "v", "V", "CTRL-V" }, vim.fn.mode())
+end
+
+function M.create_command_alias(abbr, expand)
+	local str = ""
+	local add = false
+	for i = 1, #abbr do
+		local c = abbr:sub(i, i)
+		if c ~= "[" and c ~= "]" then
+			str = str .. c
+		else
+			add = true
+		end
+		if add then
+			vim.cmd(
+				"cnoreabbrev <expr> "
+					.. str
+					.. [[ (getcmdtype() ==# ':' && getcmdline() =~# "^\\('.*,'.*\\)\\?]]
+					.. str
+					.. [[") ? "]]
+					.. expand
+					.. [[" : "]]
+					.. str
+					.. '"'
+			)
+		end
+	end
+	if not add then
+		vim.cmd(
+			"cnoreabbrev <expr> "
+				.. str
+				.. [[ (getcmdtype() ==# ':' && getcmdline() =~# "^\\('.*,'.*\\)\\?]]
+				.. str
+				.. [[") ? "]]
+				.. expand
+				.. [[" : "]]
+				.. str
+				.. '"'
+		)
+	end
 end
 
 return M

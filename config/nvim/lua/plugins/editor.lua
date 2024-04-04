@@ -249,7 +249,7 @@ return {
 	{
 		"tpope/vim-dadbod",
 		config = function()
-			require("skippi.abbrev").create_short_cmds("db", "DB")
+			require("skippi.util").create_command_alias("db", "DB")
 		end,
 	},
 	{ "tpope/vim-characterize", keys = { "ga" } },
