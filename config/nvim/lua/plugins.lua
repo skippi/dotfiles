@@ -45,7 +45,13 @@ return {
 			lsc.html.setup({})
 			lsc.dartls.setup({})
 			lsc.eslint.setup({})
-			lsc.pyright.setup({})
+			lsc.basedpyright.setup({
+				settings = {
+					basedpyright = {
+						typeCheckingMode = "standard",
+					}
+				}
+			})
 			lsc.gopls.setup({})
 			lsc.lua_ls.setup({
 				settings = {
