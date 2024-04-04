@@ -36,8 +36,12 @@ return {
 				["<C-k>"] = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
 			})
 			local deprioritize_snippet = function(a, b)
-				if a:get_kind() == types.lsp.CompletionItemKind.Snippet then return false end
-				if b:get_kind() == types.lsp.CompletionItemKind.Snippet then return true end
+				if a:get_kind() == types.lsp.CompletionItemKind.Snippet then
+					return false
+				end
+				if b:get_kind() == types.lsp.CompletionItemKind.Snippet then
+					return true
+				end
 			end
 			cmp.setup({
 				enabled = function()
@@ -305,8 +309,42 @@ return {
 	{
 		"lewis6991/gitsigns.nvim",
 		event = "BufReadPre",
+		keys = {
+			{ "do", mode = { "n" }, "<Cmd>Diffget<CR>" },
+			{ "dp", mode = { "n" }, "<Cmd>Diffput<CR>" },
+		},
 		config = function()
-			require("gitsigns").setup({
+			local gs = require("gitsigns")
+			local util = require("skippi.util")
+			util.create_user_command("Diffput", function(args)
+				local cmd = ""
+				if args.range == 1 then
+					cmd = args.line1
+				elseif args.range == 2 then
+					cmd = args.line1 .. "," .. args.line2
+				end
+				if vim.wo.diff then
+					cmd = cmd .. "diffput"
+				else
+					cmd = cmd .. "Gitsigns stage_hunk"
+				end
+				vim.cmd(cmd)
+			end, { abbrev = { "diffpu[t]", "dp" }, range = true })
+			util.create_user_command("Diffget", function(args)
+				local cmd = ""
+				if args.range == 1 then
+					cmd = args.line1
+				elseif args.range == 2 then
+					cmd = args.line1 .. "," .. args.line2
+				end
+				if vim.wo.diff then
+					cmd = cmd .. "diffget"
+				else
+					cmd = cmd .. "Gitsigns reset_hunk"
+				end
+				vim.cmd(cmd)
+			end, { abbrev = { "diffg[et]", "do" }, range = true })
+			gs.setup({
 				signs = {
 					add = { text = "┃" },
 					change = { text = "┃" },
@@ -316,7 +354,6 @@ return {
 				},
 				update_debounce = 200,
 				on_attach = function(bufnr)
-					local gs = package.loaded.gitsigns
 					local map = function(mode, l, r, opts)
 						opts = opts or {}
 						opts.buffer = bufnr
@@ -336,28 +373,9 @@ return {
 						vim.schedule(gs.prev_hunk)
 						return "<Ignore>"
 					end, { expr = true })
-					local diffp_fn = function()
-						if vim.wo.diff then
-							return "dp"
-						end
-						vim.schedule(gs.stage_hunk)
-						return "<Ignore>"
-					end
-					map("n", "dp", diffp_fn, { expr = true })
-					map({ "n", "x" }, "mdp", diffp_fn, { expr = true })
-					local diffo_fn = function()
-						if vim.wo.diff then
-							return "do"
-						end
-						vim.schedule(gs.reset_hunk)
-						return "<Ignore>"
-					end
-					map("n", "do", diffo_fn, { expr = true })
-					map({ "n", "x" }, "mdo", diffo_fn, { expr = true })
 					map("n", "dO", gs.reset_buffer)
 					map("n", "dP", gs.stage_buffer)
 					map("n", "du", gs.undo_stage_hunk)
-					map("n", "dy", gs.preview_hunk)
 					map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { silent = true })
 					map({ "o", "x" }, "ah", ":<C-U>Gitsigns select_hunk<CR>", { silent = true })
 				end,

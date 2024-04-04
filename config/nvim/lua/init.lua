@@ -1,6 +1,7 @@
 local abbrev = require("skippi.abbrev")
 local buffers = require("skippi.buffers")
 local opfunc = require("skippi.opfunc")
+local util = require("skippi.util")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -108,19 +109,17 @@ if vim.loop.os_uname().sysname:find("Windows") then
 	vim.o.shellcmdflag = "/s /v /c"
 end
 
-vim.api.nvim_create_user_command("TrimWS", function()
+util.create_user_command("TrimWS", function()
 	local pos = vim.fn.getpos(".")
 	vim.cmd([[%s/\s\+$//e]])
 	vim.fn.setpos(".", pos)
-end, { desc = "trim whitespace", force = true })
-abbrev.create_short_cmds("tri[mws]", "TrimWS")
+end, { abbrev = "tri[mws]", desc = "trim whitespace" })
 
-vim.api.nvim_create_user_command(
+util.create_user_command(
 	"Scratch",
 	[[enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile]],
-	{ force = true }
+	{ abbrev = "scra[tch]", force = true }
 )
-abbrev.create_short_cmds("scra[tch]", "Scratch")
 
 abbrev.create_short_cmds("E", "e")
 abbrev.create_short_cmds("H", "h")

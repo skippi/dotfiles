@@ -1,3 +1,5 @@
+local abbrev = require("skippi.abbrev")
+
 local M = {}
 
 function M.cursor_has_words_before()
@@ -111,6 +113,19 @@ function M.jump_treesitter_statement(offset)
 	vim.api.nvim_buf_set_mark(0, "'", i + 1, j, {})
 	vim.api.nvim_win_set_cursor(0, { i + 1, j })
 	return true
+end
+
+function M.create_user_command(name, command, opts)
+	if opts.abbrev ~= nil then
+		if type(opts.abbrev) == "string" then
+			opts.abbrev = { opts.abbrev }
+		end
+		for _, a in ipairs(opts.abbrev) do
+			abbrev.create_short_cmds(a, name)
+		end
+		opts.abbrev = nil
+	end
+	vim.api.nvim_create_user_command(name, command, opts)
 end
 
 return M
