@@ -35,6 +35,10 @@ return {
 				["<C-j>"] = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
 				["<C-k>"] = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
 			})
+			local deprioritize_snippet = function(a, b)
+				if a:get_kind() == types.lsp.CompletionItemKind.Snippet then return false end
+				if b:get_kind() == types.lsp.CompletionItemKind.Snippet then return true end
+			end
 			cmp.setup({
 				enabled = function()
 					return not vim.g.__skippi_cmp_disabled and vim.bo.filetype ~= "TelescopePrompt"
@@ -47,6 +51,7 @@ return {
 				sorting = {
 					priority_weight = 2,
 					comparators = {
+						deprioritize_snippet,
 						cmp.config.compare.offset,
 						cmp.config.compare.exact,
 						cmp.config.compare.score,

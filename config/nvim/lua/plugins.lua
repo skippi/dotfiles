@@ -43,14 +43,15 @@ return {
 			lsc.clangd.setup({})
 			lsc.cssls.setup({})
 			lsc.html.setup({})
+			lsc.emmet_ls.setup({})
 			lsc.dartls.setup({})
 			lsc.eslint.setup({})
 			lsc.basedpyright.setup({
 				settings = {
 					basedpyright = {
 						typeCheckingMode = "standard",
-					}
-				}
+					},
+				},
 			})
 			lsc.gopls.setup({})
 			lsc.lua_ls.setup({
