@@ -99,7 +99,7 @@ end, { abbrev = "tri[mws]", desc = "trim whitespace" })
 util.create_user_command(
 	"Scratch",
 	[[enew | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile]],
-	{ abbrev = "scra[tch]", force = true }
+	{ abbrev = { "scra[tch]", "es[cratch]" } }
 )
 
 util.create_command_alias("E", "e")
