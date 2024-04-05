@@ -35,11 +35,11 @@ return {
 				["<C-j>"] = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
 				["<C-k>"] = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
 			})
-			local deprioritize_snippet = function(a, b)
-				if a:get_kind() == types.lsp.CompletionItemKind.Snippet then
+			local deprioritize_emmet = function(a, b)
+				if a.source:get_debug_name() == "nvim_lsp:emmet_ls" then
 					return false
 				end
-				if b:get_kind() == types.lsp.CompletionItemKind.Snippet then
+				if b.source:get_debug_name() == "nvim_lsp:emmet_ls" then
 					return true
 				end
 			end
@@ -55,7 +55,7 @@ return {
 				sorting = {
 					priority_weight = 2,
 					comparators = {
-						deprioritize_snippet,
+						deprioritize_emmet,
 						cmp.config.compare.offset,
 						cmp.config.compare.exact,
 						cmp.config.compare.score,
