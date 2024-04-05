@@ -78,7 +78,7 @@ vim.o.updatetime = 500
 vim.o.wildcharm = vim.fn.char2nr(vim.api.nvim_replace_termcodes("<C-z>", true, true, true))
 vim.o.wildmode = "list:full"
 
-vim.o.statuscolumn = "%=%l%s%C"
+vim.o.statuscolumn = '%r%=%{&rnu>0&&&nu>0?" ":""}%l%s%C'
 
 vim.opt.diffopt:append("linematch:60")
 vim.opt.jumpoptions:append({ "stack", "view" })
