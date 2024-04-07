@@ -310,8 +310,12 @@ return {
 		"lewis6991/gitsigns.nvim",
 		event = "BufReadPre",
 		keys = {
-			{ "do", mode = { "n" }, "<Cmd>Diffget<CR>" },
-			{ "dp", mode = { "n" }, "<Cmd>Diffput<CR>" },
+			{ "do", "<Cmd>Diffget<CR>", mode = { "n" } },
+			{ "dp", "<Cmd>Diffput<CR>", mode = { "n" } },
+			{ "dO", "<Cmd>Gitsigns reset_buffer", mode = { "n" } },
+			{ "dP", "<Cmd>Gitsigns stage_buffer", mode = { "n" } },
+			{ "ih", ":<C-U>Gitsigns select_hunk<CR>", mode = { "o", "x" }, silent = true },
+			{ "ah", ":<C-U>Gitsigns select_hunk<CR>", mode = { "o", "x" }, silent = true },
 		},
 		config = function()
 			local gs = require("gitsigns")
@@ -373,11 +377,6 @@ return {
 						vim.schedule(gs.prev_hunk)
 						return "<Ignore>"
 					end, { expr = true })
-					map("n", "dO", gs.reset_buffer)
-					map("n", "dP", gs.stage_buffer)
-					map("n", "du", gs.undo_stage_hunk)
-					map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { silent = true })
-					map({ "o", "x" }, "ah", ":<C-U>Gitsigns select_hunk<CR>", { silent = true })
 				end,
 			})
 		end,
