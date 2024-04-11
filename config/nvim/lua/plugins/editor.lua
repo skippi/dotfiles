@@ -303,7 +303,7 @@ return {
 		config = function()
 			require("lsp_lines").setup()
 			vim.diagnostic.config({ virtual_text = false, virtual_lines = false })
-			vim.keymap.set("n", "yr", require("lsp_lines").toggle, { desc = "toggle lsp_lines" })
+			vim.keymap.set("n", "yoq", require("lsp_lines").toggle, { desc = "toggle lsp_lines" })
 		end,
 	},
 	{
