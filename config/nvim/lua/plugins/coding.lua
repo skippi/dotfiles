@@ -62,7 +62,6 @@ return {
 		end,
 	},
 	{ "tpope/vim-abolish", cmd = { "Abolish", "S" }, keys = { "cr" } },
-	{ "tpope/vim-commentary", keys = { { "gc", mode = { "n", "x" } }, "gcc", "gcgc", "gcu" } },
 	{
 		"tpope/vim-surround",
 		keys = {
