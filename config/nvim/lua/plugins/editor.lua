@@ -394,7 +394,6 @@ return {
 		opts = {
 			prompt = { enabled = false },
 			modes = {
-				search = { enabled = false },
 				char = { enabled = false },
 			},
 		},
