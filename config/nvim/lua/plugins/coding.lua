@@ -13,6 +13,7 @@ return {
 			"windwp/nvim-ts-autotag",
 		},
 		config = function()
+---@diagnostic disable-next-line: missing-fields
 			require("nvim-treesitter.configs").setup({
 				ensure_installed = {},
 				autotag = { enable = true },
@@ -38,10 +39,20 @@ return {
 							["]m"] = "@function.outer",
 							["]g"] = "@comment.outer",
 						},
+						goto_next_end = {
+							["]A"] = "@parameter.inner",
+							["]M"] = "@function.outer",
+							["]G"] = "@comment.outer",
+						},
 						goto_previous_start = {
 							["[a"] = "@parameter.inner",
 							["[m"] = "@function.outer",
 							["[g"] = "@comment.outer",
+						},
+						goto_previous_end = {
+							["[A"] = "@parameter.inner",
+							["[M"] = "@function.outer",
+							["[G"] = "@comment.outer",
 						},
 					},
 				},
@@ -81,14 +92,6 @@ return {
 	},
 	"tpope/vim-unimpaired",
 	{
-		"Julian/vim-textobj-variable-segment",
-		keys = {
-			{ "iv", mode = { "x", "o" } },
-			{ "av", mode = { "x", "o" } },
-		},
-		dependencies = "kana/vim-textobj-user",
-	},
-	{
 		"echasnovski/mini.ai",
 		keys = {
 			{ "a", mode = { "x", "o" } },
@@ -105,9 +108,20 @@ return {
 				},
 				search_method = "cover_or_nearest",
 				custom_textobjects = {
-					["b"] = { { "%b()", "%b[]", "%b{}" }, "^.%s*().-()%s*.$" },
-					["B"] = { { "%b()", "%b[]", "%b{}" }, "^.().*().$" },
-					e = function()
+					b = { { "%b()", "%b[]", "%b{}" }, "^.%s*().-()%s*.$" },
+					B = { { "%b()", "%b[]", "%b{}" }, "^.().*().$" },
+					t = { "<([%p%w]-)%f[^<%w][^<>]->.-</%1>", "^<.->().*()</[^/]->$" }, -- tag
+					d = { "%f[%d]%d+" }, -- digits
+					v = { -- case wise word (variable segment)
+						{
+							"%u[%l%d]+%f[^%l%d]",
+							"%f[%S][%l%d]+%f[^%l%d]",
+							"%f[%P][%l%d]+%f[^%l%d]",
+							"^[%l%d]+%f[^%l%d]",
+						},
+						"^().*()$",
+					},
+					e = function() -- whole buffer
 						return {
 							from = { line = 1, col = 1 },
 							to = {
@@ -117,6 +131,7 @@ return {
 						}
 					end,
 					r = { { "%b[]" }, "^.().*().$" },
+					u = ai.gen_spec.treesitter({ a = "@assignment.outer", i = "@assignment.inner" }, {}),
 					f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }, {}),
 					c = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }, {}),
 					o = ai.gen_spec.treesitter({
