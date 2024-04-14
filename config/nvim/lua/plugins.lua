@@ -10,13 +10,23 @@ return {
 					}),
 					nls.builtins.diagnostics.gitlint,
 					nls.builtins.diagnostics.mypy,
-					nls.builtins.formatting.black,
-					nls.builtins.formatting.prettier.with({
-						prefer_local = "node_modules/.bin",
-					}),
-					nls.builtins.formatting.stylua,
 				},
 			})
+		end,
+	},
+	{
+		"stevearc/conform.nvim",
+		event = { "BufWritePre" },
+		cmd = { "ConformInfo" },
+		opts = {
+			formatters_by_ft = {
+				javascript = { "prettier" },
+				lua = { "stylua" },
+				python = { "isort", "black" },
+			},
+		},
+		init = function()
+			vim.o.formatexpr = "v:lua.require('skippi.lsp').formatexpr()"
 		end,
 	},
 	{

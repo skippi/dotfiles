@@ -47,19 +47,21 @@ function M.formatexpr(opts)
 		-- fall back to internal formatting
 		return 1
 	end
+	local conform = require("conform")
 	local start_lnum = vim.v.lnum
 	local end_lnum = start_lnum + vim.v.count - 1
 	if start_lnum == 1 and end_lnum == vim.fn.line("$") then
-		vim.lsp.buf.format({
+		conform.format({
+			async = true,
+			lsp_fallback = true,
 			filter = function(client)
 				return client.name ~= "tsserver" and client.name ~= "lua_ls"
 			end,
-			bufnr = vim.fn.bufnr(),
 			timeout_ms = 10000,
 		})
 		return 0
 	end
-	return vim.lsp.formatexpr(opts)
+	return conform.formatexpr(opts)
 end
 
 return M
