@@ -312,8 +312,8 @@ return {
 		keys = {
 			{ "do", "<Cmd>Diffget<CR>", mode = { "n" } },
 			{ "dp", "<Cmd>Diffput<CR>", mode = { "n" } },
-			{ "dO", "<Cmd>Gitsigns reset_buffer<CR>", mode = { "n" } },
-			{ "dP", "<Cmd>Gitsigns stage_buffer<CR>", mode = { "n" } },
+			{ "dO", "<Cmd>%Diffget<CR>", mode = { "n" } },
+			{ "dP", "<Cmd>%Diffput<CR>", mode = { "n" } },
 			{ "ih", ":<C-U>Gitsigns select_hunk<CR>", mode = { "o", "x" }, silent = true },
 			{ "ah", ":<C-U>Gitsigns select_hunk<CR>", mode = { "o", "x" }, silent = true },
 		},
