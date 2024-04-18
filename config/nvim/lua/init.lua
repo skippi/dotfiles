@@ -279,24 +279,6 @@ end
 
 local group = vim.api.nvim_create_augroup("skippi", { clear = true })
 
-vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
-	desc = "javascript",
-	group = group,
-	pattern = "*.sj",
-	callback = function()
-		vim.cmd("set ft=javascript")
-	end,
-})
-
-vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
-	desc = "jenkinsfile",
-	group = group,
-	pattern = "*.Jenkinsfile",
-	callback = function()
-		vim.cmd("set ft=groovy")
-	end,
-})
-
 vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "CursorHold", "CursorHoldI" }, {
 	desc = "auto reload file",
 	group = group,
@@ -326,14 +308,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 		if line("'\"") > 0 and line("'\"") <= line("$") and not vim.bo.filetype:find("commit") then
 			vim.cmd('normal! g`"')
 		end
-	end,
-})
-
-vim.api.nvim_create_autocmd("LspAttach", {
-	desc = "lsp attach init",
-	group = group,
-	callback = function(args)
-		vim.bo[args.buf].formatexpr = "v:lua.require('skippi.lsp').formatexpr()"
 	end,
 })
 
