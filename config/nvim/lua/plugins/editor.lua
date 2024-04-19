@@ -288,7 +288,7 @@ return {
 			vim.keymap.set("n", "g<CR>", "<Cmd>G<CR>")
 			vim.keymap.set("n", "g<Space>", ":G<Space>")
 			vim.keymap.set("n", "gL", function()
-				local cmd = "G log"
+				local cmd = "G log --oneline"
 				if vim.v.count ~= 0 then
 					cmd = cmd .. " -n" .. vim.v.count
 				end
