@@ -172,7 +172,14 @@ return {
 					require("telescope.builtin").live_grep(opts)
 				end,
 			},
-			{ "<Space>?", "<Cmd>Telescope live_grep<CR>" },
+			{ "<Space>?", function()
+					local util = require("skippi.util")
+					local opts = {}
+					if vim.v.count ~= 0 then
+						opts.type_filter = util.ft_to_ripgrep_type(vim.bo.filetype)
+					end
+					require("telescope.builtin").live_grep(opts)
+			end},
 			{ "<Space>:", "<Cmd>Telescope commands<CR>" },
 			{ "<Space>b", "<Cmd>Telescope buffers<CR>" },
 			{ "<Space>d", "<Cmd>Telescope diagnostics bufnr=0<CR>" },
