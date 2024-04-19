@@ -380,6 +380,24 @@ return {
 					end, { expr = true })
 				end,
 			})
+			local group = vim.api.nvim_create_augroup("skippi.gitsigns", { clear = true })
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "GitSignsChanged",
+				group = group,
+				desc = "auto reload fugitive",
+				callback = function()
+					for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+						local ft = vim.api.nvim_get_option_value("filetype", { buf = buf })
+						if ft == "fugitive" then
+							vim.schedule(function()
+								vim.api.nvim_buf_call(buf, function()
+									vim.cmd.edit()  -- refresh the buffer
+								end)
+							end)
+						end
+					end
+				end,
+			})
 		end,
 	},
 	{

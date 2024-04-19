@@ -16,7 +16,7 @@ vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
 		if next(bufs) ~= nil then
 			buffers.bulk_write(bufs)
 			vim.schedule(function()
-				vim.cmd("edit")
+				vim.cmd.edit()
 			end)
 		end
 	end,
