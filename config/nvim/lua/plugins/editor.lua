@@ -184,6 +184,7 @@ return {
 			{ "<Space>j", "<Cmd>Telescope jumplist<CR>" },
 			{ "<Space>l", "<Cmd>Telescope lsp_document_symbols<CR>" },
 			{ "<Space>L", "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>" },
+			{ "<Space>\"", "<Cmd>Telescope registers<CR>" },
 			{
 				"z/",
 				function()
