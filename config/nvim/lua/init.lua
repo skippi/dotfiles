@@ -16,18 +16,10 @@ end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup("plugins")
 
-local function grep_file_type()
-	local type = vim.bo.filetype
-	if type == "text" then
-		type = "txt"
-	end
-	return type
-end
-
 local function grep_text(cwd)
 	local args = {}
 	if vim.v.count ~= 0 then
-		args[#args + 1] = "-t" .. grep_file_type()
+		args[#args + 1] = "-t" .. util.ft_to_ripgrep_type(vim.bo.filetype)
 	end
 	local search = nil
 	if util.edit_mode_is_visual() then
@@ -146,7 +138,7 @@ map("n", "<Space>q", "<Cmd>q<CR>")
 map("n", "g/", function()
 	local type = ""
 	if vim.v.count ~= 0 then
-		type = " -t" .. grep_file_type()
+		type = " -t" .. util.ft_to_ripgrep_type(vim.bo.filetype)
 	end
 	return ':<C-u>sil gr ""' .. type .. "<C-b><C-Right><C-Right><C-Right><Left>"
 end, { expr = true, desc = "grep prompt" })

@@ -162,9 +162,14 @@ return {
 			{
 				"<Space>/",
 				function()
-					require("telescope.builtin").live_grep({
-						cwd = require("skippi.util").workspace_root() or vim.fn.getcwd(),
-					})
+					local util = require("skippi.util")
+					local opts = {
+						cwd = util.workspace_root() or vim.fn.getcwd(),
+					}
+					if vim.v.count ~= 0 then
+						opts.type_filter = util.ft_to_ripgrep_type(vim.bo.filetype)
+					end
+					require("telescope.builtin").live_grep(opts)
 				end,
 			},
 			{ "<Space>?", "<Cmd>Telescope live_grep<CR>" },

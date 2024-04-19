@@ -187,4 +187,12 @@ function M.create_command_alias(abbr, expand)
 	end
 end
 
+
+function M.ft_to_ripgrep_type(type)
+	if type == "text" then
+		type = "txt"
+	end
+	return type
+end
+
 return M
