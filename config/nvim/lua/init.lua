@@ -236,7 +236,8 @@ end
 
 for key, fn in pairs({
 	["<C-d>"] = function()
-		return vim.fn.expand("%:p:h") .. "/"
+		local path = vim.fn.expand("%:p:h") .. "/"
+		return vim.fn.substitute(path, "\\", "/", "g")
 	end,
 	["<C-t>"] = function()
 		return vim.fn.expand("%:t")
