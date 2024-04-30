@@ -94,6 +94,10 @@ util.create_user_command(
 	{ abbrev = { "scra[tch]", "es[cratch]" } }
 )
 
+util.create_user_command("TerminalHere", function()
+	vim.cmd([[term cmd /K "cd ]] .. vim.fn.expand("%:p:h") .. [["]])
+end, { abbrev = { "teh[ere]", "terminalh[ere]", "termh[ere]" } })
+
 util.create_command_alias("E", "e")
 util.create_command_alias("H", "h")
 
