@@ -16,12 +16,12 @@ function M.workspace_root()
 	return vim.trim(dir)
 end
 
-function M.open_buf_in_explorer()
-	local path = vim.fn.expand("%:p:h")
+function M.open_file_explorer(path)
 	if vim.loop.os_uname().sysname:find("Linux") then
 		path = vim.fn.system("wslpath -w " .. path .. " | tr -d '\n'") -- xdg-open/wslview are CRAZY bugged on wsl/wt/conemu. Do not use.
 	end
-	vim.cmd("sil !explorer " .. vim.fn.shellescape(path))
+	local win_path = path:gsub("/", "\\")
+	vim.cmd("sil !explorer " .. vim.fn.shellescape(win_path))
 end
 
 function M.jump_diagnostic(count, severity)
@@ -186,7 +186,6 @@ function M.create_command_alias(abbr, expand)
 		)
 	end
 end
-
 
 function M.ft_to_ripgrep_type(type)
 	if type == "text" then

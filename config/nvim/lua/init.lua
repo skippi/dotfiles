@@ -82,6 +82,14 @@ if vim.loop.os_uname().sysname:find("Windows") then
 	vim.o.shellcmdflag = "/s /v /c"
 end
 
+util.create_user_command("Browse", function(props)
+	local path = props.args
+	if props.args == "" then
+		path = vim.fn.expand("%:p:h")
+	end
+	util.open_file_explorer(path)
+end, { abbrev = "bro[wse]", nargs = "*", desc = "open path in file explorer" })
+
 util.create_user_command("TrimWS", function()
 	local pos = vim.fn.getpos(".")
 	vim.cmd([[%s/\s\+$//e]])

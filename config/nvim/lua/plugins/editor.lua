@@ -282,8 +282,7 @@ return {
 					if vim.v.count == 0 then
 						return "<Plug>VinegarUp"
 					end
-					require("skippi.util").open_buf_in_explorer()
-					return "<Ignore>"
+					return "<Cmd>Browse<CR>"
 				end,
 				expr = true,
 				desc = "open current file parent directory",
