@@ -88,7 +88,12 @@ util.create_user_command("Browse", function(props)
 		path = vim.fn.expand("%:p:h")
 	end
 	util.open_file_explorer(path)
-end, { abbrev = "bro[wse]", nargs = "*", desc = "open path in file explorer" })
+end, {
+	abbrev = "bro[wse]",
+	desc = "open path in file explorer",
+	nargs = "*",
+	complete = "file",
+})
 
 util.create_user_command("TrimWS", function()
 	local pos = vim.fn.getpos(".")
