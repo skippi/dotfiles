@@ -30,5 +30,13 @@
 	unhide = "!git ls-files -z \"$1\" \
 		| xargs -0 git update-index --no-assume-unchanged #"
 	ls-hidden = !git ls-files -v | grep '^h' | cut -c3-
-	strip = "!git ls-files -z --others --exclude-from=$HOME/.config/git/ignore \
-		| xargs -0 --no-run-if-empty rm --verbose"
+	strip = "!f() { \
+		files=\"\"; \
+		for arg in \"$@\"; do \
+			[ -d \"$arg\" ] && files=\" $arg$files\"; \
+		done; \
+		git ls-files -z --others \
+			--exclude-from=$(git rev-parse --git-common-dir)/info/exclude \
+			--exclude-from=$HOME/.config/git/ignore \
+		| xargs -0 --no-run-if-empty rm --verbose; \
+	}; f"
