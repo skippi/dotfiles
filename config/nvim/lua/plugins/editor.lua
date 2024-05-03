@@ -172,14 +172,17 @@ return {
 					require("telescope.builtin").live_grep(opts)
 				end,
 			},
-			{ "<Space>?", function()
+			{
+				"<Space>?",
+				function()
 					local util = require("skippi.util")
 					local opts = {}
 					if vim.v.count ~= 0 then
 						opts.type_filter = util.ft_to_ripgrep_type(vim.bo.filetype)
 					end
 					require("telescope.builtin").live_grep(opts)
-			end},
+				end,
+			},
 			{ "<Space>:", "<Cmd>Telescope commands<CR>" },
 			{ "<Space>b", "<Cmd>Telescope buffers<CR>" },
 			{ "<Space>d", "<Cmd>Telescope diagnostics bufnr=0<CR>" },
@@ -196,7 +199,7 @@ return {
 			{ "<Space>j", "<Cmd>Telescope jumplist<CR>" },
 			{ "<Space>l", "<Cmd>Telescope lsp_document_symbols<CR>" },
 			{ "<Space>L", "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>" },
-			{ "<Space>\"", "<Cmd>Telescope registers<CR>" },
+			{ '<Space>"', "<Cmd>Telescope registers<CR>" },
 			{
 				"z/",
 				function()
@@ -402,7 +405,7 @@ return {
 						if ft == "fugitive" then
 							vim.schedule(function()
 								vim.api.nvim_buf_call(buf, function()
-									vim.cmd.edit()  -- refresh the buffer
+									vim.cmd.edit() -- refresh the buffer
 								end)
 							end)
 						end
@@ -425,16 +428,6 @@ return {
 			prompt = { enabled = false },
 			modes = {
 				char = { enabled = false },
-			},
-		},
-		keys = {
-			{
-				".",
-				mode = { "x", "o" },
-				function()
-					require("flash").treesitter()
-				end,
-				desc = "Flash Treesitter",
 			},
 		},
 	},

@@ -60,6 +60,22 @@ return {
 		end,
 	},
 	{
+		"RRethy/nvim-treesitter-textsubjects",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		opts = {
+			keymaps = {
+				["."] = "textsubjects-smart",
+				["ao"] = "textsubjects-container-outer",
+				["io"] = "textsubjects-container-inner",
+			},
+		},
+		config = function(_, opts)
+			require("nvim-treesitter.configs").setup({
+				textsubjects = vim.tbl_deep_extend("force", { enable = true }, opts),
+			})
+		end,
+	},
+	{
 		"andymass/vim-matchup",
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		config = function()
