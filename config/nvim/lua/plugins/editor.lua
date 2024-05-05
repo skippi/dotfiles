@@ -439,4 +439,8 @@ return {
 		},
 	},
 	{ "axelf4/vim-strip-trailing-whitespace" },
+	{
+		"kwkarlwang/bufjump.nvim",
+		opts = {},
+	},
 }
