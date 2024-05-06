@@ -139,11 +139,15 @@ util.create_command_alias("H", "h")
 local map = vim.keymap.set
 
 map("n", "<C-L>", function()
-	return (vim.v.count > 0 and "<Cmd>edit<CR>" or "")
-		.. "<Cmd>noh<CR>"
-		.. (vim.fn.has("diff") and "<Cmd>diffupdate<CR>" or "")
-		.. "<Cmd>redraw<CR>"
-end, { expr = true })
+	if vim.v.count > 0 then
+		vim.cmd.edit()
+	end
+	vim.cmd.noh()
+	if vim.fn.has("diff") then
+		vim.cmd.diffupdate()
+	end
+	vim.cmd.redraw()
+end, { desc = "redraw / reload screen" })
 map({ "n", "i" }, "<Esc>", "<Cmd>noh<CR><Esc>", { silent = true })
 map({ "n", "x", "o" }, "'", "`")
 map({ "n", "x", "o" }, "gh", "^")
