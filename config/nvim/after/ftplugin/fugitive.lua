@@ -15,9 +15,7 @@ vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
 		local bufs = buffers.find_all_modified(changedticks)
 		if next(bufs) ~= nil then
 			buffers.bulk_write(bufs)
-			vim.schedule(function()
-				vim.cmd.edit()
-			end)
+			vim.schedule(vim.cmd.edit)
 		end
 	end,
 })

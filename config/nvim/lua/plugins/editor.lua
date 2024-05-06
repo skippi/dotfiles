@@ -399,9 +399,7 @@ return {
 						local ft = vim.api.nvim_get_option_value("filetype", { buf = buf })
 						if ft == "fugitive" then
 							vim.schedule(function()
-								vim.api.nvim_buf_call(buf, function()
-									vim.cmd.edit() -- refresh the buffer
-								end)
+								vim.api.nvim_buf_call(buf, vim.cmd.edit) -- refresh the buffer
 							end)
 						end
 					end
