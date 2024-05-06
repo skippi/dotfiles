@@ -149,41 +149,22 @@ function M.edit_mode_is_visual()
 end
 
 function M.create_command_alias(abbr, expand)
-	local str = ""
-	local add = false
-	for i = 1, #abbr do
-		local c = abbr:sub(i, i)
-		if c ~= "[" and c ~= "]" then
-			str = str .. c
-		else
-			add = true
-		end
-		if add then
-			vim.cmd.cnoreabbrev(
-				"<expr> "
-					.. str
-					.. [[ (getcmdtype() ==# ':' && getcmdline() =~# "^\\('.*,'.*\\)\\?]]
-					.. str
-					.. [[") ? "]]
-					.. expand
-					.. [[" : "]]
-					.. str
-					.. '"'
-			)
-		end
-	end
-	if not add then
+	local prefix, suffix = abbr:match("([^%[]+)%[?([^%]]*)%]?")
+	assert(#prefix, "Command alias must have at least one character")
+	local add_alias = function(name)
 		vim.cmd.cnoreabbrev(
-			"<expr> "
-				.. str
-				.. [[ (getcmdtype() ==# ':' && getcmdline() =~# "^\\('.*,'.*\\)\\?]]
-				.. str
-				.. [[") ? "]]
-				.. expand
-				.. [[" : "]]
-				.. str
-				.. '"'
+			string.format(
+				[[<expr> %s (getcmdtype() ==# ':' && getcmdline() =~# "^\\('.*,'.*\\|%%\\|\\.\\)\\?%s") ? "%s" : "%s"]],
+				name,
+				name,
+				expand,
+				name
+			)
 		)
+	end
+	add_alias(prefix)
+	for i = 1, #suffix do
+		add_alias(prefix .. suffix:sub(1, i))
 	end
 end
 
