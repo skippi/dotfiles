@@ -34,7 +34,6 @@ noremap <expr> <C-L>
       \ . (has('diff') ? '<Cmd>diffupdate<CR>' : '')
       \ . '<Cmd>redraw<CR>'
 
-command! EditCode sil exe "!code -nwg" expand("%:p") . ":" . line('.') . ":" . col('.') "."
 command! EditIdea sil exe "!idea64" expand("%:p") . ":" . line('.')
 command! EditEmacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') bufname("%")
 command! HighlightTest sil so $VIMRUNTIME/syntax/hitest.vim | set ro

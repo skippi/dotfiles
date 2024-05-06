@@ -95,6 +95,12 @@ end, {
 	complete = "file",
 })
 
+util.create_user_command(
+	"EditCode",
+	[[sil exe "!code -ng" expand("%:p") . ":" . line('.') . ":" . col('.') "."]],
+	{ abbrev = { "eco[de]" }, desc = "edit in vscode" }
+)
+
 util.create_user_command("TrimWS", function()
 	local pos = vim.fn.getpos(".")
 	vim.cmd([[%s/\s\+$//e]])
