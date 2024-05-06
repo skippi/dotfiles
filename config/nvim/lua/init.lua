@@ -223,12 +223,6 @@ end, { desc = "jump to syntax config" })
 map("n", "'@", function()
 	vim.cmd("sil e " .. vim.fn.stdpath("config") .. "/after/ftplugin/" .. vim.bo.filetype .. ".lua")
 end, { desc = "jump to ftplugin config" })
-map("n", "'$", function()
-	if vim.g.Temp_last_term == nil then
-		return
-	end
-	vim.cmd(vim.g.Temp_last_term .. "b")
-end, { desc = "jump to last terminal buffer" })
 
 map("n", "gO", function()
 	if not vim.tbl_contains({ "man", "help" }, vim.bo.filetype) then
