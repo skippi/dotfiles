@@ -115,7 +115,10 @@ util.create_user_command(
 	"sil so $VIMRUNTIME/syntax/hitest.vim | set ro",
 	{ abbrev = "hit[est]", desc = "test highlight at cursor" }
 )
-util.create_user_command("Kwbd", "call kwbd#run(<bang>0)", { bang = true })
+util.create_user_command("Kwbd", "call kwbd#run(<bang>0)", {
+	abbrev = "bd[elete]",
+	bang = true,
+})
 
 util.create_user_command("TrimWS", function()
 	local pos = vim.fn.getpos(".")
@@ -303,7 +306,6 @@ opfunc.map("<C-_>", opfunc.toggle_path_slash, {
 })
 
 map("n", "ZF", "gggqG<C-o>")
-map("n", "ZD", "<Cmd>Kwbd<CR>")
 
 map({ "x", "o" }, "aj", ":<C-u>norm! 0v$<cr>", { desc = "select line", silent = true })
 map({ "x", "o" }, "ij", ":<C-u>norm! _vg_<cr>", { desc = "select inside line", silent = true })
