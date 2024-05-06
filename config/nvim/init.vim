@@ -28,17 +28,6 @@ for key in ["<Left>", "<Right>", "<C-Left>", "<C-Right>"]
   exe "inoremap" key "<C-g>U" . key
 endfor
 
-noremap <expr> <C-L>
-      \ (v:count ? '<Cmd>edit<CR>' : '')
-      \ . '<Cmd>noh<CR>'
-      \ . (has('diff') ? '<Cmd>diffupdate<CR>' : '')
-      \ . '<Cmd>redraw<CR>'
-
-command! EditIdea sil exe "!idea64" expand("%:p") . ":" . line('.')
-command! EditEmacs sil exe '!emacsclientw -a "" +' . line('.') . ":" . col('.') bufname("%")
-command! HighlightTest sil so $VIMRUNTIME/syntax/hitest.vim | set ro
-command! -bang Kwbd call kwbd#run(<bang>0)
-
 aug terminal
   au!
   au TermOpen term://* tnoremap <buffer> <ESC> <C-\><C-n>

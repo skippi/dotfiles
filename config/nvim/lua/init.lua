@@ -100,6 +100,22 @@ util.create_user_command(
 	[[sil exe "!code -ng" expand("%:p") . ":" . line('.') . ":" . col('.') "."]],
 	{ abbrev = { "eco[de]" }, desc = "edit in vscode" }
 )
+util.create_user_command(
+	"EditIdea",
+	'sil exe "!idea64" expand("%:p") . ":" . line(".")',
+	{ abbrev = "ei[dea]", desc = "edit in idea" }
+)
+util.create_user_command(
+	"EditEmacs",
+	'sil exe "!emacsclientw -a "" +" .. line(".") .. ":" .. col(".") .. " " .. bufname("%")',
+	{ abbrev = "ee[macs]", desc = "edit in emacs" }
+)
+util.create_user_command(
+	"HighlightTest",
+	"sil so $VIMRUNTIME/syntax/hitest.vim | set ro",
+	{ abbrev = "hit[est]", desc = "test highlight at cursor" }
+)
+util.create_user_command("Kwbd", "call kwbd#run(<bang>0)", { bang = true })
 
 util.create_user_command("TrimWS", function()
 	local pos = vim.fn.getpos(".")
@@ -122,6 +138,12 @@ util.create_command_alias("H", "h")
 
 local map = vim.keymap.set
 
+map("n", "<C-L>", function()
+	return (vim.v.count > 0 and "<Cmd>edit<CR>" or "")
+		.. "<Cmd>noh<CR>"
+		.. (vim.fn.has("diff") and "<Cmd>diffupdate<CR>" or "")
+		.. "<Cmd>redraw<CR>"
+end, { expr = true })
 map({ "n", "i" }, "<Esc>", "<Cmd>noh<CR><Esc>", { silent = true })
 map({ "n", "x", "o" }, "'", "`")
 map({ "n", "x", "o" }, "gh", "^")
