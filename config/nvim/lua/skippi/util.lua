@@ -61,7 +61,7 @@ function M.edit_file_by_offset(offset)
 		vim.notify("No more items", vim.log.levels.ERROR)
 		return
 	end
-	vim.cmd("edit " .. dir .. "/" .. files[idx])
+	vim.cmd.edit(dir .. "/" .. files[idx])
 end
 
 local function first_nonblank_col(lnum)
@@ -128,7 +128,7 @@ end
 
 function M.visual_selection()
 	assert(M.edit_mode_is_visual(), "not in visual mode")
-	vim.cmd([[visual]])
+	vim.cmd.visual()
 	local _, start_row, start_col, _ = unpack(vim.fn.getpos("'<"))
 	local _, end_row, end_col, _ = unpack(vim.fn.getpos("'>"))
 	if start_row > end_row or (start_row == end_row and start_col > end_col) then
@@ -159,8 +159,8 @@ function M.create_command_alias(abbr, expand)
 			add = true
 		end
 		if add then
-			vim.cmd(
-				"cnoreabbrev <expr> "
+			vim.cmd.cnoreabbrev(
+				"<expr> "
 					.. str
 					.. [[ (getcmdtype() ==# ':' && getcmdline() =~# "^\\('.*,'.*\\)\\?]]
 					.. str
@@ -173,8 +173,8 @@ function M.create_command_alias(abbr, expand)
 		end
 	end
 	if not add then
-		vim.cmd(
-			"cnoreabbrev <expr> "
+		vim.cmd.cnoreabbrev(
+			"<expr> "
 				.. str
 				.. [[ (getcmdtype() ==# ':' && getcmdline() =~# "^\\('.*,'.*\\)\\?]]
 				.. str

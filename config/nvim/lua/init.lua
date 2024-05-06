@@ -130,7 +130,7 @@ util.create_user_command(
 )
 
 util.create_user_command("TerminalHere", function()
-	vim.cmd([[term cmd /K "cd ]] .. vim.fn.expand("%:p:h") .. [["]])
+	vim.cmd.term([[cmd /K "cd ]] .. vim.fn.expand("%:p:h") .. [["]])
 end, { abbrev = { "teh[ere]", "terminalh[ere]", "termh[ere]" } })
 
 util.create_command_alias("E", "e")
@@ -177,13 +177,13 @@ map("n", "<C-w>yod", function()
 		end
 	end
 	vim.api.nvim_win_call(0, function()
-		vim.cmd("windo " .. diffcmd)
+		vim.cmd.windo(diffcmd)
 	end)
 end, { desc = "toggle window diff" })
 
 map("n", "<C-h>", "<BS>", { remap = true }) -- windows <BS> fix
 map("n", "<Space>", "<Nop>")
-map("n", "<Space>q", "<Cmd>q<CR>")
+map("n", "<Space>q", vim.cmd.quit)
 map("n", "g/", function()
 	local type = ""
 	if vim.v.count ~= 0 then
@@ -373,7 +373,7 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 			return
 		end
 		local bufnr = vim.fn.bufnr()
-		vim.cmd("edit " .. vim.trim(vim.fn.system({ "wslpath", "-a", name })))
+		vim.cmd.edit(vim.trim(vim.fn.system({ "wslpath", "-a", name })))
 		vim.schedule(function()
 			vim.api.nvim_buf_delete(bufnr, { force = true })
 		end)
