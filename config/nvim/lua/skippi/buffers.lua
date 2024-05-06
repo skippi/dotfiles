@@ -2,7 +2,10 @@ local M = {}
 
 function M.find_all_modified(state)
 	local result = {}
-	for _, b in ipairs(vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1, bufmodified = 1 })) do
+	-- https://springrts.com/wiki/Lua_Performance#TEST_9:_for-loops
+	local bufs = vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1, bufmodified = 1 })
+	for i = 1, #bufs do
+		local b = bufs[i]
 		if
 			vim.bo[b.bufnr].buftype ~= "terminal"
 			and (state == nil or b.changedtick ~= state[b.bufnr])
