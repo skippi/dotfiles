@@ -342,11 +342,7 @@ return {
 				elseif args.range == 2 then
 					cmd = args.line1 .. "," .. args.line2
 				end
-				if vim.wo.diff then
-					cmd = cmd .. "diffput"
-				else
-					cmd = cmd .. "Gitsigns stage_hunk"
-				end
+				cmd = cmd .. (vim.wo.diff and "diffput" or "Gitsigns stage_hunk")
 				vim.cmd(cmd)
 			end, { abbrev = { "diffpu[t]", "dp" }, range = true })
 			util.create_user_command("Diffget", function(args)
@@ -356,11 +352,7 @@ return {
 				elseif args.range == 2 then
 					cmd = args.line1 .. "," .. args.line2
 				end
-				if vim.wo.diff then
-					cmd = cmd .. "diffget"
-				else
-					cmd = cmd .. "Gitsigns reset_hunk"
-				end
+				cmd = cmd .. (vim.wo.diff and "diffget" or "Gitsigns reset_hunk")
 				vim.cmd(cmd)
 			end, { abbrev = { "diffg[et]", "do" }, range = true })
 			gs.setup({
