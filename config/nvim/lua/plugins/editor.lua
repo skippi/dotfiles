@@ -159,7 +159,6 @@ return {
 		keys = {
 			{ "g!", "<Cmd>lua require('skippi.picker').pkill()<CR>" },
 			{ "<C-q>", "<Cmd>Telescope quickfix<CR>" },
-			{ "<C-s>", "<Cmd>lua require('skippi.picker').tselect()<CR>" },
 			{ "<Space>.", "<Cmd>Telescope resume<CR>" },
 			{ "<Space>>", "<Cmd>Telescope pickers<CR>" },
 			{
@@ -254,6 +253,15 @@ return {
 					},
 				},
 			}
+		end,
+		config = function(_, opts)
+			local picker = require("skippi.picker")
+			local util = require("skippi.util")
+			util.create_user_command("TSelect", picker.tselect, {
+				abbrev = "ts[elect]",
+				desc = "tselect with fuzzy finder",
+			})
+			require("telescope").setup(opts)
 		end,
 	},
 	{
