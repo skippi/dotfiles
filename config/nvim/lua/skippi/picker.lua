@@ -1,3 +1,4 @@
+local util = require("skippi.util")
 local action_state = require("telescope.actions.state")
 local actions = require("telescope.actions")
 local conf = require("telescope.config").values
@@ -106,6 +107,23 @@ local function nvim_buf_temp_call(...)
 	vim.fn.winrestview(old_view)
 end
 
+local function find_tags_from_name(tagname)
+	local results = nil
+	local filename = vim.fn.bufname()
+	if vim.bo.tagfunc ~= "" then
+		local tag_fn = assert(loadstring("return " .. vim.bo.tagfunc:sub(7) .. "(...)"))
+		if vim.fn.expand("<cword>") == tagname then
+			results = tag_fn(tagname, "c", { buf_ffname = filename })
+		else
+			results = tag_fn(tagname, "r")
+		end
+	end
+	if results == nil or results == vim.NIL then
+		results = vim.fn.taglist(("^%s$"):format(tagname), filename)
+	end
+	return results
+end
+
 local function find_tags_from_tagstack(item)
 	local results = nil
 	nvim_buf_temp_call(item.from[1], function()
@@ -144,20 +162,32 @@ end
 
 function M.tselect(opts)
 	opts = opts or {}
-	local stack = vim.fn.gettagstack()
-	local stack_item = stack.items[stack.curidx - 1]
-	if stack_item == nil then
-		vim.notify("E73: tag stack empty", vim.log.levels.ERROR)
-		return
+	local tagname = opts.tagname
+	local results
+	if tagname then
+		results = find_tags_from_name(opts.tagname)
+	else
+		local stack = vim.fn.gettagstack()
+		local stack_item = stack.items[stack.curidx - 1]
+		if stack_item == nil then
+			vim.notify("E73: tag stack empty", vim.log.levels.ERROR)
+			return
+		end
+		tagname = stack_item.tagname
+		results = find_tags_from_tagstack(stack_item)
 	end
-	local results = find_tags_from_tagstack(stack_item)
 	if #results == 0 then
-		vim.notify("E492: tag not found: " .. stack_item.tagname, vim.log.levels.ERROR)
+		vim.notify("E492: tag not found: " .. tagname, vim.log.levels.ERROR)
 		return
 	end
-	results = { unpack(results, 1, 128) }
+	if opts.limit then
+		results = { unpack(results, 1, opts.limit) }
+	end
 	for _, tag in ipairs(results) do
-		if tag.cmd:find("^/%^") ~= nil then
+		tag.bufnr = vim.fn.bufnr(tag.filename, true)
+		local lnum, col = tag.cmd:match("/\\%%(%d+)l\\%%(%d+)c/")
+		local is_lsp_entry = lnum and col
+		if not is_lsp_entry then
 			local lines = vim.fn.readfile(tag.filename, "")
 			local pat = tag.cmd:gsub("^/%^", "\\V"):gsub("/$", ""):gsub("%$$", "")
 			local idx = vim.fn.match(lines, pat)
@@ -168,16 +198,19 @@ function M.tselect(opts)
 				tag.text = pat
 				tag.lnum = 1
 			end
+			tag.col = util.first_nonblank_col(tag.lnum) or 1
 		else
-			tag.bufnr = vim.fn.bufnr(tag.filename, true)
-			nvim_buf_temp_call(tag.bufnr, function()
-				vim.cmd("keepjumps " .. tag.cmd)
-				tag.text = vim.api.nvim_get_current_line()
-				local pos = vim.fn.getcurpos()
-				tag.lnum = pos[2]
-				tag.col = pos[3]
-			end)
+			tag.lnum = tonumber(lnum)
+			tag.col = tonumber(col)
+			local lines = vim.fn.readfile(tag.filename, "", tag.lnum)
+			tag.text = lines[tag.lnum]
 		end
+	end
+	if opts.auto_jump and #results == 1 then
+		local tag = results[1]
+		vim.cmd(tag.bufnr .. "b")
+		vim.fn.cursor(tag.lnum, tag.col)
+		return
 	end
 	pickers
 		.new(opts, {
@@ -190,6 +223,13 @@ function M.tselect(opts)
 			sorter = conf.generic_sorter(opts),
 		})
 		:find()
+end
+
+function M.tjump(opts)
+	opts = opts or {}
+	return M.tselect(vim.tbl_extend("force", opts, {
+		auto_jump = true,
+	}))
 end
 
 return M

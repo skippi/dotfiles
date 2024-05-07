@@ -64,7 +64,7 @@ function M.edit_file_by_offset(offset)
 	vim.cmd.edit(dir .. "/" .. files[idx])
 end
 
-local function first_nonblank_col(lnum)
+function M.first_nonblank_col(lnum)
 	local nonblank_col = vim.api.nvim_buf_get_lines(0, lnum - 1, lnum, false)[1]:find("%S")
 	if nonblank_col == nil then
 		return nil
@@ -81,7 +81,7 @@ function M.jump_treesitter_statement(offset)
 		return false
 	end
 	local lnum, col = unpack(vim.api.nvim_win_get_cursor(0))
-	col = first_nonblank_col(lnum) or col
+	col = M.first_nonblank_col(lnum) or col
 	local ok, node = pcall(vim.treesitter.get_node, { bufnr = 0, pos = { lnum - 1, col } })
 	if not ok or node == nil or node:type() == "comment" then
 		return false
@@ -107,7 +107,7 @@ function M.jump_treesitter_statement(offset)
 			i, j = node:range()
 		end
 	end
-	j = first_nonblank_col(i + 1) or j
+	j = M.first_nonblank_col(i + 1) or j
 	vim.api.nvim_buf_set_mark(0, "'", i + 1, j, {})
 	vim.api.nvim_win_set_cursor(0, { i + 1, j })
 	return true

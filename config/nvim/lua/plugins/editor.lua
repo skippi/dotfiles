@@ -158,6 +158,8 @@ return {
 		cmd = "Telescope",
 		keys = {
 			{ "g!", "<Cmd>lua require('skippi.picker').pkill()<CR>" },
+			{ "g]", ":<C-u>TSelect <C-r><C-w><CR>", silent = true },
+			{ "g<C-]>", ":<C-u>TJump <C-r><C-w><CR>", silent = true },
 			{ "<C-q>", "<Cmd>Telescope quickfix<CR>" },
 			{ "<Space>.", "<Cmd>Telescope resume<CR>" },
 			{ "<Space>>", "<Cmd>Telescope pickers<CR>" },
@@ -257,9 +259,27 @@ return {
 		config = function(_, opts)
 			local picker = require("skippi.picker")
 			local util = require("skippi.util")
-			util.create_user_command("TSelect", picker.tselect, {
+			util.create_user_command("TSelect", function(params)
+				opts = {}
+				if #params.args then
+					opts.tagname = params.args
+				end
+				picker.tselect(opts)
+			end, {
 				abbrev = "ts[elect]",
 				desc = "tselect with fuzzy finder",
+				nargs = "*",
+			})
+			util.create_user_command("TJump", function(params)
+				opts = {}
+				if #params.args then
+					opts.tagname = params.args
+				end
+				picker.tjump(opts)
+			end, {
+				abbrev = "tj[ump]",
+				desc = "tjump with fuzzy finder",
+				nargs = "*",
 			})
 			require("telescope").setup(opts)
 		end,
