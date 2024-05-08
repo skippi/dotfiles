@@ -211,6 +211,16 @@ function M.tselect(opts)
 	end
 	if opts.auto_jump and #results == 1 then
 		local tag = results[1]
+		vim.fn.settagstack(0, {
+			items = {
+				{
+					bufnr = vim.fn.bufnr(),
+					from = vim.fn.getpos("."),
+					matchnr = 1,
+					tagname = tag.name,
+				},
+			},
+		}, "t")
 		vim.cmd(tag.bufnr .. "b")
 		vim.fn.cursor(tag.lnum, tag.col)
 		return
