@@ -87,12 +87,18 @@ util.create_user_command("Browse", function(props)
 	if props.args == "" then
 		path = vim.fn.expand("%:p:h")
 	end
+	if not util.is_url(path) then
+		path = vim.fn.expand(path)
+	end
 	util.open_file_explorer(path)
 end, {
 	abbrev = "bro[wse]",
 	desc = "open path in file explorer",
-	nargs = "*",
-	complete = "file",
+	nargs = "?",
+	complete = function(arg, _, _)
+		-- Need a custom function since "file" completion auto expands symbols like #,%
+		return vim.fn.getcompletion(arg, "file")
+	end,
 })
 
 util.create_user_command(

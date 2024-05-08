@@ -21,7 +21,7 @@ function M.open_file_explorer(path)
 		path = vim.fn.system("wslpath -w " .. path .. " | tr -d '\n'") -- xdg-open/wslview are CRAZY bugged on wsl/wt/conemu. Do not use.
 	end
 	local win_path = path:gsub("/", "\\")
-	vim.cmd("sil !explorer " .. vim.fn.shellescape(win_path))
+	vim.cmd("sil !explorer " .. vim.fn.shellescape(win_path, true))
 end
 
 function M.jump_diagnostic(count, severity)
@@ -173,6 +173,10 @@ function M.ft_to_ripgrep_type(type)
 		type = "txt"
 	end
 	return type
+end
+
+function M.is_url(str)
+	return str:match("^http[s]?://[%w-_%.%?%.:/%+=&]+")
 end
 
 return M
