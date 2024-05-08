@@ -116,6 +116,9 @@ local function find_tags_from_name(tagname)
 			results = tag_fn(tagname, "c", { buf_ffname = filename })
 		else
 			results = tag_fn(tagname, "r")
+			if results ~= nil and results ~= vim.NIL then
+				results = vim.fn.matchfuzzy(results, tagname, { key = "name" })
+			end
 		end
 	end
 	if results == nil or results == vim.NIL then

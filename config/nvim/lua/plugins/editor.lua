@@ -268,7 +268,7 @@ return {
 			end, {
 				abbrev = "ts[elect]",
 				desc = "tselect with fuzzy finder",
-				nargs = "*",
+				nargs = "?",
 			})
 			util.create_user_command("TJump", function(params)
 				opts = {}
@@ -279,7 +279,7 @@ return {
 			end, {
 				abbrev = "tj[ump]",
 				desc = "tjump with fuzzy finder",
-				nargs = "*",
+				nargs = "?",
 			})
 			require("telescope").setup(opts)
 		end,
