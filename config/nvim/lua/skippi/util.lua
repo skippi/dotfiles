@@ -148,18 +148,28 @@ function M.edit_mode_is_visual()
 	return vim.tbl_contains({ "v", "V", "CTRL-V" }, vim.fn.mode())
 end
 
+function M.expand_alias(alias, command)
+	local info = vim.api.nvim_parse_cmd(command, {})
+	if vim.fn.getcmdtype() ~= ":" then
+		return alias
+	end
+	local cmdline = vim.fn.getcmdline()
+	if cmdline:match("^" .. alias .. "$") then
+		return command
+	end
+	local range_re = vim.regex("^[<>%,'\\.+-]\\+" .. alias .. "$")
+	if info.range and range_re:match_str(cmdline) then
+		return command
+	end
+	return alias
+end
+
 function M.create_command_alias(abbr, expand)
 	local prefix, suffix = abbr:match("([^%[]+)%[?([^%]]*)%]?")
 	assert(#prefix, "Command alias must have at least one character")
-	local add_alias = function(name)
+	local add_alias = function(alias)
 		vim.cmd.cnoreabbrev(
-			string.format(
-				[[<expr> %s (getcmdtype() ==# ':' && getcmdline() =~# "^\\('.*,'.*\\|%%\\|\\.\\)\\?%s") ? "%s" : "%s"]],
-				name,
-				name,
-				expand,
-				name
-			)
+			string.format([[<expr> %s v:lua.require("skippi.util").expand_alias("%s", "%s")]], alias, alias, expand)
 		)
 	end
 	add_alias(prefix)
