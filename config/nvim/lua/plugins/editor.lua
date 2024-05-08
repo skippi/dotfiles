@@ -261,7 +261,7 @@ return {
 			local util = require("skippi.util")
 			util.create_user_command("TSelect", function(params)
 				opts = {}
-				if #params.args then
+				if #params.args ~= 0 then
 					opts.tagname = params.args
 				end
 				picker.tselect(opts)
@@ -272,7 +272,7 @@ return {
 			})
 			util.create_user_command("TJump", function(params)
 				opts = {}
-				if #params.args then
+				if #params.args ~= 0 then
 					opts.tagname = params.args
 				end
 				picker.tjump(opts)

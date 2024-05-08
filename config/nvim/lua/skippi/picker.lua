@@ -101,48 +101,6 @@ function M.pkill(opts)
 		:find()
 end
 
-local function nvim_buf_temp_call(...)
-	local old_view = vim.fn.winsaveview()
-	vim.api.nvim_buf_call(...)
-	vim.fn.winrestview(old_view)
-end
-
-local function find_tags_from_name(tagname)
-	local results = nil
-	local filename = vim.fn.bufname()
-	if vim.bo.tagfunc ~= "" then
-		local tag_fn = assert(loadstring("return " .. vim.bo.tagfunc:sub(7) .. "(...)"))
-		if vim.fn.expand("<cword>") == tagname then
-			results = tag_fn(tagname, "c", { buf_ffname = filename })
-		else
-			results = tag_fn(tagname, "r")
-			if results ~= nil and results ~= vim.NIL then
-				results = vim.fn.matchfuzzy(results, tagname, { key = "name" })
-			end
-		end
-	end
-	if results == nil or results == vim.NIL then
-		results = vim.fn.taglist(("^%s$"):format(tagname), filename)
-	end
-	return results
-end
-
-local function find_tags_from_tagstack(item)
-	local results = nil
-	nvim_buf_temp_call(item.from[1], function()
-		vim.fn.setpos(".", item.from)
-		local filename = vim.fn.bufname()
-		if vim.bo.tagfunc ~= "" then
-			local tag_fn = assert(loadstring("return " .. vim.bo.tagfunc:sub(7) .. "(...)"))
-			results = tag_fn(item.tagname, "c", { buf_ffname = filename })
-		end
-		if results == nil or results == vim.NIL then
-			results = vim.fn.taglist(("^%s$"):format(item.tagname), filename)
-		end
-	end)
-	return results
-end
-
 local function make_entry_from_tag(item)
 	return vim.tbl_extend("force", item, {
 		ordinal = item.text .. " " .. item.filename,
@@ -164,11 +122,19 @@ local function make_entry_from_tag(item)
 end
 
 function M.tselect(opts)
+	local curr_win = vim.fn.win_getid()
+	local curr_pos = vim.fn.getcurpos()
+	curr_pos[1] = vim.fn.bufnr()
+	local lsp = require("skippi.lsp")
 	opts = opts or {}
 	local tagname = opts.tagname
 	local results
 	if tagname then
-		results = find_tags_from_name(opts.tagname)
+		if vim.fn.expand("<cword>") == tagname then
+			results = lsp.taglist(tagname, vim.fn.getpos("."))
+		else
+			results = lsp.taglist(tagname)
+		end
 	else
 		local stack = vim.fn.gettagstack()
 		local stack_item = stack.items[stack.curidx - 1]
@@ -177,7 +143,7 @@ function M.tselect(opts)
 			return
 		end
 		tagname = stack_item.tagname
-		results = find_tags_from_tagstack(stack_item)
+		results = lsp.taglist(tagname, stack_item.from)
 	end
 	if #results == 0 then
 		vim.notify("E492: tag not found: " .. tagname, vim.log.levels.ERROR)
@@ -211,11 +177,11 @@ function M.tselect(opts)
 	end
 	if opts.auto_jump and #results == 1 then
 		local tag = results[1]
-		vim.fn.settagstack(0, {
+		vim.fn.settagstack(curr_win, {
 			items = {
 				{
-					bufnr = vim.fn.bufnr(),
-					from = vim.fn.getpos("."),
+					bufnr = curr_pos[1],
+					from = curr_pos,
 					matchnr = 1,
 					tagname = tag.name,
 				},
@@ -234,6 +200,24 @@ function M.tselect(opts)
 			}),
 			previewer = conf.grep_previewer(opts),
 			sorter = conf.generic_sorter(opts),
+			attach_mappings = function(_, _)
+				actions.select_default:enhance({
+					pre = function()
+						local tag = action_state.get_selected_entry()
+						vim.fn.settagstack(curr_win, {
+							items = {
+								{
+									bufnr = curr_pos[1],
+									from = curr_pos,
+									matchnr = 1,
+									tagname = tag.name,
+								},
+							},
+						}, "t")
+					end,
+				})
+				return true
+			end,
 		})
 		:find()
 end

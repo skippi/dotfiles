@@ -65,4 +65,41 @@ function M.formatexpr(opts)
 	return conform.formatexpr(opts)
 end
 
+local function nvim_buf_temp_call(...)
+	local old_view = vim.fn.winsaveview()
+	vim.api.nvim_buf_call(...)
+	vim.fn.winrestview(old_view)
+end
+
+local function invoke_tagfunc(tagname, flags, info)
+	assert(#vim.bo.tagfunc > 0, "vim.bo.tagfunc must be set")
+	local tag_fn = assert(loadstring("return " .. vim.bo.tagfunc:sub(7) .. "(...)"))
+	return tag_fn(tagname, flags, info)
+end
+
+function M.taglist(tagname, pos)
+	local results
+	if vim.bo.tagfunc ~= "" then
+		if pos then
+			nvim_buf_temp_call(pos[1], function()
+				vim.fn.setpos(".", pos)
+				results = invoke_tagfunc(tagname, "c", { buf_ffname = vim.fn.expand("%:p") })
+			end)
+		else
+			results = invoke_tagfunc(tagname, "r")
+			if results ~= nil and results ~= vim.NIL then
+				results = vim.fn.matchfuzzy(results, tagname, { key = "name" })
+			end
+		end
+	end
+	if results == nil or results == vim.NIL then
+		results = vim.fn.taglist(("^%s$"):format(tagname), vim.fn.bufname())
+	end
+	if results == nil or results == vim.NIL then
+		results = {}
+	end
+	return results
+end
+
+
 return M
