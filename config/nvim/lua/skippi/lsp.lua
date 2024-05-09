@@ -87,9 +87,6 @@ function M.taglist(tagname, pos)
 			end)
 		else
 			results = invoke_tagfunc(tagname, "r")
-			if results ~= nil and results ~= vim.NIL then
-				results = vim.fn.matchfuzzy(results, tagname, { key = "name" })
-			end
 		end
 	end
 	if results == nil or results == vim.NIL then

@@ -121,10 +121,12 @@ local function make_entry_from_tag(item)
 	})
 end
 
+local function peek_tag_stack()
+	local stack = vim.fn.gettagstack()
+	return stack.items[stack.curidx - 1]
+end
+
 function M.tselect(opts)
-	local curr_win = vim.fn.win_getid()
-	local curr_pos = vim.fn.getcurpos()
-	curr_pos[1] = vim.fn.bufnr()
 	local lsp = require("skippi.lsp")
 	opts = opts or {}
 	local tagname = opts.tagname
@@ -133,12 +135,11 @@ function M.tselect(opts)
 		if vim.fn.expand("<cword>") == tagname then
 			results = lsp.taglist(tagname, vim.fn.getpos("."))
 		else
-			results = lsp.taglist(tagname)
+			results = vim.fn.matchfuzzy(lsp.taglist(tagname), tagname, { key = "name" })
 		end
 	else
-		local stack = vim.fn.gettagstack()
-		local stack_item = stack.items[stack.curidx - 1]
-		if stack_item == nil then
+		local stack_item = peek_tag_stack()
+		if not stack_item then
 			vim.notify("E73: tag stack empty", vim.log.levels.ERROR)
 			return
 		end
@@ -175,9 +176,11 @@ function M.tselect(opts)
 			tag.text = lines[tag.lnum]
 		end
 	end
+	local curr_pos = vim.fn.getcurpos()
+	curr_pos[1] = vim.fn.bufnr()
 	if opts.auto_jump and #results == 1 then
 		local tag = results[1]
-		vim.fn.settagstack(curr_win, {
+		vim.fn.settagstack(0, {
 			items = {
 				{
 					bufnr = curr_pos[1],
@@ -202,9 +205,9 @@ function M.tselect(opts)
 			sorter = conf.generic_sorter(opts),
 			attach_mappings = function(_, _)
 				actions.select_default:enhance({
-					pre = function()
+					post = function()
 						local tag = action_state.get_selected_entry()
-						vim.fn.settagstack(curr_win, {
+						vim.fn.settagstack(0, {
 							items = {
 								{
 									bufnr = curr_pos[1],
