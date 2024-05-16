@@ -108,6 +108,14 @@ return {
 	},
 	"tpope/vim-unimpaired",
 	{
+		"Julian/vim-textobj-variable-segment",
+		keys = {
+			{ "iv", mode = { "x", "o" } },
+			{ "av", mode = { "x", "o" } },
+		},
+		dependencies = "kana/vim-textobj-user",
+	},
+	{
 		"echasnovski/mini.ai",
 		keys = {
 			{ "a", mode = { "x", "o" } },
@@ -128,15 +136,6 @@ return {
 					B = { { "%b()", "%b[]", "%b{}" }, "^.().*().$" },
 					t = { "<([%p%w]-)%f[^<%w][^<>]->.-</%1>", "^<.->().*()</[^/]->$" }, -- tag
 					d = { "%f[%d]%d+" }, -- digits
-					v = { -- case wise word (variable segment)
-						{
-							"%u[%l%d]+%f[^%l%d]",
-							"%f[%S][%l%d]+%f[^%l%d]",
-							"%f[%P][%l%d]+%f[^%l%d]",
-							"^[%l%d]+%f[^%l%d]",
-						},
-						"^().*()$",
-					},
 					e = function() -- whole buffer
 						return {
 							from = { line = 1, col = 1 },
