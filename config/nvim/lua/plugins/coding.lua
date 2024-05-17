@@ -108,14 +108,6 @@ return {
 	},
 	"tpope/vim-unimpaired",
 	{
-		"Julian/vim-textobj-variable-segment",
-		keys = {
-			{ "iv", mode = { "x", "o" } },
-			{ "av", mode = { "x", "o" } },
-		},
-		dependencies = "kana/vim-textobj-user",
-	},
-	{
 		"echasnovski/mini.ai",
 		keys = {
 			{ "a", mode = { "x", "o" } },
@@ -124,6 +116,7 @@ return {
 		dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
 		opts = function()
 			local ai = require("mini.ai")
+			local util = require("skippi.util")
 			return {
 				n_lines = 500,
 				mappings = {
@@ -135,7 +128,17 @@ return {
 					b = { { "%b()", "%b[]", "%b{}" }, "^.%s*().-()%s*.$" },
 					B = { { "%b()", "%b[]", "%b{}" }, "^.().*().$" },
 					t = { "<([%p%w]-)%f[^<%w][^<>]->.-</%1>", "^<.->().*()</[^/]->$" }, -- tag
-					d = { "%f[%d]%d+" }, -- digits
+					d = { "%f[+-][+-]?()%f[%d]%d+()" }, -- digits
+					v = function(ai_type) -- variable segment
+						local start_pos, end_pos = unpack(util.find_segment(ai_type))
+						return {
+							from = { line = start_pos[2], col = start_pos[3] },
+							to = {
+								line = end_pos[2],
+								col = end_pos[3],
+							},
+						}
+					end,
 					e = function() -- whole buffer
 						return {
 							from = { line = 1, col = 1 },

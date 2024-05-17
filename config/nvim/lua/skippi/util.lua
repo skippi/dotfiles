@@ -189,4 +189,74 @@ function M.is_url(str)
 	return str:match("^http[s]?://[%w-_%.%?%.:/%+=&]+")
 end
 
+function M.tbl_equal(t1, t2)
+	if t1 == t2 then
+		return true
+	end
+	if type(t1) ~= "table" or type(t2) ~= "table" then
+		return false
+	end
+	for key, value in pairs(t1) do
+		if not M.tbl_equal(t2[key], value) then
+			return false
+		end
+	end
+	for key in pairs(t2) do
+		if t1[key] == nil then
+			return false
+		end
+	end
+	return true
+end
+
+local function find_segment_helper(right_boundary)
+	local left_boundaries = table.concat({ "_\\+\\k", "\\<", "\\l\\u", "\\u\\u\\ze\\l", "\\a\\d", "\\d\\a" }, "\\|")
+	vim.fn.search(left_boundaries, "bce")
+	local start_pos = vim.fn.getpos(".")
+
+	vim.fn.search("\\>", "c")
+	local word_end = vim.fn.getpos(".")
+	vim.fn.setpos(".", start_pos)
+
+	vim.fn.search(right_boundary, "c")
+	for _ = 1, vim.v.count1 - 1 do
+		if not M.tbl_equal(vim.fn.getpos("."), word_end) then
+			vim.fn.search(right_boundary)
+		end
+	end
+	local end_pos = vim.fn.getpos(".")
+
+	return { start_pos, end_pos }
+end
+
+function M.find_segment(ai_type)
+	if ai_type == "i" then
+		return find_segment_helper(table.concat({ "\\k_", "\\l\\u", "\\u\\u\\l", "\\a\\d", "\\d\\a", "\\k\\>" }, "\\|"))
+	end
+	local right_boundary = table.concat({ "_", "\\l\\u", "\\u\\u\\l", "\\a\\d", "\\d\\a", "\\k\\>" }, "\\|")
+	local start_pos, end_pos = unpack(find_segment_helper(right_boundary))
+	local start_row, start_col = start_pos[2], start_pos[3]
+	local start_line = vim.fn.getline(start_row)
+
+	vim.fn.search("\\k\\>", "c")
+	if M.tbl_equal(end_pos, vim.fn.getpos(".")) and start_line:sub(start_col - 1, start_col - 1):match("_") then
+		start_pos[3] = start_pos[3] - 1
+	end
+
+	if vim.fn.match(vim.fn.expand("<cword>"), "^_*\\l.*\\u") ~= -1 then
+		vim.fn.search("\\<", "bc")
+		local word_start = vim.fn.getpos(".")[3]
+
+		if start_col - 2 <= word_start or start_line:sub(1, start_col - 2):match("^_*$") then
+			vim.fn.setpos(".", end_pos)
+			local tildeop = vim.o.tildeop
+			vim.o.tildeop = false
+			vim.cmd("normal! l~")
+			vim.o.tildeop = tildeop
+		end
+	end
+
+	return { start_pos, end_pos }
+end
+
 return M
