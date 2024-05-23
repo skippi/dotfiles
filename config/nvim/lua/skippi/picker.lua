@@ -168,7 +168,7 @@ function M.tselect(opts)
 				tag.text = pat
 				tag.lnum = 1
 			end
-			tag.col = util.first_nonblank_col(tag.lnum) or 1
+			tag.col = lines[tag.lnum]:find("%S") or 1
 		else
 			tag.lnum = tonumber(lnum)
 			tag.col = tonumber(col)
