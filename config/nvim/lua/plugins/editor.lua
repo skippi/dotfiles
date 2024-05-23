@@ -328,8 +328,7 @@ return {
 		"tpope/vim-fugitive",
 		dependencies = { "tpope/vim-rhubarb" },
 		config = function()
-			vim.keymap.set("n", "gX", "<Cmd>.GBrowse<CR>", { silent = true })
-			vim.keymap.set("x", "gX", ":GBrowse<CR>", { silent = true })
+			vim.keymap.set({ "n", "x" }, "gX", ":GBrowse<CR>", { silent = true })
 			vim.keymap.set("n", "g.", "<Cmd>Gvdiffsplit<CR>")
 			vim.keymap.set("n", "g<CR>", "<Cmd>G<CR>")
 			vim.keymap.set("n", "g<Space>", ":G<Space>")
