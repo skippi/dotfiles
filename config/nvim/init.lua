@@ -1,20 +1,10 @@
+require("config.lazy")
+
 local buffers = require("skippi.buffers")
 local opfunc = require("skippi.opfunc")
 local util = require("skippi.util")
 
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-	vim.fn.system({
-		"git",
-		"clone",
-		"--filter=blob:none",
-		"https://github.com/folke/lazy.nvim.git",
-		"--branch=stable", -- latest stable release
-		lazypath,
-	})
-end
-vim.opt.rtp:prepend(lazypath)
-require("lazy").setup("plugins")
+vim.g.python3_host_prog = "C:\\Users\\jtbca\\scoop\\apps\\pyenv\\current\\pyenv-win\\versions\\3.10.5\\python.exe"
 
 local function grep_text(cwd)
 	local args = {}
@@ -77,6 +67,17 @@ vim.opt.jumpoptions:append({ "stack", "view" })
 vim.opt.listchars:append({ eol = "↴" })
 vim.opt.shortmess:append("c")
 vim.opt.sessionoptions:append("globals")
+
+vim.cmd([[
+set statusline=
+set statusline+=%(\ %{toupper(mode(0))}%)
+set statusline+=%(\ @%{FugitiveHead()}%)
+set statusline+=%(\ %<%f%)
+set statusline+=\ %{v:lua.require('dap').status()!=''?'[!]':''}%h%m%r%w
+set statusline+=%=
+set statusline+=%([%n]%)
+set statusline+=%(%<\ [%{&ff}]\ %y\ %l:%c\ %p%%\ %)
+]])
 
 if vim.loop.os_uname().sysname:find("Windows") then
 	vim.o.shellcmdflag = "/s /v /c"
@@ -146,6 +147,23 @@ util.create_command_alias("E", "e")
 util.create_command_alias("H", "h")
 
 local map = vim.keymap.set
+
+-- PSReadLine bug fixes
+map('t', '<M-c>', '<M-c>')
+map('t', '<M-h>', '<M-h>')
+
+-- Movement keys in insert mode
+local movement_keys = { '<Left>', '<Right>', '<C-Left>', '<C-Right>' }
+for _, key in ipairs(movement_keys) do
+  map('i', key, '<C-g>U' .. key)
+end
+
+vim.cmd([[
+nnoremap <Space>r :'{,'}s\M\<<C-r><C-w>\>g<Left><Left>
+xnoremap <Space>r "zy:'{,'}s\M<C-r>zg<Left><Left>
+xnoremap & <Esc><Cmd>'<,'>&<CR>
+xnoremap g& <Esc><Cmd>'<,'>&&<CR>
+]])
 
 map("n", "<C-L>", function()
 	if vim.v.count > 0 then
@@ -282,6 +300,14 @@ end)
 map({ "n", "x" }, "j", [[v:count ? 'j' : 'gj']], { desc = "smart j", expr = true })
 map({ "n", "x" }, "k", [[v:count ? 'k' : 'gk']], { desc = "smart k", expr = true })
 
+-- Tab navigation mappings
+for i = 1, 9 do
+  local tab_cmd = string.format('%dgt', i)
+  map({'n', 'x'}, '<M-' .. i .. '>', '<Esc>' .. tab_cmd)
+  map({'i', 'c'}, '<M-' .. i .. '>', '<Esc>' .. tab_cmd)
+  map('t', '<M-' .. i .. '>', '<C-\\><C-n>' .. tab_cmd)
+end
+
 for _, op in ipairs({ "p", "P", "y", "Y", "gp", "gP", "=p", "=P" }) do
 	map({ "n", "x", "o" }, "<Space>" .. op, '"+' .. op, { remap = true })
 end
@@ -386,4 +412,18 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 			vim.api.nvim_buf_delete(bufnr, { force = true })
 		end)
 	end,
+})
+
+vim.api.nvim_create_autocmd('TermOpen', {
+  pattern = 'term://*',
+  group = group,
+  callback = function()
+    vim.keymap.set('t', '<ESC>', [[<C-\><C-n>]], { buffer = true })
+  end,
+})
+
+vim.api.nvim_create_autocmd('TermClose', {
+  pattern = 'term://*',
+  group = group,
+  command = 'Kwbd'
 })
