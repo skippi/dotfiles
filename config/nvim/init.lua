@@ -39,10 +39,8 @@ vim.o.fileformat = "unix"
 vim.o.fileformats = "unix,dos"
 vim.o.grepformat = "%f:%l:%c:%m,%f:%l:%m"
 vim.o.grepprg = "rg --smart-case --follow --hidden --vimgrep --glob !.git"
-vim.o.hidden = true
 vim.o.ignorecase = true
 vim.o.inccommand = "nosplit"
-vim.o.joinspaces = false
 vim.o.mouse = "a"
 vim.o.path = ",,**"
 vim.o.pumheight = 10
@@ -73,13 +71,13 @@ set statusline=
 set statusline+=%(\ %{toupper(mode(0))}%)
 set statusline+=%(\ @%{FugitiveHead()}%)
 set statusline+=%(\ %<%f%)
-set statusline+=\ %{v:lua.require('dap').status()!=''?'[!]':''}%h%m%r%w
 set statusline+=%=
 set statusline+=%([%n]%)
 set statusline+=%(%<\ [%{&ff}]\ %y\ %l:%c\ %p%%\ %)
 ]])
 
 if vim.loop.os_uname().sysname:find("Windows") then
+	vim.o.shellslash = true
 	vim.o.shellcmdflag = "/s /v /c"
 end
 

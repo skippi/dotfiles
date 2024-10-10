@@ -1,6 +1,7 @@
 return {
 	{
-		"hrsh7th/nvim-cmp",
+		"iguanacucumber/magazine.nvim",
+		name = "nvim-cmp",
 		keys = {
 			{
 				"yo<C-x>",
@@ -141,18 +142,7 @@ return {
 			"nvim-lua/plenary.nvim",
 			{
 				"nvim-telescope/telescope-fzf-native.nvim",
-				dependencies = "nvim-telescope/telescope.nvim",
 				build = "make",
-				config = function()
-					require("telescope").load_extension("fzf")
-				end,
-			},
-			{
-				"nvim-telescope/telescope-ui-select.nvim",
-				dependencies = "nvim-telescope/telescope.nvim",
-				config = function()
-					require("telescope").load_extension("ui-select")
-				end,
 			},
 		},
 		cmd = "Telescope",
@@ -187,7 +177,6 @@ return {
 					require("telescope.builtin").live_grep(opts)
 				end,
 			},
-			{ "<Space>:", "<Cmd>Telescope commands<CR>" },
 			{ "<Space>b", "<Cmd>Telescope buffers<CR>" },
 			{ "<Space>d", "<Cmd>Telescope diagnostics bufnr=0<CR>" },
 			{ "<Space>D", "<Cmd>Telescope diagnostics<CR>" },
@@ -200,10 +189,8 @@ return {
 				end,
 			},
 			{ "<Space>F", "<Cmd>Telescope find_files<CR>" },
-			{ "<Space>j", "<Cmd>Telescope jumplist<CR>" },
 			{ "<Space>l", "<Cmd>Telescope lsp_document_symbols<CR>" },
 			{ "<Space>L", "<Cmd>Telescope lsp_dynamic_workspace_symbols<CR>" },
-			{ '<Space>"', "<Cmd>Telescope registers<CR>" },
 			{
 				"z/",
 				function()
@@ -282,6 +269,7 @@ return {
 				nargs = "?",
 			})
 			require("telescope").setup(opts)
+			require("telescope").load_extension("fzf")
 		end,
 	},
 	{
@@ -293,12 +281,6 @@ return {
 			vim.keymap.set("n", "ZX", "<Cmd>Remove!<CR>", { desc = "delete current file" })
 		end,
 	},
-	{
-		"tpope/vim-dadbod",
-		config = function()
-			require("skippi.util").create_command_alias("db", "DB")
-		end,
-	},
 	{ "tpope/vim-characterize", keys = { "ga" } },
 	{
 		"tpope/vim-sleuth",
@@ -306,23 +288,6 @@ return {
 		config = function()
 			vim.g.sleuth_lua_defaults = "tabstop=2"
 		end,
-	},
-	{
-		"tpope/vim-vinegar",
-		keys = {
-			{
-				"-",
-				function()
-					if vim.v.count == 0 then
-						return "<Plug>VinegarUp"
-					end
-					return "<Cmd>Browse<CR>"
-				end,
-				expr = true,
-				desc = "open current file parent directory",
-			},
-		},
-		ft = "netrw",
 	},
 	{
 		"tpope/vim-fugitive",
@@ -361,6 +326,32 @@ return {
 			{ "dP", "<Cmd>%Diffput<CR>", mode = { "n" } },
 			{ "ih", ":<C-U>Gitsigns select_hunk<CR>", mode = { "o", "x" }, silent = true },
 			{ "ah", ":<C-U>Gitsigns select_hunk<CR>", mode = { "o", "x" }, silent = true },
+			{
+				"]c",
+				function()
+					if vim.wo.diff then
+						return "]c"
+					end
+					local gs = require("gitsigns")
+					vim.schedule(gs.next_hunk)
+					return "<Ignore>"
+				end,
+				mode = { "n", "x", "o" },
+				expr = true,
+			},
+			{
+				"[c",
+				function()
+					if vim.wo.diff then
+						return "[c"
+					end
+					local gs = require("gitsigns")
+					vim.schedule(gs.prev_hunk)
+					return "<Ignore>"
+				end,
+				mode = { "n", "x", "o" },
+				expr = true,
+			},
 		},
 		config = function()
 			local gs = require("gitsigns")
@@ -393,28 +384,7 @@ return {
 					topdelete = { text = "┃" },
 					changedelete = { text = "┃" },
 				},
-				update_debounce = 200,
-				on_attach = function(bufnr)
-					local map = function(mode, l, r, opts)
-						opts = opts or {}
-						opts.buffer = bufnr
-						vim.keymap.set(mode, l, r, opts)
-					end
-					map({ "n", "x", "o" }, "]c", function()
-						if vim.wo.diff then
-							return "]c"
-						end
-						vim.schedule(gs.next_hunk)
-						return "<Ignore>"
-					end, { expr = true })
-					map({ "n", "x", "o" }, "[c", function()
-						if vim.wo.diff then
-							return "[c"
-						end
-						vim.schedule(gs.prev_hunk)
-						return "<Ignore>"
-					end, { expr = true })
-				end,
+				update_debounce = 0,
 			})
 			local group = vim.api.nvim_create_augroup("skippi.gitsigns", { clear = true })
 			vim.api.nvim_create_autocmd("User", {
@@ -434,33 +404,5 @@ return {
 			})
 		end,
 	},
-	{
-		"mfussenegger/nvim-dap",
-		dependencies = { "leoluz/nvim-dap-go" },
-		config = function()
-			require("dap-go").setup()
-		end,
-	},
-	{
-		"folke/flash.nvim",
-		event = "VeryLazy",
-		opts = {
-			prompt = { enabled = false },
-			modes = {
-				char = { enabled = false },
-			},
-		},
-	},
-	{
-		"stevearc/oil.nvim",
-		cmd = "Oil",
-		opts = {
-			default_file_explorer = false,
-		},
-	},
 	{ "axelf4/vim-strip-trailing-whitespace" },
-	{
-		"kwkarlwang/bufjump.nvim",
-		opts = {},
-	},
 }
