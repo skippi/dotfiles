@@ -2,118 +2,15 @@ return {
 	{
 		"iguanacucumber/magazine.nvim",
 		name = "nvim-cmp",
-		keys = {
-			{
-				"yo<C-x>",
-				function()
-					vim.g.__skippi_cmp_disabled = not vim.g.__skippi_cmp_disabled
-					vim.notify("cmp.enabled = " .. tostring(not vim.g.__skippi_cmp_disabled), vim.log.levels.INFO)
-				end,
-			},
-		},
 		event = { "InsertEnter", "CmdlineEnter" },
 		dependencies = {
 			{ "hrsh7th/cmp-buffer" },
 			{ "hrsh7th/cmp-cmdline" },
-			{ "hrsh7th/cmp-nvim-lsp" },
-			{ "hrsh7th/cmp-nvim-lsp-signature-help" },
 			{ "hrsh7th/cmp-path" },
-			{ "saadparwaiz1/cmp_luasnip" },
-			{ "lukas-reineke/cmp-under-comparator" },
-			{
-				"L3MON4D3/LuaSnip",
-				dependencies = { "rafamadriz/friendly-snippets" },
-				config = function()
-					require("luasnip.loaders.from_vscode").lazy_load()
-				end,
-			},
 		},
 		config = function()
 			local cmp = require("cmp")
-			local luasnip = require("luasnip")
-			local types = require("cmp.types")
-			local cmdline_mapping = cmp.mapping.preset.cmdline({
-				["<C-j>"] = cmp.mapping.select_next_item({ behavior = types.cmp.SelectBehavior.Select }),
-				["<C-k>"] = cmp.mapping.select_prev_item({ behavior = types.cmp.SelectBehavior.Select }),
-			})
-			local deprioritize_emmet = function(a, b)
-				if a.source:get_debug_name() == "nvim_lsp:emmet_ls" then
-					return false
-				end
-				if b.source:get_debug_name() == "nvim_lsp:emmet_ls" then
-					return true
-				end
-			end
-			cmp.setup({
-				enabled = function()
-					return not vim.g.__skippi_cmp_disabled and vim.bo.filetype ~= "TelescopePrompt"
-				end,
-				snippet = {
-					expand = function(args)
-						luasnip.lsp_expand(args.body)
-					end,
-				},
-				sorting = {
-					priority_weight = 2,
-					comparators = {
-						deprioritize_emmet,
-						cmp.config.compare.offset,
-						cmp.config.compare.exact,
-						cmp.config.compare.score,
-						cmp.config.compare.recently_used,
-						require("cmp-under-comparator").under,
-						cmp.config.compare.locality,
-						cmp.config.compare.kind,
-						cmp.config.compare.length,
-						cmp.config.compare.order,
-					},
-				},
-				mapping = cmp.mapping.preset.insert({
-					["<Tab>"] = cmp.mapping(function(fallback)
-						if cmp.visible() and require("skippi.util").cursor_has_words_before() then
-							cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
-						elseif luasnip.expand_or_locally_jumpable() then
-							luasnip.expand_or_jump()
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
-					["<S-Tab>"] = cmp.mapping(function(fallback)
-						if luasnip.jumpable(-1) then
-							luasnip.jump(-1)
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
-				}),
-				sources = cmp.config.sources({
-					{ name = "nvim_lsp_signature_help" },
-				}, {
-					{ name = "nvim_lsp" },
-					{ name = "luasnip", keyword_length = 2 },
-				}, {
-					{
-						name = "buffer",
-						keyword_length = 3,
-						option = {
-							get_bufnrs = function()
-								-- https://springrts.com/wiki/Lua_Performance#TEST_9:_for-loops
-								local wins = vim.api.nvim_list_wins()
-								local bufs = {}
-								for i = 1, #wins do
-									local win = wins[i]
-									local b = vim.api.nvim_win_get_buf(win)
-									local size = vim.api.nvim_buf_get_offset(b, vim.api.nvim_buf_line_count(b))
-									if size <= 2 * 1024 * 1024 then
-										bufs[#bufs + 1] = b
-									end
-								end
-								return bufs
-							end,
-						},
-					},
-				}),
-			})
+			local cmdline_mapping = cmp.mapping.preset.cmdline()
 			cmp.setup.cmdline("/", {
 				mapping = cmdline_mapping,
 				sources = cmp.config.sources({

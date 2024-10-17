@@ -9,7 +9,6 @@ return {
 		event = "BufReadPost",
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter-textobjects",
-			"RRethy/nvim-treesitter-endwise",
 			"windwp/nvim-ts-autotag",
 		},
 		config = function()
@@ -29,7 +28,6 @@ return {
 						return ok and stats and stats.size > max_filesize
 					end,
 				},
-				endwise = { enable = true },
 				textobjects = {
 					move = {
 						enable = true,
