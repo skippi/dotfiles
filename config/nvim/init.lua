@@ -144,6 +144,11 @@ end, { abbrev = { "teh[ere]", "terminalh[ere]", "termh[ere]" } })
 util.create_command_alias("E", "e")
 util.create_command_alias("H", "h")
 
+-- Remove default lsp mappings
+vim.keymap.del("n", "grn")
+vim.keymap.del("n", "grr")
+vim.keymap.del({ "n", "x" }, "gra")
+
 local map = vim.keymap.set
 
 -- PSReadLine bug fixes
