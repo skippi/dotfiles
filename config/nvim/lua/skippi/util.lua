@@ -259,4 +259,16 @@ function M.find_segment(ai_type)
 	return { start_pos, end_pos }
 end
 
+function M.format(opts)
+	opts = vim.tbl_extend("keep", opts or {}, {
+		async = true,
+		lsp_fallback = true,
+		filter = function(client)
+			return client.name ~= "tsserver" and client.name ~= "lua_ls"
+		end,
+		timeout_ms = 10000,
+	})
+	require("conform").format(opts)
+end
+
 return M

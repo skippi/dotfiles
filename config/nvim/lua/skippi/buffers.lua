@@ -20,6 +20,29 @@ function M.find_all_modified(state)
 	return result
 end
 
+function M.find_diff_chunks()
+	local chunks = {}
+	local section = nil
+	for lnum = 1, vim.fn.line("$") do
+		if vim.fn.diff_hlID(lnum, 1) ~= 0 then
+			if section == nil then
+				section = { lnum, lnum }
+			else
+				section[2] = section[2] + 1
+			end
+		else
+			if section ~= nil then
+				chunks[#chunks + 1] = section
+				section = nil
+			end
+		end
+	end
+	if section ~= nil then
+		chunks[#chunks+1] = section
+	end
+	return chunks
+end
+
 function M.bulk_write(bufnrs)
 	if next(bufnrs) == nil then
 		return

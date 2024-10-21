@@ -51,14 +51,7 @@ function M.formatexpr(opts)
 	local start_lnum = vim.v.lnum
 	local end_lnum = start_lnum + vim.v.count - 1
 	if start_lnum == 1 and end_lnum == vim.fn.line("$") then
-		conform.format({
-			async = true,
-			lsp_fallback = true,
-			filter = function(client)
-				return client.name ~= "tsserver" and client.name ~= "lua_ls"
-			end,
-			timeout_ms = 10000,
-		})
+		require("skippi.util").format()
 		return 0
 	end
 	return conform.formatexpr(opts)
