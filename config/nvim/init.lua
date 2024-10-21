@@ -324,7 +324,11 @@ for key, fn in pairs({
 		return vim.fn.expand("%:t")
 	end,
 	["p"] = function()
-		return vim.fn.expand("%:p")
+		local path = vim.fn.expand("%:p")
+		if vim.loop.os_uname().sysname:find("Windows") then
+			path = vim.fn.substitute(path, "/", "\\", "g")
+		end
+		return path
 	end,
 }) do
 	map("n", "y" .. key, function()
