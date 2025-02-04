@@ -1,23 +1,20 @@
 return {
 	{
+		"folke/lazydev.nvim",
+		ft = "lua",
+		opts = {
+			library = {
+				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+			},
+		},
+	},
+	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			"b0o/schemastore.nvim",
-			{
-				"folke/neodev.nvim",
-				config = function()
-					require("neodev").setup({})
-				end,
-			},
 		},
 		config = function()
 			local lsp = require("skippi.lsp")
-			vim.api.nvim_create_autocmd("LspAttach", {
-				group = vim.api.nvim_create_augroup("skippi.lsp.attach", {}),
-				callback = function(e)
-					lsp.on_attach({}, e.buf)
-				end,
-			})
 			local lsc = require("lspconfig")
 			lsc.util.default_config.capabilities = lsp.make_capabilities()
 			lsc.clangd.setup({})

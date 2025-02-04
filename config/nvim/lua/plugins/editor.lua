@@ -1,39 +1,5 @@
 return {
 	{
-		"iguanacucumber/magazine.nvim",
-		name = "nvim-cmp",
-		event = { "InsertEnter", "CmdlineEnter" },
-		dependencies = {
-			{ "hrsh7th/cmp-buffer" },
-			{ "hrsh7th/cmp-cmdline" },
-			{ "hrsh7th/cmp-path" },
-		},
-		config = function()
-			local cmp = require("cmp")
-			local cmdline_mapping = cmp.mapping.preset.cmdline()
-			cmp.setup.cmdline("/", {
-				mapping = cmdline_mapping,
-				sources = cmp.config.sources({
-					{ name = "buffer" },
-				}),
-			})
-			cmp.setup.cmdline("?", {
-				mapping = cmdline_mapping,
-				sources = cmp.config.sources({
-					{ name = "buffer" },
-				}),
-			})
-			cmp.setup.cmdline(":", {
-				mapping = cmdline_mapping,
-				sources = cmp.config.sources({
-					{ name = "path" },
-				}, {
-					{ name = "cmdline", option = { ignore_cmds = { "Man", "!", "terminal" } } },
-				}),
-			})
-		end,
-	},
-	{
 		"nvim-telescope/telescope.nvim",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
@@ -202,15 +168,6 @@ return {
 				vim.cmd(cmd)
 			end)
 			vim.keymap.set("n", "gb", "<Cmd>G blame<CR>")
-		end,
-	},
-	{
-		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-		event = "LspAttach",
-		config = function()
-			require("lsp_lines").setup()
-			vim.diagnostic.config({ virtual_text = false, virtual_lines = false })
-			vim.keymap.set("n", "yoq", require("lsp_lines").toggle, { desc = "toggle lsp_lines" })
 		end,
 	},
 	{

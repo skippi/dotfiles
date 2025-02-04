@@ -5,7 +5,6 @@ return {
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-treesitter/nvim-treesitter",
-			"hrsh7th/nvim-cmp",
 			"nvim-telescope/telescope.nvim",
 		},
 		keys = {
@@ -57,10 +56,12 @@ return {
 					local diffs = require("skippi.buffers").find_diff_chunks()
 					vim.print(diffs)
 					for _, diff in ipairs(diffs) do
-						util.format({ range = {
-							start = { diff[1], 0 },
-							["end"] = { diff[2], 0 },
-						} })
+						util.format({
+							range = {
+								start = { diff[1], 0 },
+								["end"] = { diff[2], 0 },
+							},
+						})
 					end
 				end,
 			})

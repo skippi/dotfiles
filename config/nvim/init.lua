@@ -64,7 +64,7 @@ vim.opt.diffopt:append("linematch:60")
 vim.opt.jumpoptions:append({ "stack", "view" })
 vim.opt.listchars:append({ eol = "↴" })
 vim.opt.shortmess:append("c")
-vim.opt.sessionoptions:append("globals")
+vim.opt.sessionoptions:append("globals,winpos,terminal,folds")
 
 vim.cmd([[
 set statusline=
@@ -152,21 +152,14 @@ vim.keymap.del({ "n", "x" }, "gra")
 local map = vim.keymap.set
 
 -- PSReadLine bug fixes
-map('t', '<M-c>', '<M-c>')
-map('t', '<M-h>', '<M-h>')
+map("t", "<M-c>", "<M-c>")
+map("t", "<M-h>", "<M-h>")
 
 -- Movement keys in insert mode
-local movement_keys = { '<Left>', '<Right>', '<C-Left>', '<C-Right>' }
+local movement_keys = { "<Left>", "<Right>", "<C-Left>", "<C-Right>" }
 for _, key in ipairs(movement_keys) do
-  map('i', key, '<C-g>U' .. key)
+	map("i", key, "<C-g>U" .. key)
 end
-
-vim.cmd([[
-nnoremap <Space>r :'{,'}s\M\<<C-r><C-w>\>g<Left><Left>
-xnoremap <Space>r "zy:'{,'}s\M<C-r>zg<Left><Left>
-xnoremap & <Esc><Cmd>'<,'>&<CR>
-xnoremap g& <Esc><Cmd>'<,'>&&<CR>
-]])
 
 map("n", "<C-L>", function()
 	if vim.v.count > 0 then
@@ -182,38 +175,30 @@ map({ "n", "i" }, "<Esc>", "<Cmd>noh<CR><Esc>", { silent = true })
 map({ "n", "x", "o" }, "'", "`")
 map({ "n", "x", "o" }, "gh", "^")
 map({ "n", "x", "o" }, "gl", "g_")
-map({ "n", "x" }, "<M-c>", '"_c')
-map({ "n", "x" }, "<M-d>", '"_d')
 map("n", "<BS>", "<C-^>")
 map("x", "*", [[:<C-u>let @z=@"<CR>gvymz/\V<C-R>=escape(@", '/\')<CR><CR>:let @"=@z<CR>`z]], { silent = true })
 map("x", "#", [[:<C-u>let @z=@"<CR>gvymz?\V<C-R>=escape(@", '?\')<CR><CR>:let @"=@z<CR>`z]], { silent = true })
 
-map("n", "<C-w> ", ":windo ")
-map("n", "<C-w>'", function()
-	local ESC = 27
-	local rc, keynr = pcall(vim.fn.getchar)
-	if not rc or keynr == ESC then
-		return "<Ignore>"
-	end
-	return "<C-w>s'" .. vim.fn.nr2char(keynr)
-end, { desc = "open new window and jump to mark", expr = true, remap = true })
-map("n", "<C-w>yod", function()
-	local wins = vim.api.nvim_tabpage_list_wins(0)
-	local diffcmd = "diffoff"
-	for _, id in ipairs(wins) do
-		if not vim.wo[id].diff then
-			diffcmd = "diffthis"
-			break
-		end
-	end
-	vim.api.nvim_win_call(0, function()
-		vim.cmd.windo(diffcmd)
-	end)
-end, { desc = "toggle window diff" })
-
-map("n", "<C-h>", "<BS>", { remap = true }) -- windows <BS> fix
 map("n", "<Space>", "<Nop>")
 map("n", "<Space>q", vim.cmd.quit)
+map("n", "<Space>a", vim.lsp.buf.code_action)
+map("n", "<Space>r", vim.lsp.buf.rename)
+map({ "n", "x" }, "gd", function()
+	vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
+	vim.o.hlsearch = true
+	require("telescope.builtin").lsp_definitions()
+end)
+map({ "n", "x" }, "gy", require("telescope.builtin").lsp_type_definitions)
+map({ "n", "x" }, "gI", function()
+	vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
+	vim.o.hlsearch = true
+	require("telescope.builtin").lsp_implementations()
+end)
+map("n", "gr", function()
+	vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
+	vim.o.hlsearch = true
+	require("telescope.builtin").lsp_references()
+end)
 map("n", "g/", function()
 	local type = ""
 	if vim.v.count ~= 0 then
@@ -234,23 +219,10 @@ map("x", "m,", "#cgN", { remap = true })
 map("x", "m;", "*cgn", { remap = true })
 map("!", "<C-r>", "<C-r><C-o>")
 map("!", "<C-r><C-o>", "<C-r>")
-map("n", "yd", vim.diagnostic.open_float)
-
-map("n", "<M-[>", "<Cmd>tabmove -<CR>")
-map("n", "<M-]>", "<Cmd>tabmove +<CR>")
-
-for key, typ in pairs({
-	["d"] = {},
-	["w"] = vim.diagnostic.severity.WARN,
-	["e"] = vim.diagnostic.severity.ERROR,
-}) do
-	map({ "n", "x", "o" }, "[" .. key, function()
-		util.jump_diagnostic(-vim.v.count1, typ)
-	end)
-	map({ "n", "x", "o" }, "]" .. key, function()
-		util.jump_diagnostic(vim.v.count1, typ)
-	end)
-end
+map("n", "yoq", function()
+	local current = vim.diagnostic.config() or {}
+	vim.diagnostic.config({ virtual_lines = not current.virtual_lines })
+end)
 
 map("n", "[f", function()
 	if vim.bo.buftype == "quickfix" then
@@ -267,48 +239,15 @@ map("n", "]f", function()
 	end
 end, { desc = "go to next file", silent = true })
 
-map("n", "'~", function()
-	vim.cmd("sil e " .. vim.fn.stdpath("config") .. "/lua/init.lua")
-end, { desc = "jump to init.lua" })
-map("n", "'<Tab>", function()
-	vim.cmd("sil e " .. vim.fn.stdpath("config") .. "/after/indent/" .. vim.bo.filetype .. ".lua")
-end, { desc = "jump to indent config" })
-map("n", "'#", function()
-	vim.cmd("sil e " .. vim.fn.stdpath("config") .. "/after/syntax/" .. vim.bo.filetype .. ".lua")
-end, { desc = "jump to syntax config" })
-map("n", "'@", function()
-	vim.cmd("sil e " .. vim.fn.stdpath("config") .. "/after/ftplugin/" .. vim.bo.filetype .. ".lua")
-end, { desc = "jump to ftplugin config" })
-
-map("n", "gO", function()
-	if not vim.tbl_contains({ "man", "help" }, vim.bo.filetype) then
-		return [[mz<Cmd>keepjumps lua vim.treesitter.inspect_tree({ command = "new" })<CR><Cmd>wincmd p<CR>'z]]
-	end
-	return "gO"
-end, { expr = true })
-
-map({ "n", "x", "o" }, "(", function()
-	local ok = util.jump_treesitter_statement(-vim.v.count1)
-	if not ok then
-		vim.api.nvim_feedkeys("(", "n", false)
-	end
-end)
-map({ "n", "x", "o" }, ")", function()
-	local ok = util.jump_treesitter_statement(vim.v.count1)
-	if not ok then
-		vim.api.nvim_feedkeys(")", "n", false)
-	end
-end)
-
 map({ "n", "x" }, "j", [[v:count ? 'j' : 'gj']], { desc = "smart j", expr = true })
 map({ "n", "x" }, "k", [[v:count ? 'k' : 'gk']], { desc = "smart k", expr = true })
 
 -- Tab navigation mappings
 for i = 1, 9 do
-  local tab_cmd = string.format('%dgt', i)
-  map({'n', 'x'}, '<M-' .. i .. '>', '<Esc>' .. tab_cmd)
-  map({'i', 'c'}, '<M-' .. i .. '>', '<Esc>' .. tab_cmd)
-  map('t', '<M-' .. i .. '>', '<C-\\><C-n>' .. tab_cmd)
+	local tab_cmd = string.format("%dgt", i)
+	map({ "n", "x" }, "<M-" .. i .. ">", "<Esc>" .. tab_cmd)
+	map({ "i", "c" }, "<M-" .. i .. ">", "<Esc>" .. tab_cmd)
+	map("t", "<M-" .. i .. ">", "<C-\\><C-n>" .. tab_cmd)
 end
 
 for _, op in ipairs({ "p", "P", "y", "Y", "gp", "gP", "=p", "=P" }) do
@@ -339,19 +278,10 @@ for key, fn in pairs({
 	end, { remap = true, expr = true })
 end
 
-opfunc.map("<C-_>", opfunc.toggle_path_slash, {
-	desc = "toggle path slashes",
-	expr = true,
-})
-
 map("n", "ZF", "gggqG<C-o>")
 
 map({ "x", "o" }, "aj", ":<C-u>norm! 0v$<cr>", { desc = "select line", silent = true })
 map({ "x", "o" }, "ij", ":<C-u>norm! _vg_<cr>", { desc = "select inside line", silent = true })
-
-if vim.loop.os_uname().sysname:find("Windows") then
-	map("n", "<C-z>", "<Nop>") -- disable <C-z> windows memory leak
-end
 
 local group = vim.api.nvim_create_augroup("skippi", { clear = true })
 
@@ -421,16 +351,16 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 	end,
 })
 
-vim.api.nvim_create_autocmd('TermOpen', {
-  pattern = 'term://*',
-  group = group,
-  callback = function()
-    vim.keymap.set('t', '<ESC>', [[<C-\><C-n>]], { buffer = true })
-  end,
+vim.api.nvim_create_autocmd("TermOpen", {
+	pattern = "term://*",
+	group = group,
+	callback = function()
+		vim.keymap.set("t", "<ESC>", [[<C-\><C-n>]], { buffer = true })
+	end,
 })
 
-vim.api.nvim_create_autocmd('TermClose', {
-  pattern = 'term://*',
-  group = group,
-  command = 'Kwbd'
+vim.api.nvim_create_autocmd("TermClose", {
+	pattern = "term://*",
+	group = group,
+	command = "Kwbd",
 })

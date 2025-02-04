@@ -5,11 +5,21 @@ return {
 		dependencies = "rafamadriz/friendly-snippets",
 		version = "v0.*",
 		opts = {
-			highlight = {
+			keymap = { preset = "super-tab" },
+			appearance = {
 				use_nvim_cmp_as_default = true,
 			},
-			accept = { auto_brackets = { enabled = true } },
-			trigger = { signature_help = { enabled = true } },
+			sources = {
+				default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+				providers = {
+					lazydev = {
+						name = "LazyDev",
+						module = "lazydev.integrations.blink",
+						-- make lazydev completions top priority (see `:h blink.cmp`)
+						score_offset = 100,
+					},
+				},
+			},
 		},
 	},
 }

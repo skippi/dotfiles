@@ -38,7 +38,7 @@ function M.find_diff_chunks()
 		end
 	end
 	if section ~= nil then
-		chunks[#chunks+1] = section
+		chunks[#chunks + 1] = section
 	end
 	return chunks
 end

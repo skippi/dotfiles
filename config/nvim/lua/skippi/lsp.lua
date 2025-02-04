@@ -11,32 +11,6 @@ function M.make_capabilities()
 	return cap
 end
 
-function M.on_attach(_, bufnr)
-	local map = function(mode, key, cmd, opts)
-		opts = opts or {}
-		opts.buffer = bufnr
-		vim.keymap.set(mode, key, cmd, opts)
-	end
-	map("n", "<Space><Space>", vim.lsp.buf.rename)
-	map("n", "<Space>a", vim.lsp.buf.code_action)
-	map({ "n", "x" }, "gd", function()
-		vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
-		vim.o.hlsearch = true
-		require("telescope.builtin").lsp_definitions()
-	end)
-	map({ "n", "x", "o" }, "gy", require("telescope.builtin").lsp_type_definitions)
-	map({ "n", "x" }, "gI", function()
-		vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
-		vim.o.hlsearch = true
-		require("telescope.builtin").lsp_implementations()
-	end)
-	map("n", "gr", function()
-		vim.fn.setreg("/", "\\<" .. vim.fn.expand("<cword>") .. "\\>")
-		vim.o.hlsearch = true
-		require("telescope.builtin").lsp_references()
-	end)
-end
-
 function M.formatexpr(opts)
 	if vim.bo.filetype:find("commit") then
 		return 1
@@ -88,6 +62,5 @@ function M.taglist(tagname, pos)
 	end
 	return results
 end
-
 
 return M
