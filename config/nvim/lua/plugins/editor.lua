@@ -259,4 +259,8 @@ return {
 		end,
 	},
 	{ "axelf4/vim-strip-trailing-whitespace" },
+	{
+		"stevearc/dressing.nvim",
+		opts = {},
+	},
 }
