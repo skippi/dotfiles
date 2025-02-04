@@ -12,6 +12,15 @@ return {
 			sources = {
 				default = { "lazydev", "lsp", "path", "snippets", "buffer" },
 				providers = {
+					cmdline = {
+						enabled = function()
+							local cmdline = vim.fn.getcmdline()
+							if cmdline:match("^te") or cmdline:match("^!") then
+								return false
+							end
+							return true
+						end
+					},
 					lazydev = {
 						name = "LazyDev",
 						module = "lazydev.integrations.blink",
