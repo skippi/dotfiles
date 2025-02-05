@@ -29,6 +29,7 @@ return {
 					},
 				},
 			},
+			signature = { enabled = true, }
 		},
 	},
 }

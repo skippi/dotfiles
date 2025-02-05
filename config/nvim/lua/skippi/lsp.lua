@@ -2,6 +2,7 @@ local M = {}
 
 function M.make_capabilities()
 	local cap = require("lspconfig").util.default_config.capabilities
+	cap = require("blink.cmp").get_lsp_capabilities(cap)
 	cap.semanticTokensProvider = nil
 	cap.textDocument.completion.completionItem.snippetSupport = true
 	cap.textDocument.foldingRange = {
